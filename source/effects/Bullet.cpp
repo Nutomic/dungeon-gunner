@@ -1,0 +1,45 @@
+/*
+ * Bullet.cpp
+ *
+ *  Created on: 12.08.2012
+ *      Author: Felix
+ */
+
+#include "Bullet.h"
+
+#include "../util/Log.h"
+
+const float Bullet::SPEED = 500.0f;
+
+/**
+ * Places a bullet in the world.
+ *
+ * @param position World position of the bullet.
+ * @param world Box2d world.
+ * @param texture Texture to display for bullet.
+ */
+Bullet::Bullet(const Vector2f& position, b2World& world,
+	const std::shared_ptr<sf::Texture>& texture, Physical& shooter, float direction) :
+		Particle(texture, PhysicalData(position, Vector2i(20, 20), world, CATEGORY_PARTICLE,
+				CATEGORY_PARTICLE, true, true)),
+		mShooter(shooter) {
+	setSpeed(angle(direction), SPEED);
+	setAngle(direction);
+}
+
+/**
+ * @copydoc Physical::onCollide
+ */
+void
+Bullet::onCollide(Physical& other, uint16 type) {
+	// Make sure we do not damage twice.
+	if (!getDelete()) {
+		// Call onShot on other, with damage as param.
+		setDelete(true);
+	}
+}
+
+bool
+Bullet::doesCollide(Physical& other) {
+	return &other != &mShooter;
+}
