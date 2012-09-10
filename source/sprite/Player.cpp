@@ -17,8 +17,8 @@ const float Player::SPEED = 100.0f;
 /**
  * Initializes Sprite.
  */
-Player::Player(b2World& world, Collection& collection) :
-		Sprite("player.png", PhysicalData(Vector2f(200.0f, 100.0f), Vector2i(50, 50), world,
+Player::Player(b2World& world, Collection& collection, const Vector2f& position) :
+		Sprite("player.png", PhysicalData(position, Vector2i(50, 50), world,
 				CATEGORY_ACTOR, MASK_ALL, true)),
 		mWeapon(*this, collection, world),
 		mDestination(Vector2i(50, 50)) {

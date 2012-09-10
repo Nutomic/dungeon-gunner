@@ -24,7 +24,7 @@ class Sprite;
 class Player : public Sprite, public Actor {
 // Public functions.
 public:
-	Player(b2World& world, Collection& collection);
+	Player(b2World& world, Collection& collection, const Vector2f& position);
 
 	void setCrosshairPosition(const Vector2f& position);
 	void fire();

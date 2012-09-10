@@ -30,7 +30,7 @@ Game::Game(const Vector2i& resolution) :
 		mView(Vector2f(0, 0), Vector2f(resolution)),
 		//mFps("test"),
 		mTileManager(mWorld),
-		mPlayer(mWorld, mCollection),
+		mPlayer(mWorld, mCollection, Vector2f(200.0f, 100.0f)),
 		mElapsed(0),
 		mQuit(false),
 		mPaused(false) {
