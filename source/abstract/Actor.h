@@ -16,10 +16,12 @@
 class Actor {
 // Public functions.
 public:
-	Actor();
+	Actor(int health);
 	virtual ~Actor() = 0;
 
 	static void think(float elapsedTime);
+
+	void onDamage(int damage);
 
 // Protected functions.
 protected:
@@ -30,9 +32,14 @@ protected:
 	 */
 	virtual void onThink(float elapsedTime) = 0;
 
+	virtual void onDeath();
+
 // Private variables.
 private:
 	static std::vector<Actor*> mInstances;
+
+	const int mMaxHealth;
+	int mCurrentHealth; //< Current health. Between 0 and mMaxHealth.
 };
 
 #endif /* DG_ACTOR_H_ */

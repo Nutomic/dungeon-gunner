@@ -7,6 +7,7 @@
 
 #include "Bullet.h"
 
+#include "../abstract/Actor.h"
 #include "../util/Log.h"
 
 const float Bullet::SPEED = 500.0f;
@@ -35,6 +36,10 @@ Bullet::onCollide(Physical& other, uint16 type) {
 	// Make sure we do not damage twice.
 	if (!getDelete()) {
 		// Call onShot on other, with damage as param.
+		if (type == CATEGORY_ACTOR) {
+			Actor& a = dynamic_cast<Actor&>(other);
+			a.onDamage(10);
+		}
 		setDelete(true);
 	}
 }

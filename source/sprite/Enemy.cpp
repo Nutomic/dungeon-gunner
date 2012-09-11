@@ -8,8 +8,9 @@
 #include "Enemy.h"
 
 Enemy::Enemy(b2World& world, const Vector2f& position) :
-Sprite("enemy.png", PhysicalData(position, Vector2i(50, 50), world,
-		CATEGORY_ACTOR, MASK_ALL, true)) {
+		Sprite("enemy.png", PhysicalData(position, Vector2i(50, 50), world,
+		       CATEGORY_ACTOR, MASK_ALL, true)),
+		Actor(100) {
 
 }
 

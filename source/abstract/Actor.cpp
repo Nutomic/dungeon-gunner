@@ -15,7 +15,9 @@ std::vector<Actor*> Actor::mInstances = std::vector<Actor*>();
 /**
  * Saves pointer to this instance in static var for think().
  */
-Actor::Actor() {
+Actor::Actor(int health) :
+	mMaxHealth(health),
+	mCurrentHealth(health) {
 	mInstances.push_back(this);
 }
 
@@ -38,4 +40,25 @@ Actor::think(float elapsedTime) {
 	for (auto i : mInstances) {
 		i->onThink(elapsedTime);
 	}
+}
+
+/**
+ * Subtracts health from Actor.
+ *
+ * @param damage Amount of health to subtract.
+ */
+void
+Actor::onDamage(int damage) {
+	mCurrentHealth -= damage;
+	if (mCurrentHealth <= 0) {
+		mCurrentHealth = 0;
+		onDeath();
+	}
+}
+
+/**
+ * Called when health reaches zero. Does nothing by default.
+ */
+void
+Actor::onDeath() {
 }
