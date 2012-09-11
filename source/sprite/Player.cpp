@@ -13,12 +13,13 @@
 #include "../items/Weapon.h"
 
 const float Player::SPEED = 100.0f;
+const Vector2i Player::SIZE = Vector2i(50, 50);
 
 /**
  * Initializes Sprite.
  */
 Player::Player(b2World& world, Collection& collection, const Vector2f& position) :
-		Sprite("player.png", PhysicalData(position, Vector2i(50, 50), world,
+		Sprite("player.png", PhysicalData(position, SIZE, world,
 				CATEGORY_ACTOR, MASK_ALL, true)),
 		Actor(100),
 		mWeapon(*this, collection, world),

@@ -38,6 +38,7 @@ protected:
 // Private variables.
 private:
 	static const float SPEED;
+	static const Vector2i SIZE;
 	Weapon mWeapon; //< Weapon object used for Player::fire().
 	Vector2f mDestination; //< Absolute position of the movement destination.
 	Vector2f mCrosshairPosition; //< Relative position of the point to fire at (mouse cursor).
