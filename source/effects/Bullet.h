@@ -22,6 +22,9 @@ public:
 	void onCollide(Physical& other, uint16 category);
 	bool doesCollide(Physical& other);
 
+// Public variables.
+public:
+	static const Vector2i SIZE;
 // Private variables.
 private:
 	static const float SPEED;
