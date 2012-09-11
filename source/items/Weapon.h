@@ -19,15 +19,18 @@
  * 	- pass xml filename
  */
 class Weapon : public Emitter {
+// Public functions.
 public:
 	Weapon(Physical& holder, Collection& collection, b2World& world);
 	~Weapon();
 
 	void fire();
 
+// Protected functions.
 protected:
 	std::shared_ptr<Particle> createParticle();
 
+// Private variables.
 private:
 	Physical& mHolder;
 	std::shared_ptr<sf::Texture> mBulletTexture;
