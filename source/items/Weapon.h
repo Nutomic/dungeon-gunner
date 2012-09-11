@@ -32,6 +32,8 @@ protected:
 
 // Private variables.
 private:
+	static const int BULLET_DAMAGE;
+
 	Physical& mHolder;
 	std::shared_ptr<sf::Texture> mBulletTexture;
 	b2World& mWorld;

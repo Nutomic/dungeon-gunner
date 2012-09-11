@@ -12,6 +12,8 @@
 #include "../util/Loader.h"
 #include "../util/ResourceManager.h"
 
+const int Weapon::BULLET_DAMAGE = 10;
+
 Weapon::Weapon(Physical& holder, Collection& collection, b2World& world) :
 		Emitter(collection),
 		mHolder(holder),
@@ -34,5 +36,5 @@ Weapon::fire() {
 std::shared_ptr<Particle>
 Weapon::createParticle() {
 	return std::shared_ptr<Particle>(new Bullet(mHolder.getPosition(), mWorld, mBulletTexture,
-			mHolder, mHolder.getAngle(), 10));
+			mHolder, mHolder.getAngle(), BULLET_DAMAGE));
 }
