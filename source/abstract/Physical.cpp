@@ -90,7 +90,7 @@ Physical::getSpeed() const {
 }
 
 /**
- * Returns the rotation of the body (converted to an SFML angle).
+ * Returns the rotation of the body as an SFML angle.
  */
 float
 Physical::getAngle() const {
