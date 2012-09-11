@@ -21,7 +21,7 @@
 class Weapon : public Emitter {
 // Public functions.
 public:
-	Weapon(Physical& holder, Collection& collection, b2World& world);
+	Weapon(Physical& holder, Collection& collection, b2World& world, const Vector2i& holderSize);
 	~Weapon();
 
 	void fire();
@@ -37,6 +37,7 @@ private:
 	Physical& mHolder;
 	std::shared_ptr<sf::Texture> mBulletTexture;
 	b2World& mWorld;
+	const Vector2f mOffset; //< Offset to the point where bullets are inserted (from holder center).
 };
 
 #endif /* DG_WEAPON_H_ */
