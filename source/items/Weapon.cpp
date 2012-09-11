@@ -34,5 +34,5 @@ Weapon::fire() {
 std::shared_ptr<Particle>
 Weapon::createParticle() {
 	return std::shared_ptr<Particle>(new Bullet(mHolder.getPosition(), mWorld, mBulletTexture,
-			mHolder, mHolder.getAngle()));
+			mHolder, mHolder.getAngle(), 10));
 }

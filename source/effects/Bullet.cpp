@@ -20,10 +20,11 @@ const float Bullet::SPEED = 500.0f;
  * @param texture Texture to display for bullet.
  */
 Bullet::Bullet(const Vector2f& position, b2World& world,
-	const std::shared_ptr<sf::Texture>& texture, Physical& shooter, float direction) :
+	const std::shared_ptr<sf::Texture>& texture, Physical& shooter, float direction, int damage) :
 		Particle(texture, PhysicalData(position, Vector2i(20, 20), world, CATEGORY_PARTICLE,
 				CATEGORY_PARTICLE, true, true)),
-		mShooter(shooter) {
+		mShooter(shooter),
+		mDamage(damage) {
 	setSpeed(angle(direction), SPEED);
 	setAngle(direction);
 }
@@ -38,7 +39,7 @@ Bullet::onCollide(Physical& other, uint16 type) {
 		// Call onShot on other, with damage as param.
 		if (type == CATEGORY_ACTOR) {
 			Actor& a = dynamic_cast<Actor&>(other);
-			a.onDamage(10);
+			a.onDamage(mDamage);
 		}
 		setDelete(true);
 	}

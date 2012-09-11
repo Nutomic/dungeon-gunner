@@ -17,7 +17,7 @@ class Bullet : public Particle {
 // Public functions.
 public:
 	Bullet(const Vector2f& position, b2World& world, const std::shared_ptr<sf::Texture>& texture,
-			Physical& shooter, float direction);
+			Physical& shooter, float direction, int damage);
 
 	void onCollide(Physical& other, uint16 category);
 	bool doesCollide(Physical& other);
@@ -26,6 +26,7 @@ public:
 private:
 	static const float SPEED;
 	Physical& mShooter;
+	const int mDamage;
 };
 
 #endif /* DG_BULLET_H_ */
