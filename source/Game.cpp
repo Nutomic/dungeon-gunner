@@ -9,6 +9,7 @@
 
 #include "abstract/Actor.h"
 #include "sprite/Cover.h"
+#include "sprite/Enemy.h"
 #include "util/Loader.h"
 #include "util/ResourceManager.h"
 #include "util/String.h"
@@ -36,12 +37,16 @@ Game::Game(const Vector2i& resolution) :
 		mPaused(false) {
 	mWindow.setFramerateLimit(FPS_GOAL);
 	mWindow.setKeyRepeatEnabled(true);
+	mWorld.SetContactListener(this);
+
+	mTileManager.generate();
 	for (int i = 0; i < 500; i += 50) {
 		mCollection.insert(std::shared_ptr<Sprite>(new Cover(Vector2f(i, i), Vector2i(20, 20),
 				mWorld)), Collection::LEVEL_STATIC);
 	}
-	mTileManager.generate();
-	mWorld.SetContactListener(this);
+	mCollection.insert(std::shared_ptr<Sprite>(new Enemy(mWorld, Vector2f(400.0f, 200.0f))),
+			Collection::LEVEL_ACTOR);
+
 }
 
 /**
