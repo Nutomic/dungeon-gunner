@@ -25,10 +25,8 @@ Physical::Physical(const PhysicalData& data) :
 	// not moving -> static body
 	// moving -> dynamic body
 	// bullet -> kinematic body
-	bodyDef.type = 	(data.moving) ?
-						(data.bullet)
-							? b2_dynamicBody
-							: b2_dynamicBody
+	bodyDef.type = 	(data.moving)
+						? b2_dynamicBody
 						: b2_staticBody;
 	bodyDef.position = vector(data.position);
 	bodyDef.allowSleep = true;
