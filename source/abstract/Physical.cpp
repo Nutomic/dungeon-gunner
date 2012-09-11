@@ -45,6 +45,7 @@ Physical::Physical(const PhysicalData& data) :
 	fixtureDef.filter.categoryBits = data.category;
 	fixtureDef.filter.maskBits = ~data.maskExclude;
 	fixtureDef.restitution = 0;
+	fixtureDef.density = (data.bullet) ? 0 : 10000;
 
 	mBody->CreateFixture(&fixtureDef);
 }
