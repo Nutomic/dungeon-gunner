@@ -132,6 +132,18 @@ Game::keyUp(const sf::Event& event) {
 	case sf::Keyboard::Space:
 		mPaused = !mPaused;
 		break;
+	case sf::Keyboard::W:
+		mPlayer.setDirection(Player::DIRECTION_UP, true);
+		break;
+	case sf::Keyboard::S:
+		mPlayer.setDirection(Player::DIRECTION_DOWN, true);
+		break;
+	case sf::Keyboard::A:
+		mPlayer.setDirection(Player::DIRECTION_LEFT, true);
+		break;
+	case sf::Keyboard::D:
+		mPlayer.setDirection(Player::DIRECTION_RIGHT, true);
+		break;
 	default:
 		break;
 	}
@@ -143,6 +155,18 @@ Game::keyUp(const sf::Event& event) {
 void
 Game::keyDown(const sf::Event& event) {
 	switch (event.key.code) {
+	case sf::Keyboard::W:
+		mPlayer.setDirection(Player::DIRECTION_UP, false);
+		break;
+	case sf::Keyboard::S:
+		mPlayer.setDirection(Player::DIRECTION_DOWN, false);
+		break;
+	case sf::Keyboard::A:
+		mPlayer.setDirection(Player::DIRECTION_LEFT, false);
+		break;
+	case sf::Keyboard::D:
+		mPlayer.setDirection(Player::DIRECTION_RIGHT, false);
+		break;
 	default:
 		break;
 	}
