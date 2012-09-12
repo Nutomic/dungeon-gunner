@@ -13,7 +13,6 @@
 #include "util/Loader.h"
 #include "util/ResourceManager.h"
 #include "util/String.h"
-#include "util/Log.h"
 
 /// Goal amount of frames per second.
 const int Game::FPS_GOAL = 60;
@@ -46,7 +45,6 @@ Game::Game(const Vector2i& resolution) :
 	}
 	mCollection.insert(std::shared_ptr<Sprite>(new Enemy(mWorld, Vector2f(400.0f, 200.0f))),
 			Collection::LEVEL_ACTOR);
-
 }
 
 /**

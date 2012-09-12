@@ -8,9 +8,9 @@
 #include "Bullet.h"
 
 #include "../abstract/Actor.h"
-#include "../util/Log.h"
 
 const Vector2i Bullet::SIZE = Vector2i(20, 20);
+
 const float Bullet::SPEED = 500.0f;
 
 /**

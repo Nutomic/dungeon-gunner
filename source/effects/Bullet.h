@@ -25,6 +25,7 @@ public:
 // Public variables.
 public:
 	static const Vector2i SIZE;
+
 // Private variables.
 private:
 	static const float SPEED; //< If speed is too low, bullets push each other away on insert.
