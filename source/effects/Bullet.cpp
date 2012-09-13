@@ -23,7 +23,7 @@ const float Bullet::SPEED = 500.0f;
 Bullet::Bullet(const Vector2f& position, b2World& world,
 	const std::shared_ptr<sf::Texture>& texture, Physical& shooter, float direction, int damage) :
 		Particle(texture, PhysicalData(position, SIZE, world, CATEGORY_PARTICLE,
-				CATEGORY_PARTICLE, true, true)),
+				CATEGORY_PARTICLE, true, true, true)),
 		mShooter(shooter),
 		mDamage(damage) {
 	setSpeed(angle(direction), SPEED);
