@@ -27,14 +27,24 @@ public:
 	public:
 		PhysicalData() = default;
 		PhysicalData(const Vector2f& position, const Vector2i& size, b2World& world,
-				uint16 category, uint16 maskExclude, bool moving, bool bullet = false);
-		const Vector2f& position; //< World position of the body in pixel coordinates.
-		const Vector2i& size; //< Pixel size of the body.
-		b2World& world; //< Box2D world object.
-		uint16 category; //< The category for collision filtering. Only one may be set. @link Physical::Category
-		uint16 maskExclude; //< All categories set here will have collisions disabled with this object.
-		bool moving; //< True if the body may move on its own (player, monster).
-		bool bullet; //< True if the object is a bullet.
+				uint16 category, uint16 maskExclude, bool moving, bool bullet = false,
+				bool circle = false);
+		/// World position of the body in pixel coordinates.
+		const Vector2f& position;
+		/// Pixel size of the body if it is a box.
+		Vector2i size;
+		/// Box2D world object.
+		b2World& world;
+		/// The category for collision filtering. Only one may be set. @link Physical::Category
+		uint16 category;
+		/// All categories set here will have collisions disabled with this object.
+		uint16 maskExclude;
+		/// True if the body may move on its own (player, monster).
+		bool moving;
+		/// True if the object is a bullet.
+		bool bullet;
+		/// True if the body collides as a circle. Radius is side length / 2, both sides must be equal.
+		bool circle;
 	};
 
 	/**

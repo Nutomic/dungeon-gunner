@@ -33,11 +33,21 @@ Physical::Physical(const PhysicalData& data) :
 
 	mBody = data.world.CreateBody(&bodyDef);
 
-	b2PolygonShape boxShape;
-	boxShape.SetAsBox(pixelToMeter(data.size.x) / 2, pixelToMeter(data.size.y) / 2);
+	b2Shape* shape;
+	if (data.circle) {
+		assert(data.size.x == data.size.y);
+		shape = new b2CircleShape;
+		shape->m_radius = pixelToMeter(data.size.x) / 2;
+	}
+	else {
+		b2PolygonShape* box = new b2PolygonShape;
+		box->SetAsBox(pixelToMeter(data.size.x) / 2,
+				      pixelToMeter(data.size.y) / 2);
+		shape = dynamic_cast<b2Shape*>(box);
+	}
 
 	b2FixtureDef fixtureDef;
-	fixtureDef.shape = &boxShape;
+	fixtureDef.shape = shape;
 	fixtureDef.density = 1.0f;
 	fixtureDef.filter.categoryBits = data.category;
 	fixtureDef.filter.maskBits = ~data.maskExclude;
@@ -45,6 +55,8 @@ Physical::Physical(const PhysicalData& data) :
 	fixtureDef.density = (data.bullet) ? 0 : 10000;
 
 	mBody->CreateFixture(&fixtureDef);
+
+	delete shape;
 }
 
 /**
@@ -60,14 +72,15 @@ Physical::~Physical() {
  * @link Physical::PhysicalData
  */
 Physical::PhysicalData::PhysicalData( const Vector2f& position, const Vector2i& size,
-		b2World& world, uint16 category, uint16 maskExclude, bool moving, bool bullet) :
+		b2World& world, uint16 category, uint16 maskExclude, bool moving, bool bullet, bool circle) :
 	position(position),
 	size(size),
 	world(world),
 	category(category),
 	maskExclude(maskExclude),
 	moving(moving),
-	bullet(bullet) {
+	bullet(bullet),
+	circle(circle) {
 }
 
 /**
