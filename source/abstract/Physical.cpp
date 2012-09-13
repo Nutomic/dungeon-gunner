@@ -95,7 +95,7 @@ Physical::getSpeed() const {
  */
 float
 Physical::getAngle() const {
-	return - thor::toDegree(mBody->GetAngle());
+	return thor::toDegree(mBody->GetAngle());
 }
 
 /**
@@ -165,5 +165,5 @@ Physical::setSpeed(Vector2f direction, float speed) {
  */
 void
 Physical::setAngle(float angle) {
-	mBody->SetTransform(mBody->GetPosition(), - thor::toRadian(angle));
+	mBody->SetTransform(mBody->GetPosition(), thor::toRadian(angle));
 }
