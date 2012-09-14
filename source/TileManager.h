@@ -19,6 +19,8 @@
 #include "util/Vector.h"
 #include "abstract/Sprite.h"
 
+class Sprite;
+
 class TileManager : public sf::Drawable {
 // Public constants.
 public:

@@ -16,7 +16,9 @@
 #include "../items/Weapon.h"
 #include "../util/Vector.h"
 
+class Actor;
 class Sprite;
+class Weapon;
 
 /**
  * Player object.

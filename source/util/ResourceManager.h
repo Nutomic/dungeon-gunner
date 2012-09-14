@@ -14,6 +14,10 @@
 
 #include "Singleton.h"
 
+template <class T>
+class Singleton;
+
+
 /**
  * Loads and manages all resources by providing Singleton access to Thor ResourceManager.
  */

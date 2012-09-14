@@ -15,6 +15,8 @@
 
 #include "../abstract/Sprite.h"
 
+class Sprite;
+
 /**
  * A collection of sprites, which can be put into different layers.
  */

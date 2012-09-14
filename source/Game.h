@@ -19,6 +19,9 @@
 #include "sprite/Player.h"
 #include "util/Collection.h"
 
+class Player;
+class Collection;
+
 /*
  * Use vertex for tiles.
  */

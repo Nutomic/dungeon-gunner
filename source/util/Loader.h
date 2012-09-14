@@ -18,6 +18,9 @@
 
 #include "Singleton.h"
 
+template <class T>
+class Singleton;
+
 /**
  * This class allows to set default resource folders and subfolders, which means that these
  * folders only have to be set once, and not be included in the creation of every single

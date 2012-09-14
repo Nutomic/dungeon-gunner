@@ -10,6 +10,8 @@
 
 #include "../abstract/Sprite.h"
 
+class Sprite;
+
 class Body : public Sprite {
 // Public functions.
 public:

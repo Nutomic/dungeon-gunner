@@ -13,6 +13,9 @@
 #include "../abstract/Physical.h"
 #include "../particle/Emitter.h"
 
+class Physical;
+class Emitter;
+
 /**
  * Loading mechanism:
  * 	- pass enum value and load mapped xml

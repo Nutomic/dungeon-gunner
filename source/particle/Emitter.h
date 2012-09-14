@@ -12,6 +12,10 @@
 #include "../util/Collection.h"
 #include "Particle.h"
 
+class Physical;
+class Collection;
+class Particle;
+
 class Emitter {
 // Public functions.
 public:

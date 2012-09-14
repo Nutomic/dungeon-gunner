@@ -15,6 +15,8 @@
 #include "Physical.h"
 #include "../util/Vector.h"
 
+class Physical;
+
 /**
  * Represents a drawable object.
  *

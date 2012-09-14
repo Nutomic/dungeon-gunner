@@ -13,6 +13,10 @@
 #include "../util/Collection.h"
 #include "../util/Vector.h"
 
+class Actor;
+class Sprite;
+class Collection;
+
 class Enemy : public Sprite, public Actor {
 // Public functions.
 public:

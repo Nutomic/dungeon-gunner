@@ -10,6 +10,8 @@
 
 #include "../abstract/Sprite.h"
 
+class Sprite;
+
 /**
  * Prototype for a particle.
  */

@@ -10,6 +10,8 @@
 
 #include "../abstract/Sprite.h"
 
+class Sprite;
+
 /**
  * A wall that can be placed anywhere (not limited by tiles) and have any (rectangular) size.
  */

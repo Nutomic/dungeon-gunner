@@ -10,6 +10,8 @@
 
 #include "../particle/Particle.h"
 
+class Particle;
+
 /**
  * Bullet particle fired by a weapon, may damage actors.
  */
