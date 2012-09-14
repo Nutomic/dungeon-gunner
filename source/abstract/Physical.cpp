@@ -19,7 +19,6 @@
 Physical::Physical(const PhysicalData& data) :
 		mDelete(false) {
 	assert(data.size != Vector2i());
-	assert(data.category);
 
 	b2BodyDef bodyDef;
 	bodyDef.type = 	(data.moving)

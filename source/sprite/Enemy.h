@@ -10,18 +10,24 @@
 
 #include "../abstract/Actor.h"
 #include "../abstract/Sprite.h"
-
+#include "../util/Collection.h"
 #include "../util/Vector.h"
 
 class Enemy : public Sprite, public Actor {
 // Public functions.
 public:
-	Enemy(b2World& world, const Vector2f& position);
+	Enemy(b2World& world, const Vector2f& position, Collection& collection);
 	~Enemy();
 
 // Private functions.
 private:
 	void onThink(float elapsedTime);
+	void onDeath();
+
+// Private variablese.
+private:
+	b2World& mWorld;
+	Collection& mCollection;
 };
 
 #endif /* DG_ENEMY_H_ */
