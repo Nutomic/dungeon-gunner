@@ -117,9 +117,9 @@ Physical::getDelete() const {
 /**
  * Returns the Physical::Category of this object.
  */
-uint16
+Physical::Category
 Physical::getCategory() const {
-	return mBody->GetFixtureList()->GetFilterData().categoryBits;
+	return (Category) mBody->GetFixtureList()->GetFilterData().categoryBits;
 }
 
 /**

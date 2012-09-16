@@ -19,22 +19,13 @@ class Sprite;
 
 /**
  * A collection of sprites, which can be put into different layers.
+ *
+ * Uses Sprite instead of sf::Drawable to also manage deleting objects.
  */
 class Collection : public sf::Drawable {
-// Public types.
-public:
-	/**
-	 * Determines in what order sprites are rendered, dynamics and actors should be on top.
-	 */
-	enum Level {
-		LEVEL_STATIC,
-		LEVEL_PARTICLE,
-		LEVEL_ACTOR
-	};
-
 // Public functions.
 public:
-	void insert(std::shared_ptr<Sprite> drawable, Level level);
+	void insert(std::shared_ptr<Sprite> drawable);
 	void remove(std::shared_ptr<Sprite> drawable);
 	void checkDelete();
 
@@ -44,7 +35,7 @@ private:
 
 // Private variables.
 private:
-	std::map<Level, std::vector<std::shared_ptr<Sprite> > > mDrawables;
+	std::map<Physical::Category, std::vector<std::shared_ptr<Sprite> > > mDrawables;
 };
 
 #endif /* DG_COLLECTION_H_ */

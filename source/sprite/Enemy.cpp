@@ -20,8 +20,7 @@ Enemy::Enemy(b2World& world, const Vector2f& position, Collection& collection) :
 
 Enemy::~Enemy() {
 	// Insert here to avoid altering b2d data during timestep.
-	mCollection.insert(std::shared_ptr<Sprite>(new Body(mWorld, getPosition())),
-			Collection::LEVEL_STATIC);
+	mCollection.insert(std::shared_ptr<Sprite>(new Body(mWorld, getPosition())));
 }
 
 void

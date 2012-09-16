@@ -19,5 +19,5 @@ Emitter::~Emitter() {
  */
 void
 Emitter::emit() {
-	mCollection.insert(createParticle(), Collection::LEVEL_PARTICLE);
+	mCollection.insert(createParticle());
 }

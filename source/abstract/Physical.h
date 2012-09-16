@@ -49,14 +49,15 @@ public:
 
 	/**
 	 * Categories of physical objects, for Box2D collision filtering.
+	 * The order of categories is also used for render order.
 	 *
 	 * @warning An object may only have one category.
 	 */
 	enum Category {
-		CATEGORY_NONSOLID = 0,
 		CATEGORY_WORLD = 1 << 1,
-		CATEGORY_ACTOR = 1 << 2,
-		CATEGORY_PARTICLE = 1 << 3
+		CATEGORY_NONSOLID = 1 << 2,
+		CATEGORY_PARTICLE = 1 << 3,
+		CATEGORY_ACTOR = 1 << 4
 	};
 
 	/**
@@ -76,7 +77,7 @@ public:
 	Vector2f getSpeed() const;
 	float getAngle() const;
 	bool getDelete() const;
-	uint16 getCategory() const;
+	Category getCategory() const;
 
 	virtual bool doesCollide(Physical& other);
 	virtual void onCollide(Physical& other, uint16 category);

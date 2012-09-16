@@ -41,10 +41,10 @@ Game::Game(const Vector2i& resolution) :
 	mTileManager.generate();
 	for (int i = 0; i < 500; i += 50) {
 		mCollection.insert(std::shared_ptr<Sprite>(new Cover(Vector2f(i, i), Vector2i(20, 20),
-				mWorld)), Collection::LEVEL_STATIC);
+				mWorld)));
 	}
-	mCollection.insert(std::shared_ptr<Sprite>(new Enemy(mWorld, Vector2f(400.0f, 200.0f), mCollection)),
-			Collection::LEVEL_ACTOR);
+	mCollection.insert(std::shared_ptr<Sprite>(new Enemy(mWorld, Vector2f(400.0f, 200.0f),
+			mCollection)));
 }
 
 /**
