@@ -21,6 +21,7 @@ class Sprite;
  * A collection of sprites, which can be put into different layers.
  *
  * Uses Sprite instead of sf::Drawable to also manage deleting objects.
+ * Render order is determined by Physical::Category (higher number on top).
  */
 class Collection : public sf::Drawable {
 // Public functions.

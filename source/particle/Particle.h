@@ -16,6 +16,7 @@ class Sprite;
  * Prototype for a particle.
  */
 class Particle : public Sprite {
+// Public functions.
 public:
 	Particle(const std::shared_ptr<sf::Texture>& texture, const PhysicalData& data);
 	virtual ~Particle();

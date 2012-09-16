@@ -23,14 +23,18 @@ class Physical;
  * Handles drawing to world.
  */
 class Sprite : public sf::Drawable, public Physical {
+// Public functions.
 public:
 	Sprite(const sf::String& texturePath, const PhysicalData& data);
 	Sprite(const std::shared_ptr<sf::Texture>& texture, const PhysicalData& data);
 	virtual ~Sprite() = 0;
 
-private:
+// Protected functions.
+protected:
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
+// Private variables.
+private:
 	std::shared_ptr<sf::Texture> mTexture;
 	Vector2i mSize;
 };

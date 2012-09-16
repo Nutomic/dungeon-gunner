@@ -43,13 +43,15 @@ public:
 		bool moving;
 		/// True if the object is a bullet.
 		bool bullet;
-		/// True if the body collides as a circle. Radius is side length / 2, both sides must be equal.
+		/// True if the body collides as a circle. Radius is side length / 2,
+		/// both sides must be equal.
 		bool circle;
 	};
 
 	/**
 	 * Categories of physical objects, for Box2D collision filtering.
-	 * The order of categories is also used for render order.
+	 * The order of categories is also used for render order in Collection::draw()
+	 * (higher number on top).
 	 *
 	 * @warning An object may only have one category.
 	 */
@@ -61,7 +63,7 @@ public:
 	};
 
 	/**
-	 * Common Box2D collision masking values.
+	 * Common collision masking values.
 	 */
 	enum Mask {
 		MASK_NONE = 0xffff, //< Disables any collisions.
@@ -88,13 +90,10 @@ protected:
 	void setSpeed(Vector2f direction, float speed);
 	void setAngle(float angle);
 
-// Protected variables.
-protected:
-	// Currently protected to allow for (debug only) direct player input.
-	b2Body* mBody;
 
 // Private variables.
 private:
+	b2Body* mBody;
 	bool mDelete;
 };
 

@@ -16,6 +16,7 @@ class Sprite;
  * A wall that can be placed anywhere (not limited by tiles) and have any (rectangular) size.
  */
 class Cover : public Sprite {
+// Public functions.
 public:
 	Cover(const Vector2f& position, const Vector2i& size, b2World& world);
 };

@@ -22,7 +22,7 @@
 class Sprite;
 
 class TileManager : public sf::Drawable {
-// Public constants.
+// Public variables.
 public:
 	/// The size of a single tile (pixels).
 	static const Vector2i TILE_SIZE;
@@ -75,7 +75,5 @@ public:
 private:
 	Type mType;
 };
-
-
 
 #endif /* DG_TILEMANAGER_H_ */

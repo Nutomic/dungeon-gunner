@@ -8,7 +8,6 @@
 #include "Sprite.h"
 
 #include "../util/Loader.h"
-#include "../util/Log.h"
 #include "../util/String.h"
 #include "../util/ResourceManager.h"
 

@@ -17,11 +17,11 @@
 template <class T>
 class Singleton;
 
-
 /**
  * Loads and manages all resources by providing Singleton access to Thor ResourceManager.
  */
 class ResourceManager : public thor::MultiResourceCache, public Singleton<ResourceManager> {
+// Private functions.
 private:
 	friend class Singleton<ResourceManager>;
 	ResourceManager() = default;
