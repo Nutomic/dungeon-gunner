@@ -80,6 +80,10 @@ public:
 	float getAngle() const;
 	bool getDelete() const;
 	Category getCategory() const;
+	Vector2f getSize() const;
+
+	bool isSolid() const;
+	bool isMovable() const;
 
 	virtual bool doesCollide(Physical& other);
 	virtual void onCollide(Physical& other, uint16 category);

@@ -21,7 +21,7 @@ Physical::Physical(const PhysicalData& data) :
 	assert(data.size != Vector2i());
 
 	b2BodyDef bodyDef;
-	bodyDef.type = 	(data.moving)
+	bodyDef.type = (data.moving)
 						? b2_dynamicBody
 						: b2_staticBody;
 	bodyDef.position = vector(data.position);
@@ -120,6 +120,31 @@ Physical::getDelete() const {
 Physical::Category
 Physical::getCategory() const {
 	return (Category) mBody->GetFixtureList()->GetFilterData().categoryBits;
+}
+
+/**
+ * Returns the size of the body as a vector.
+ */
+Vector2f
+Physical::getSize() const {
+	b2AABB aabb(mBody->GetFixtureList()->GetAABB(0));
+	return vector(aabb.upperBound - aabb.lowerBound);
+}
+
+/**
+ * Returns true if collisions are enabled for the body.
+ */
+bool
+Physical::isSolid() const {
+	return mBody->GetFixtureList()->GetFilterData().maskBits != 0;
+}
+
+/**
+ * Returns true if the body is able to move.
+ */
+bool
+Physical::isMovable() const {
+	return mBody->GetType() != b2_staticBody;
 }
 
 /**
