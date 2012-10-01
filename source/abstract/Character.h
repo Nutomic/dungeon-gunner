@@ -10,13 +10,17 @@
 
 #include <vector>
 
+#include "Sprite.h"
+
+class Sprite;
+
 /**
  * Provides think function for AI.
  */
-class Character {
+class Character : public Sprite {
 // Public functions.
 public:
-	Character(int health);
+	Character(const sf::String& texturePath, const PhysicalData& data, int health);
 	virtual ~Character() = 0;
 
 	static void think(float elapsedTime);

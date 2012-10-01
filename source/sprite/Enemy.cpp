@@ -10,9 +10,8 @@
 #include "Body.h"
 
 Enemy::Enemy(b2World& world, const Vector2f& position, Collection& collection) :
-		Sprite("enemy.png", PhysicalData(position, Vector2i(50, 50), world,
-		       CATEGORY_ACTOR, MASK_ALL, true, false, true)),
-		Character(100),
+		Character("enemy.png", PhysicalData(position, Vector2i(50, 50), world,
+		       CATEGORY_ACTOR, MASK_ALL, true, false, true), 100),
 		mWorld(world),
 		mCollection(collection) {
 

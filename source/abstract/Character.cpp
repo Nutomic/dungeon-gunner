@@ -15,10 +15,11 @@ std::vector<Character*> Character::mInstances = std::vector<Character*>();
 /**
  * Saves pointer to this instance in static var for think().
  */
-Character::Character(int health) :
-	mMaxHealth(health),
-	mCurrentHealth(health) {
-	mInstances.push_back(this);
+Character::Character(const sf::String& texturePath, const PhysicalData& data, int health) :
+		Sprite(texturePath, data),
+		mMaxHealth(health),
+		mCurrentHealth(health) {
+		mInstances.push_back(this);
 }
 
 /**

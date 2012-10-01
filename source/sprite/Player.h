@@ -13,19 +13,17 @@
 
 #include "../Pathfinder.h"
 #include "../abstract/Character.h"
-#include "../abstract/Sprite.h"
 #include "../items/Weapon.h"
 #include "../util/Vector.h"
 
 class Character;
 class Pathfinder;
-class Sprite;
 class Weapon;
 
 /**
  * Player object.
  */
-class Player : public Sprite, public Character {
+class Player : public Character {
 // Public types.
 public:
 	/**
