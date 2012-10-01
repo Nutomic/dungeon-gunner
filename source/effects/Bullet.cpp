@@ -7,7 +7,7 @@
 
 #include "Bullet.h"
 
-#include "../abstract/Actor.h"
+#include "../abstract/Character.h"
 
 const Vector2i Bullet::SIZE = Vector2i(20, 20);
 
@@ -39,7 +39,7 @@ Bullet::onCollide(Physical& other, uint16 type) {
 	if (!getDelete()) {
 		// Call onShot on other, with damage as param.
 		if (type == CATEGORY_ACTOR) {
-			Actor& a = dynamic_cast<Actor&>(other);
+			Character& a = dynamic_cast<Character&>(other);
 			a.onDamage(mDamage);
 		}
 		setDelete(true);

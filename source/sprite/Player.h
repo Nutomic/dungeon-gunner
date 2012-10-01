@@ -12,12 +12,12 @@
 #include <SFML/Graphics.hpp>
 
 #include "../Pathfinder.h"
-#include "../abstract/Actor.h"
+#include "../abstract/Character.h"
 #include "../abstract/Sprite.h"
 #include "../items/Weapon.h"
 #include "../util/Vector.h"
 
-class Actor;
+class Character;
 class Pathfinder;
 class Sprite;
 class Weapon;
@@ -25,7 +25,7 @@ class Weapon;
 /**
  * Player object.
  */
-class Player : public Sprite, public Actor {
+class Player : public Sprite, public Character {
 // Public types.
 public:
 	/**

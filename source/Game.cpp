@@ -9,7 +9,7 @@
 
 #include <Thor/Graphics.hpp>
 
-#include "abstract/Actor.h"
+#include "abstract/Character.h"
 #include "sprite/Cover.h"
 #include "sprite/Enemy.h"
 #include "util/Loader.h"
@@ -83,7 +83,7 @@ Game::loop() {
 		input();
 
 		for (; !mPaused && (left >= TICKS_GOAL); left -= TICKS_GOAL) {
-			Actor::think(TICKS_GOAL);
+			Character::think(TICKS_GOAL);
 			mWorld.Step(1.0f / FPS_GOAL, 8, 3);
 
 			mCollection.checkDelete();

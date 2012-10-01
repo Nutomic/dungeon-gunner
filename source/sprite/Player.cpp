@@ -23,7 +23,7 @@ Player::Player(b2World& world, Collection& collection, const Vector2f& position,
 	Pathfinder& pathfinder) :
 		Sprite("player.png", PhysicalData(position, SIZE, world,
 				CATEGORY_ACTOR, MASK_ALL, true, false, true)),
-		Actor(100),
+		Character(100),
 		mWeapon(*this, collection, world, SIZE),
 		mDirection(0),
 		mPathfinder(pathfinder) {

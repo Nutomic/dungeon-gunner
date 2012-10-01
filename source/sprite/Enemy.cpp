@@ -12,7 +12,7 @@
 Enemy::Enemy(b2World& world, const Vector2f& position, Collection& collection) :
 		Sprite("enemy.png", PhysicalData(position, Vector2i(50, 50), world,
 		       CATEGORY_ACTOR, MASK_ALL, true, false, true)),
-		Actor(100),
+		Character(100),
 		mWorld(world),
 		mCollection(collection) {
 

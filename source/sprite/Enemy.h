@@ -8,16 +8,16 @@
 #ifndef DG_ENEMY_H_
 #define DG_ENEMY_H
 
-#include "../abstract/Actor.h"
+#include "../abstract/Character.h"
 #include "../abstract/Sprite.h"
 #include "../util/Collection.h"
 #include "../util/Vector.h"
 
-class Actor;
+class Character;
 class Sprite;
 class Collection;
 
-class Enemy : public Sprite, public Actor {
+class Enemy : public Sprite, public Character {
 // Public functions.
 public:
 	Enemy(b2World& world, const Vector2f& position, Collection& collection);
