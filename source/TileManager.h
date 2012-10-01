@@ -35,9 +35,9 @@ public:
 
 // Private types.
 private:
-	enum Type {
-		TYPE_FLOOR,
-		TYPE_WALL
+	enum class Type {
+		FLOOR,
+		WALL
 	};
 
 	/**

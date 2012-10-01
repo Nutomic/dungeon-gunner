@@ -76,22 +76,22 @@ Player::move(const Vector2f& destination) {
 void
 Player::setDirection(Direction direction, bool unset) {
 	if (unset) {
-		mDirection = mDirection & ~direction;
+		mDirection = mDirection & ~(uint8) direction;
 	} else {
-		mDirection = mDirection | direction;
+		mDirection = mDirection | (uint8) direction;
 	}
 	// Convert directions into a vector.
 	Vector2f dirVec(0, 0);
-	if (mDirection & DIRECTION_RIGHT) {
+	if (mDirection & (uint8) Direction::RIGHT) {
 		dirVec.x += 1.0f;
 	}
-	if (mDirection & DIRECTION_LEFT) {
+	if (mDirection & (uint8) Direction::LEFT) {
 		dirVec.x += - 1.0f;
 	}
-	if (mDirection & DIRECTION_DOWN) {
+	if (mDirection & (uint8) Direction::DOWN) {
 		dirVec.y += 1.0f;
 	}
-	if (mDirection & DIRECTION_UP) {
+	if (mDirection & (uint8) Direction::UP) {
 		dirVec.y += - 1.0f;
 	}
 	setSpeed(dirVec, SPEED);

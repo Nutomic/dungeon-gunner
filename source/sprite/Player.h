@@ -31,11 +31,11 @@ public:
 	/**
 	 * Movement directions that can be set via Player::setDirection().
 	 */
-	enum Direction {
-		DIRECTION_RIGHT = 1 << 0,
-		DIRECTION_LEFT = 1 << 1,
-		DIRECTION_UP = 1 << 2,
-		DIRECTION_DOWN = 1 << 3
+	enum class Direction : uint8 {
+		RIGHT = 1 << 0,
+		LEFT = 1 << 1,
+		UP = 1 << 2,
+		DOWN = 1 << 3
 	};
 
 // Public functions.

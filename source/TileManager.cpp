@@ -33,7 +33,7 @@ TileManager::TileManager(b2World& world) :
  */
 TileManager::Tile::Tile(Type type, const TilePosition& position, b2World& world) :
 		Sprite(getTexture(type), PhysicalData(Vector2f(position.x * TILE_SIZE.x, position.y * TILE_SIZE.y),
-				TILE_SIZE, world, CATEGORY_WORLD, (type == TYPE_FLOOR) ? MASK_NONE : MASK_ALL, false)),
+				TILE_SIZE, world, CATEGORY_WORLD, (type == Type::FLOOR) ? MASK_NONE : MASK_ALL, false)),
 		mType(type) {
 }
 
@@ -47,10 +47,10 @@ std::shared_ptr<sf::Texture>
 TileManager::Tile::getTexture(Type type) {
 	sf::String filename;
 	switch (type) {
-	case TYPE_FLOOR:
+	case Type::FLOOR:
 		filename = "floor.png";
 		break;
-	case TYPE_WALL:
+	case Type::WALL:
 		filename = "wall.png";
 		break;
 	default:
@@ -82,11 +82,11 @@ void
 TileManager::generate() {
 	for (int x = 0; x < 10; x++)
 		for (int y = 0; y < 10; y++)
-			setTile(TilePosition(x, y), TYPE_WALL);
+			setTile(TilePosition(x, y), Type::WALL);
 
 	for (int x = 1; x < 9; x++)
 		for (int y = 1; y < 9; y++)
-			setTile(TilePosition(x, y), TYPE_FLOOR);
+			setTile(TilePosition(x, y), Type::FLOOR);
 }
 
 /**
