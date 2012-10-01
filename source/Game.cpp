@@ -25,11 +25,10 @@ const float Game::TICKS_GOAL = 1000 / Game::FPS_GOAL;
 /**
  * Initializes game, including window and objects (sprites).
  */
-Game::Game(const Vector2i& resolution) :
+Game::Game(sf::RenderWindow& window) :
 		mWorld(b2Vec2(0, 0)),
-		mWindow(sf::VideoMode(resolution.x, resolution.y, 32), "Roguelike Shooter",
-				sf::Style::Close | sf::Style::Titlebar),
-		mView(Vector2f(0, 0), Vector2f(resolution)),
+		mWindow(window),
+		mView(Vector2f(0, 0), mWindow.getView().getSize()),
 		//mFps("test"),
 		mTileManager(mWorld),
 		mPathfinder(mWorld),

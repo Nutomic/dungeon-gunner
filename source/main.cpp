@@ -15,7 +15,10 @@ int main(int argc, char* argv[]) {
 	Loader::i().setFolder("resources/");
 	Loader::i().setSubFolder<sf::Texture>("textures/");
 
-    Game game(Vector2i(800, 600));
+	sf::RenderWindow window(sf::VideoMode(800, 600, 32), "Dungeon Gunner",
+				sf::Style::Close | sf::Style::Titlebar);
+
+    Game game(window);
 
 	game.loop();
 

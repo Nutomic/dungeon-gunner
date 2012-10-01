@@ -29,7 +29,7 @@ class Collection;
 class Game : private sf::NonCopyable, public b2ContactListener {
 // Public functions.
 public:
-	Game(const Vector2i& resolution);
+	Game(sf::RenderWindow& window);
 	~Game();
 
 	void loop();
@@ -56,7 +56,7 @@ private:
 
 	b2World mWorld;
 
-	sf::RenderWindow mWindow;
+	sf::RenderWindow& mWindow;
 	sf::Clock mClock;
 	sf::View mView;
 	//sf::Text mFps;
