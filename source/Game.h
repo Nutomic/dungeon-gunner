@@ -45,6 +45,7 @@ private:
 	void keyUp(const sf::Event& event);
 	void mouseUp(const sf::Event& event);
 
+	void generate();
 	sf::String getFps();
 	sf::Vector2<float> convertCoordinates(int x, int y);
 
@@ -63,7 +64,7 @@ private:
 	Collection mCollection;
 	TileManager mTileManager;
 	Pathfinder mPathfinder;
-	Player mPlayer;
+	std::unique_ptr<Player> mPlayer;
 
 	/// Milliseconds since the last tick.
 	sf::Uint32 mElapsed;

@@ -33,7 +33,6 @@ Game::Game(const Vector2i& resolution) :
 		//mFps("test"),
 		mTileManager(mWorld),
 		mPathfinder(mWorld),
-		mPlayer(mWorld, mCollection, Vector2f(200.0f, 100.0f), mPathfinder),
 		mElapsed(0),
 		mQuit(false),
 		mPaused(false) {
@@ -41,13 +40,32 @@ Game::Game(const Vector2i& resolution) :
 	mWindow.setKeyRepeatEnabled(true);
 	mWorld.SetContactListener(this);
 
-	mTileManager.generate();
+	generate();
+}
+
+/**
+ * Generates a predefined map.
+ */
+void
+Game::generate() {
+	for (int x = 0; x < 10; x++)
+		for (int y = 0; y < 10; y++)
+			mTileManager.setTile(TileManager::TilePosition(x, y), TileManager::Type::WALL);
+
+	for (int x = 1; x < 9; x++)
+		for (int y = 1; y < 9; y++)
+			mTileManager.setTile(TileManager::TilePosition(x, y), TileManager::Type::FLOOR);
+
+	for (int x = 1; x < 5; x++)
+		mTileManager.setTile(TileManager::TilePosition(x, 4), TileManager::Type::WALL);
+
 	mCollection.insert(std::shared_ptr<Sprite>(new Enemy(mWorld, Vector2f(400.0f, 200.0f),
 			mCollection)));
 	mCollection.insert(std::shared_ptr<Sprite>(new Cover(Vector2f(300, 200), Vector2i(100, 150),
 			mWorld)));
-}
 
+	mPlayer = std::unique_ptr<Player>(new Player(mWorld, mCollection, Vector2f(200.0f, 100.0f), mPathfinder));
+}
 /**
  * Closes window.
  */
@@ -113,7 +131,7 @@ Game::input() {
 			mouseUp(event);
 			break;
 		case sf::Event::MouseMoved:
-			mPlayer.setCrosshairPosition(convertCoordinates(event.mouseMove.x, event.mouseMove.y));
+			mPlayer->setCrosshairPosition(convertCoordinates(event.mouseMove.x, event.mouseMove.y));
 			break;
 		default:
 			break;
@@ -134,16 +152,16 @@ Game::keyUp(const sf::Event& event) {
 		mPaused = !mPaused;
 		break;
 	case sf::Keyboard::W:
-		mPlayer.setDirection(Player::Direction::UP, true);
+		mPlayer->setDirection(Player::Direction::UP, true);
 		break;
 	case sf::Keyboard::S:
-		mPlayer.setDirection(Player::Direction::DOWN, true);
+		mPlayer->setDirection(Player::Direction::DOWN, true);
 		break;
 	case sf::Keyboard::A:
-		mPlayer.setDirection(Player::Direction::LEFT, true);
+		mPlayer->setDirection(Player::Direction::LEFT, true);
 		break;
 	case sf::Keyboard::D:
-		mPlayer.setDirection(Player::Direction::RIGHT, true);
+		mPlayer->setDirection(Player::Direction::RIGHT, true);
 		break;
 	default:
 		break;
@@ -157,16 +175,16 @@ void
 Game::keyDown(const sf::Event& event) {
 	switch (event.key.code) {
 	case sf::Keyboard::W:
-		mPlayer.setDirection(Player::Direction::UP, false);
+		mPlayer->setDirection(Player::Direction::UP, false);
 		break;
 	case sf::Keyboard::S:
-		mPlayer.setDirection(Player::Direction::DOWN, false);
+		mPlayer->setDirection(Player::Direction::DOWN, false);
 		break;
 	case sf::Keyboard::A:
-		mPlayer.setDirection(Player::Direction::LEFT, false);
+		mPlayer->setDirection(Player::Direction::LEFT, false);
 		break;
 	case sf::Keyboard::D:
-		mPlayer.setDirection(Player::Direction::RIGHT, false);
+		mPlayer->setDirection(Player::Direction::RIGHT, false);
 		break;
 	default:
 		break;
@@ -188,10 +206,10 @@ void
 Game::mouseUp(const sf::Event& event) {
 	switch (event.mouseButton.button) {
 	case sf::Mouse::Left:
-		mPlayer.fire();
+		mPlayer->fire();
 		break;
 	case sf::Mouse::Right:
-		mPlayer.move(convertCoordinates(event.mouseButton.x, event.mouseButton.y));
+		mPlayer->move(convertCoordinates(event.mouseButton.x, event.mouseButton.y));
 		break;
 	default:
 		break;
@@ -205,14 +223,14 @@ void
 Game::render() {
 	mWindow.clear();
 
-	mView.setCenter(mPlayer.getPosition());
+	mView.setCenter(mPlayer->getPosition());
 
 	// Render world and dynamic stuff.
 	mWindow.setView(mView);
 
 	mWindow.draw(mTileManager);
 	mWindow.draw(mCollection);
-	mWindow.draw(mPlayer);
+	mWindow.draw(*mPlayer);
 
 	// Render GUI and static stuff.
 	mWindow.setView(mWindow.getDefaultView());

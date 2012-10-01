@@ -76,20 +76,6 @@ TileManager::Tile::getTilePosition() const {
 }
 
 /**
- * Fills the world with predefined tiles.
- */
-void
-TileManager::generate() {
-	for (int x = 0; x < 10; x++)
-		for (int y = 0; y < 10; y++)
-			setTile(TilePosition(x, y), Type::WALL);
-
-	for (int x = 1; x < 9; x++)
-		for (int y = 1; y < 9; y++)
-			setTile(TilePosition(x, y), Type::FLOOR);
-}
-
-/**
  * Insert a tile at the position. Deletes an existing tile first if one is at the position.
  *
  * @param position Grid coordinate of the tile (not pixel coordinate).

@@ -22,19 +22,8 @@
 class Sprite;
 
 class TileManager : public sf::Drawable {
-// Public variables.
+// Public types.
 public:
-	/// The size of a single tile (pixels).
-	static const Vector2i TILE_SIZE;
-
-// Public functions.
-public:
-	TileManager(b2World& world);
-
-	void generate();
-
-// Private types.
-private:
 	enum class Type {
 		FLOOR,
 		WALL
@@ -45,12 +34,24 @@ private:
 	 */
 	typedef Vector2i TilePosition;
 
+// Public variables.
+public:
+	/// The size of a single tile (pixels).
+	static const Vector2i TILE_SIZE;
+
+// Public functions.
+public:
+	TileManager(b2World& world);
+
+	void setTile(const TilePosition& position, Type type);
+
+// Private types.
+private:
 	class Tile;
 
 // Private functions.
 private:
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
-	void setTile(const TilePosition& position, Type type);
 
 // Private variables.
 private:
