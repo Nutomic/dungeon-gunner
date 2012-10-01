@@ -7,6 +7,8 @@
 
 #include "Game.h"
 
+#include <Thor/Graphics.hpp>
+
 #include "abstract/Actor.h"
 #include "sprite/Cover.h"
 #include "sprite/Enemy.h"
@@ -30,7 +32,8 @@ Game::Game(const Vector2i& resolution) :
 		mView(Vector2f(0, 0), Vector2f(resolution)),
 		//mFps("test"),
 		mTileManager(mWorld),
-		mPlayer(mWorld, mCollection, Vector2f(200.0f, 100.0f)),
+		mPathfinder(mWorld),
+		mPlayer(mWorld, mCollection, Vector2f(200.0f, 100.0f), mPathfinder),
 		mElapsed(0),
 		mQuit(false),
 		mPaused(false) {
@@ -39,12 +42,10 @@ Game::Game(const Vector2i& resolution) :
 	mWorld.SetContactListener(this);
 
 	mTileManager.generate();
-	for (int i = 0; i < 500; i += 50) {
-		mCollection.insert(std::shared_ptr<Sprite>(new Cover(Vector2f(i, i), Vector2i(20, 20),
-				mWorld)));
-	}
 	mCollection.insert(std::shared_ptr<Sprite>(new Enemy(mWorld, Vector2f(400.0f, 200.0f),
 			mCollection)));
+	mCollection.insert(std::shared_ptr<Sprite>(new Cover(Vector2f(300, 200), Vector2i(100, 150),
+			mWorld)));
 }
 
 /**

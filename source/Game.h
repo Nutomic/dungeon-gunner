@@ -15,6 +15,7 @@
 
 #include <Box2D/Box2D.h>
 
+#include "Pathfinder.h"
 #include "TileManager.h"
 #include "sprite/Player.h"
 #include "util/Collection.h"
@@ -61,6 +62,7 @@ private:
 
 	Collection mCollection;
 	TileManager mTileManager;
+	Pathfinder mPathfinder;
 	Player mPlayer;
 
 	/// Milliseconds since the last tick.

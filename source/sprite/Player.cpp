@@ -14,18 +14,19 @@
 
 const float Player::SPEED = 100.0f;
 const Vector2i Player::SIZE = Vector2i(50, 50);
+const float Player::POINT_REACHED_DISTANCE = 1.0f;
 
 /**
  * Initializes Sprite.
  */
-Player::Player(b2World& world, Collection& collection, const Vector2f& position) :
+Player::Player(b2World& world, Collection& collection, const Vector2f& position,
+	Pathfinder& pathfinder) :
 		Sprite("player.png", PhysicalData(position, SIZE, world,
 				CATEGORY_ACTOR, MASK_ALL, true, false, true)),
 		Actor(100),
 		mWeapon(*this, collection, world, SIZE),
-		mDestination(Vector2i(position)),
 		mDirection(0),
-		mDirectInput(false) {
+		mPathfinder(pathfinder) {
 }
 
 /**
@@ -54,10 +55,15 @@ Player::fire() {
  */
 void
 Player::move(const Vector2f& destination) {
-	mDestination = destination;
-	// Convert to relative destination.
-	setSpeed(mDestination - getPosition(), SPEED);
-	mDirectInput = false;
+	mPath = mPathfinder.getPath(*this, destination);
+	// Make sure we found a path.
+	if (mPath != std::vector<Vector2f>()) {
+		setSpeed(*mPath.end() - getPosition(), SPEED);
+	}
+	// Otherwise stop (in case this was called during movement).
+	else {
+		setSpeed(Vector2f(), 0);
+	}
 }
 
 /**
@@ -89,7 +95,6 @@ Player::setDirection(Direction direction, bool unset) {
 		dirVec.y += - 1.0f;
 	}
 	setSpeed(dirVec, SPEED);
-	mDirectInput = true;
 }
 
 /**
@@ -98,8 +103,19 @@ Player::setDirection(Direction direction, bool unset) {
 void
 Player::onThink(float elapsedTime) {
 	// Stop if we are close enough to destination.
-	if (!mDirectInput && (thor::length(mDestination - getPosition()) < 1.0f)) {
-		setSpeed(Vector2f(), 0);
+	if (!mPath.empty()) {
+		// Reached a point.
+		if (thor::length(*mPath.end() - getPosition()) < POINT_REACHED_DISTANCE) {
+			mPath.pop_back();
+			if (!mPath.empty()) {
+				// Move to next.
+				setSpeed(*mPath.end() - getPosition(), SPEED);
+			}
+			else {
+				// Reached destination.
+				setSpeed(Vector2f(), 0);
+			}
+		}
 	}
 	// Look towards crosshair.
 	setAngle(angle(mCrosshairPosition));
@@ -111,6 +127,6 @@ Player::onThink(float elapsedTime) {
 void
 Player::onCollide(Physical& other, uint16 category) {
 	if (category != CATEGORY_PARTICLE) {
-		mDestination = getPosition();
+		mPath.clear();
 	}
 }

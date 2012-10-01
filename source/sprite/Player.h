@@ -11,12 +11,14 @@
 #include <SFML/System.hpp>
 #include <SFML/Graphics.hpp>
 
+#include "../Pathfinder.h"
 #include "../abstract/Actor.h"
 #include "../abstract/Sprite.h"
 #include "../items/Weapon.h"
 #include "../util/Vector.h"
 
 class Actor;
+class Pathfinder;
 class Sprite;
 class Weapon;
 
@@ -38,7 +40,7 @@ public:
 
 // Public functions.
 public:
-	Player(b2World& world, Collection& collection, const Vector2f& position);
+	Player(b2World& world, Collection& collection, const Vector2f& position, Pathfinder& pathfinder);
 
 	void setCrosshairPosition(const Vector2f& position);
 	void fire();
@@ -54,13 +56,16 @@ private:
 private:
 	static const float SPEED;
 	static const Vector2i SIZE;
+	/// The distance to a point where it is considered reached.
+	static const float POINT_REACHED_DISTANCE;
 
 	Weapon mWeapon; //< Weapon object used for Player::fire().
-	Vector2f mDestination; //< Absolute position of the movement destination.
 	Vector2f mCrosshairPosition; //< Relative position of the point to fire at (mouse cursor).
+
 	uint8 mDirection; //< Current movement direction for direct control.
-	bool mDirectInput; //< True when using keyboard input (directions), false when using
-	                   //  destination point.
+
+	Pathfinder& mPathfinder;
+	std::vector<Vector2f> mPath;
 };
 
 #endif /* DG_PLAYER_H_ */
