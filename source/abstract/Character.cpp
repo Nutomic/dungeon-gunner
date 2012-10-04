@@ -52,7 +52,8 @@ Character::think(float elapsedTime) {
 }
 
 /**
- * Subtracts health from Actor.
+ * Subtracts health from Actor. Calls onDeath() when health reaches zero and marks
+ * object for deletion.
  *
  * @param damage Amount of health to subtract.
  */
@@ -62,15 +63,13 @@ Character::onDamage(int damage) {
 	if (mCurrentHealth <= 0) {
 		mCurrentHealth = 0;
 		onDeath();
+		setDelete(true);
 	}
 }
 
 /**
- * Called when health reaches zero. Marks the object for deletion.
- *
- * @warning Implementations should call the default implementation.
+ * Called when health reaches zero. Default immplementation does nothing.
  */
 void
 Character::onDeath() {
-	setDelete(true);
 }
