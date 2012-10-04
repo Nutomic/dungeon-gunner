@@ -11,12 +11,14 @@
 #include <SFML/System.hpp>
 #include <SFML/Graphics.hpp>
 
+#include "../Instances.h"
 #include "../Pathfinder.h"
 #include "../abstract/Character.h"
 #include "../items/Weapon.h"
 #include "../util/Vector.h"
 
 class Character;
+class Instances;
 class Pathfinder;
 class Weapon;
 
@@ -38,7 +40,7 @@ public:
 
 // Public functions.
 public:
-	Player(b2World& world, Collection& collection, const Vector2f& position, Pathfinder& pathfinder);
+	Player(const Instances& instances, const Vector2f& position);
 
 	void setCrosshairPosition(const Vector2f& position);
 	void fire();

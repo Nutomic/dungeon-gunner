@@ -19,13 +19,12 @@ const float Player::POINT_REACHED_DISTANCE = 1.0f;
 /**
  * Initializes Sprite.
  */
-Player::Player(b2World& world, Collection& collection, const Vector2f& position,
-	Pathfinder& pathfinder) :
-		Character("player.png", PhysicalData(position, SIZE, world,
+Player::Player(const Instances& instances, const Vector2f& position) :
+		Character("player.png", PhysicalData(position, SIZE, instances.world,
 				CATEGORY_ACTOR, MASK_ALL, true, false, true), 100),
-		mWeapon(*this, collection, world, SIZE),
+		mWeapon(instances, *this, SIZE),
 		mDirection(0),
-		mPathfinder(pathfinder) {
+		mPathfinder(instances.pathfinder) {
 }
 
 /**

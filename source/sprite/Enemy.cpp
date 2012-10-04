@@ -9,12 +9,11 @@
 
 #include "Body.h"
 
-Enemy::Enemy(b2World& world, const Vector2f& position, Collection& collection) :
-		Character("enemy.png", PhysicalData(position, Vector2i(50, 50), world,
+Enemy::Enemy(const Instances& instances, const Vector2f& position) :
+		Character("enemy.png", PhysicalData(position, Vector2i(50, 50), instances.world,
 		       CATEGORY_ACTOR, MASK_ALL, true, false, true), 100),
-		mWorld(world),
-		mCollection(collection) {
-
+		mWorld(instances.world),
+		mCollection(instances.collection) {
 }
 
 Enemy::~Enemy() {

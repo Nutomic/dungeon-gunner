@@ -9,6 +9,7 @@
 
 #include <Thor/Graphics.hpp>
 
+#include "Instances.h"
 #include "abstract/Character.h"
 #include "sprite/Cover.h"
 #include "sprite/Enemy.h"
@@ -58,12 +59,13 @@ Game::generate() {
 	for (int x = 1; x < 5; x++)
 		mTileManager.setTile(TileManager::TilePosition(x, 4), TileManager::Type::WALL);
 
-	mCollection.insert(std::shared_ptr<Sprite>(new Enemy(mWorld, Vector2f(400.0f, 200.0f),
-			mCollection)));
+	Instances instances(mPathfinder, mTileManager, mCollection, mWorld);
+
+	mCollection.insert(std::shared_ptr<Sprite>(new Enemy(instances, Vector2f(400.0f, 200.0f))));
 	mCollection.insert(std::shared_ptr<Sprite>(new Cover(Vector2f(300, 200), Vector2i(100, 150),
 			mWorld)));
 
-	mPlayer = std::unique_ptr<Player>(new Player(mWorld, mCollection, Vector2f(200.0f, 100.0f), mPathfinder));
+	mPlayer = std::unique_ptr<Player>(new Player(instances, Vector2f(200.0f, 100.0f)));
 }
 /**
  * Closes window.

@@ -10,11 +10,13 @@
 
 #include <Thor/Particles.hpp>
 
+#include "../Instances.h"
 #include "../abstract/Physical.h"
 #include "../particle/Emitter.h"
 
-class Physical;
 class Emitter;
+class Instances;
+class Physical;
 
 /**
  * Loading mechanism:
@@ -24,7 +26,7 @@ class Emitter;
 class Weapon : public Emitter {
 // Public functions.
 public:
-	Weapon(Physical& holder, Collection& collection, b2World& world, const Vector2i& holderSize);
+	Weapon(const Instances& instances, Physical& holder, const Vector2i& holderSize);
 	~Weapon();
 
 	void fire();

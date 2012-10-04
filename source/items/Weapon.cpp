@@ -18,13 +18,12 @@
 
 const int Weapon::BULLET_DAMAGE = 10;
 
-Weapon::Weapon(Physical& holder, Collection& collection, b2World& world,
-	const Vector2i& holderSize) :
-		Emitter(collection),
+Weapon::Weapon(const Instances& instances, Physical& holder, const Vector2i& holderSize) :
+		Emitter(instances.collection),
 		mHolder(holder),
 		mBulletTexture(ResourceManager::i()
                          .acquire(Loader::i().fromFile<sf::Texture>("bullet.png"))),
-		mWorld(world),
+		mWorld(instances.world),
 		mOffset(0, std::max(holderSize.x, holderSize.y) / 2 +
 			b2_linearSlop +
 			std::max(Bullet::SIZE.x, Bullet::SIZE.y) / 2) {
