@@ -68,6 +68,15 @@ Character::onDamage(int damage) {
 }
 
 /**
+ * Implement this function for any (regular) AI computations. Default implementation does nothing.
+ *
+ * @param elapsedTime Amount of time to simulate.
+ */
+void
+Character::onThink(float elapsedTime) {
+}
+
+/**
  * Called when health reaches zero. Default immplementation does nothing.
  */
 void

@@ -32,13 +32,7 @@ public:
 
 // Protected functions.
 protected:
-	/**
-	 * Implement this function for any (regular) AI computations.
-	 *
-	 * @param elapsedTime Amount of time to simulate.
-	 */
-	virtual void onThink(float elapsedTime) = 0;
-
+	virtual void onThink(float elapsedTime);
 	virtual void onDeath();
 
 // Private variables.
