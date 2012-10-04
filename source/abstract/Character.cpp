@@ -10,25 +10,33 @@
 #include <algorithm>
 #include <assert.h>
 
-std::vector<Character*> Character::mInstances = std::vector<Character*>();
+#include "../sprite/Body.h"
+
+std::vector<Character*> Character::mCharacterInstances = std::vector<Character*>();
 
 /**
  * Saves pointer to this instance in static var for think().
  */
-Character::Character(const sf::String& texturePath, const PhysicalData& data, int health) :
+Character::Character(const Instances& instances, const sf::String& texturePath,
+	const PhysicalData& data, int health) :
 		Sprite(texturePath, data),
 		mMaxHealth(health),
-		mCurrentHealth(health) {
-		mInstances.push_back(this);
+		mCurrentHealth(health),
+		mInstances(instances) {
+		mCharacterInstances.push_back(this);
 }
 
 /**
- * Deletes pointer from think() static var.
+ * Deletes pointer from static variable mCharacterInstances, inserts body into world
+ * (done here to avoid altering Box2D data during timestep).
  */
 Character::~Character() {
-	auto it = std::find(mInstances.begin(), mInstances.end(), this);
-	assert(it != mInstances.end());
-	mInstances.erase(it);
+	auto it = std::find(mCharacterInstances.begin(), mCharacterInstances.end(), this);
+	assert(it != mCharacterInstances.end());
+	mCharacterInstances.erase(it);
+
+	mInstances.collection.insert(std::shared_ptr<Sprite>(new Body(mInstances.world,
+			getPosition())));
 }
 
 /**
@@ -38,7 +46,7 @@ Character::~Character() {
  */
 void
 Character::think(float elapsedTime) {
-	for (auto i : mInstances) {
+	for (auto i : mCharacterInstances) {
 		i->onThink(elapsedTime);
 	}
 }
@@ -58,8 +66,11 @@ Character::onDamage(int damage) {
 }
 
 /**
- * Called when health reaches zero. Does nothing by default.
+ * Called when health reaches zero. Marks the object for deletion.
+ *
+ * @warning Implementations should call the default implementation.
  */
 void
 Character::onDeath() {
+	setDelete(true);
 }

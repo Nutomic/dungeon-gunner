@@ -21,12 +21,10 @@ class Enemy : public Character {
 // Public functions.
 public:
 	Enemy(const Instances& instances, const Vector2f& position);
-	~Enemy();
 
 // Private functions.
 private:
 	void onThink(float elapsedTime);
-	void onDeath();
 
 // Private variablese.
 private:

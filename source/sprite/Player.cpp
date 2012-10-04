@@ -20,7 +20,7 @@ const float Player::POINT_REACHED_DISTANCE = 1.0f;
  * Initializes Sprite.
  */
 Player::Player(const Instances& instances, const Vector2f& position) :
-		Character("player.png", PhysicalData(position, SIZE, instances.world,
+		Character(instances, "player.png", PhysicalData(position, SIZE, instances.world,
 				CATEGORY_ACTOR, MASK_ALL, true, false, true), 100),
 		mWeapon(instances, *this, SIZE),
 		mDirection(0),
