@@ -12,6 +12,7 @@
 
 #include "Sprite.h"
 #include "../Instances.h"
+#include "../util/String.h"
 
 class Instances;
 class Sprite;
@@ -22,7 +23,7 @@ class Sprite;
 class Character : public Sprite {
 // Public functions.
 public:
-	Character(const Instances& instances, const sf::String& texturePath,
+	Character(const Instances& instances, const String& texturePath,
 		const PhysicalData& data, int health);
 	virtual ~Character() = 0;
 

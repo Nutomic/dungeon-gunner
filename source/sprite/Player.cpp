@@ -11,6 +11,7 @@
 
 #include "../util/Vector.h"
 #include "../items/Weapon.h"
+#include "../util/String.h"
 
 const float Player::SPEED = 100.0f;
 const Vector2i Player::SIZE = Vector2i(50, 50);

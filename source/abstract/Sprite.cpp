@@ -8,7 +8,6 @@
 #include "Sprite.h"
 
 #include "../util/Loader.h"
-#include "../util/String.h"
 #include "../util/ResourceManager.h"
 
 /**
@@ -16,7 +15,7 @@
  *
  * @param texturePath Relative path to the texture file in the resource folder.
  */
-Sprite::Sprite(const sf::String& texturePath, const PhysicalData& data) :
+Sprite::Sprite(const String& texturePath, const PhysicalData& data) :
 		Physical(data),
 		mTexture(ResourceManager::i().acquire(Loader::i().fromFile<sf::Texture>(texturePath))),
 		mSize(data.size) {

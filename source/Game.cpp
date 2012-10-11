@@ -244,7 +244,7 @@ Game::render() {
 /**
  * Returns current FPS as string.
  */
-sf::String
+String
 Game::getFps() {
 	return str((mElapsed != 0) ? 1000.0f / mElapsed : 0.0f, 2);
 }

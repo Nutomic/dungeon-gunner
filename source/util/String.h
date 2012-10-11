@@ -12,10 +12,10 @@
 #ifndef DG_STRING_H_
 #define DG_STRING_H_
 
-#include <math.h>
 #include <sstream>
+#include <string>
 
-#include <SFML/System.hpp>
+typedef std::string String;
 
 /**
  * Converts any value to a string.
@@ -24,7 +24,7 @@
  * @return val converted to string.
  */
 template <typename T>
-sf::String
+String
 str(T val) {
 	std::stringstream out;
 	out << val;
@@ -39,7 +39,7 @@ str(T val) {
  * @return val converted to string.
  */
 template <typename T>
-sf::String
+String
 str(T val, int digits) {
 	std::stringstream out;
 	out.precision(digits);

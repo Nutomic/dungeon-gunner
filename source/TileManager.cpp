@@ -9,9 +9,10 @@
 
 #include <Thor/Resources.hpp>
 
+#include "abstract/Sprite.h"
 #include "util/Loader.h"
 #include "util/ResourceManager.h"
-#include "abstract/Sprite.h"
+#include "util/String.h"
 
 const Vector2i TileManager::TILE_SIZE = Vector2i(100, 100);
 
@@ -45,7 +46,7 @@ TileManager::Tile::Tile(Type type, const TilePosition& position, b2World& world)
  */
 std::shared_ptr<sf::Texture>
 TileManager::Tile::getTexture(Type type) {
-	sf::String filename;
+	String filename;
 	switch (type) {
 	case Type::FLOOR:
 		filename = "floor.png";

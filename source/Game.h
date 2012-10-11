@@ -19,6 +19,7 @@
 #include "TileManager.h"
 #include "sprite/Player.h"
 #include "util/Collection.h"
+#include "util/String.h"
 
 class Player;
 class Collection;
@@ -46,7 +47,7 @@ private:
 	void mouseUp(const sf::Event& event);
 
 	void generate();
-	sf::String getFps();
+	String getFps();
 	sf::Vector2<float> convertCoordinates(int x, int y);
 
 // Private variables.

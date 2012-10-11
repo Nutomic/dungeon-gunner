@@ -17,7 +17,7 @@ std::vector<Character*> Character::mCharacterInstances = std::vector<Character*>
 /**
  * Saves pointer to this instance in static var for think().
  */
-Character::Character(const Instances& instances, const sf::String& texturePath,
+Character::Character(const Instances& instances, const String& texturePath,
 	const PhysicalData& data, int health) :
 		Sprite(texturePath, data),
 		mMaxHealth(health),
