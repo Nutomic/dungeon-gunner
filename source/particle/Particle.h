@@ -9,8 +9,10 @@
 #define DG_PARTICLE_H_
 
 #include "../abstract/Sprite.h"
+#include "../util/Yaml.h"
 
 class Sprite;
+class Yaml;
 
 /**
  * Prototype for a particle.
@@ -18,7 +20,8 @@ class Sprite;
 class Particle : public Sprite {
 // Public functions.
 public:
-	Particle(const std::shared_ptr<sf::Texture>& texture, const PhysicalData& data);
+	Particle(const std::shared_ptr<sf::Texture>& texture, const PhysicalData& data,
+			const Yaml& config);
 	virtual ~Particle();
 };
 

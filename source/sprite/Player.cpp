@@ -12,7 +12,6 @@
 #include "../util/Vector.h"
 #include "../items/Weapon.h"
 #include "../util/String.h"
-#include "../util/Yaml.h"
 
 const float Player::SPEED = 100.0f;
 const Vector2i Player::SIZE = Vector2i(50, 50);
@@ -21,9 +20,9 @@ const float Player::POINT_REACHED_DISTANCE = 1.0f;
 /**
  * Initializes Sprite.
  */
-Player::Player(const Instances& instances, const Vector2f& position) :
+Player::Player(const Instances& instances, const Vector2f& position, const Yaml& config) :
 		Character(instances, "player.png", PhysicalData(position, SIZE, instances.world,
-				CATEGORY_ACTOR, MASK_ALL, true, false, true), 100),
+				CATEGORY_ACTOR, MASK_ALL, true, false, true), config),
 		mWeapon(instances, *this, Yaml("weapon.yaml")),
 		mDirection(0),
 		mPathfinder(instances.pathfinder) {

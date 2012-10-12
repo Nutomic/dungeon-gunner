@@ -12,15 +12,17 @@
 #include "../abstract/Character.h"
 #include "../util/Collection.h"
 #include "../util/Vector.h"
+#include "../util/Yaml.h"
 
 class Character;
 class Collection;
 class Instances;
+class Yaml;
 
 class Enemy : public Character {
 // Public functions.
 public:
-	Enemy(const Instances& instances, const Vector2f& position);
+	Enemy(const Instances& instances, const Vector2f& position, const Yaml& config);
 
 // Private functions.
 private:

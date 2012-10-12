@@ -61,11 +61,11 @@ Game::generate() {
 
 	Instances instances(mPathfinder, mTileManager, mCollection, mWorld);
 
-	mCollection.insert(std::shared_ptr<Sprite>(new Enemy(instances, Vector2f(400.0f, 200.0f))));
+	mCollection.insert(std::shared_ptr<Sprite>(new Enemy(instances, Vector2f(400.0f, 200.0f), Yaml("enemy.yaml"))));
 	mCollection.insert(std::shared_ptr<Sprite>(new Cover(Vector2f(300, 200), Vector2i(100, 150),
-			mWorld)));
+			mWorld, Yaml("cover.yaml"))));
 
-	mPlayer = std::unique_ptr<Player>(new Player(instances, Vector2f(200.0f, 100.0f)));
+	mPlayer = std::unique_ptr<Player>(new Player(instances, Vector2f(200.0f, 100.0f), Yaml("player.yaml")));
 }
 /**
  * Closes window.

@@ -12,16 +12,17 @@
 
 #include "../sprite/Body.h"
 
+const String Character::KEY_HEALTH = "health";
 std::vector<Character*> Character::mCharacterInstances = std::vector<Character*>();
 
 /**
  * Saves pointer to this instance in static var for think().
  */
 Character::Character(const Instances& instances, const String& texturePath,
-	const PhysicalData& data, int health) :
+	const PhysicalData& data, const Yaml& config) :
 		Sprite(texturePath, data),
-		mMaxHealth(health),
-		mCurrentHealth(health),
+		mMaxHealth(config.get<int>(KEY_HEALTH)),
+		mCurrentHealth(mMaxHealth),
 		mInstances(instances) {
 		mCharacterInstances.push_back(this);
 }
@@ -36,7 +37,7 @@ Character::~Character() {
 	mCharacterInstances.erase(it);
 
 	mInstances.collection.insert(std::shared_ptr<Sprite>(new Body(mInstances.world,
-			getPosition())));
+			getPosition(), Yaml("body.yaml"))));
 }
 
 /**

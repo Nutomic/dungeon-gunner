@@ -13,9 +13,11 @@
 #include "Sprite.h"
 #include "../Instances.h"
 #include "../util/String.h"
+#include "../util/Yaml.h"
 
 class Instances;
 class Sprite;
+class Yaml;
 
 /**
  * Provides think function for AI, manages health, drops body on death.
@@ -24,7 +26,7 @@ class Character : public Sprite {
 // Public functions.
 public:
 	Character(const Instances& instances, const String& texturePath,
-		const PhysicalData& data, int health);
+		const PhysicalData& data, const Yaml& config);
 	virtual ~Character() = 0;
 
 	static void think(float elapsedTime);
@@ -38,6 +40,8 @@ protected:
 
 // Private variables.
 private:
+	static const String KEY_HEALTH;
+
 	static std::vector<Character*> mCharacterInstances;
 
 	const int mMaxHealth;

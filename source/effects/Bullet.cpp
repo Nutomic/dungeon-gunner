@@ -26,7 +26,7 @@ Bullet::Bullet(const Vector2f& position, b2World& world, Physical& shooter, floa
 	const Yaml& config) :
 		Particle(ResourceManager::i().acquire(Loader::i().fromFile<sf::Texture>("bullet.png")),
 				PhysicalData(position, SIZE, world, CATEGORY_PARTICLE, CATEGORY_PARTICLE,
-				true, true, true)),
+				true, true, true), config),
 		mShooter(shooter),
 		mDamage(config.get<int>(KEY_DAMAGE)),
 		mSpeed(config.get<int>(KEY_SPEED)) {
