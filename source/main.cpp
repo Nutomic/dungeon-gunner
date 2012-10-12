@@ -8,10 +8,14 @@
 #include "Game.h"
 #include "util/Loader.h"
 
+#include "util/Yaml.h"
+
 /**
  * Creates Game object.
  */
 int main(int argc, char* argv[]) {
+	Yaml::setFolder("resources/yaml/");
+
 	Loader::i().setFolder("resources/");
 	Loader::i().setSubFolder<sf::Texture>("textures/");
 
