@@ -9,8 +9,11 @@
 #define DG_BULLET_H_
 
 #include "../particle/Particle.h"
+#include "../util/String.h"
+#include "../util/Yaml.h"
 
 class Particle;
+class Yaml;
 
 /**
  * Bullet particle fired by a weapon, may damage actors.
@@ -18,8 +21,8 @@ class Particle;
 class Bullet : public Particle {
 // Public functions.
 public:
-	Bullet(const Vector2f& position, b2World& world, const std::shared_ptr<sf::Texture>& texture,
-			Physical& shooter, float direction, int damage);
+	Bullet(const Vector2f& position, b2World& world, Physical& shooter, float direction,
+			const Yaml& config);
 
 	void onCollide(Physical& other, uint16 category);
 	bool doesCollide(Physical& other);
@@ -30,9 +33,12 @@ public:
 
 // Private variables.
 private:
-	static const float SPEED; //< If speed is too low, bullets push each other away on insert.
+	static const String KEY_DAMAGE;
+	static const String KEY_SPEED;
+
 	Physical& mShooter;
 	const int mDamage;
+	const float mSpeed;
 };
 
 #endif /* DG_BULLET_H_ */

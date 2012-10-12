@@ -18,6 +18,7 @@
 class Emitter;
 class Instances;
 class Physical;
+class Yaml;
 
 /**
  * Loading mechanism:
@@ -37,14 +38,13 @@ protected:
 
 // Private variables.
 private:
-	static const String KEY_DAMAGE;
+	static const String KEY_BULLET;
 
 	Physical& mHolder;
-	std::shared_ptr<sf::Texture> mBulletTexture;
 	b2World& mWorld;
 
 	const Vector2f mOffset; //< Offset to the point where bullets are inserted (from holder center).
-	const int mDamage;
+	const String mBullet;
 };
 
 #endif /* DG_WEAPON_H_ */

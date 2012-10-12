@@ -8,10 +8,12 @@
 #include "Bullet.h"
 
 #include "../abstract/Character.h"
+#include "../util/Loader.h"
+#include "../util/ResourceManager.h"
 
 const Vector2i Bullet::SIZE = Vector2i(20, 20);
-
-const float Bullet::SPEED = 500.0f;
+const String Bullet::KEY_DAMAGE = "damage";
+const String Bullet::KEY_SPEED = "speed";
 
 /**
  * Places a bullet in the world.
@@ -20,13 +22,15 @@ const float Bullet::SPEED = 500.0f;
  * @param world Box2d world.
  * @param texture Texture to display for bullet.
  */
-Bullet::Bullet(const Vector2f& position, b2World& world,
-	const std::shared_ptr<sf::Texture>& texture, Physical& shooter, float direction, int damage) :
-		Particle(texture, PhysicalData(position, SIZE, world, CATEGORY_PARTICLE,
-				CATEGORY_PARTICLE, true, true, true)),
+Bullet::Bullet(const Vector2f& position, b2World& world, Physical& shooter, float direction,
+	const Yaml& config) :
+		Particle(ResourceManager::i().acquire(Loader::i().fromFile<sf::Texture>("bullet.png")),
+				PhysicalData(position, SIZE, world, CATEGORY_PARTICLE, CATEGORY_PARTICLE,
+				true, true, true)),
 		mShooter(shooter),
-		mDamage(damage) {
-	setSpeed(angle(direction), SPEED);
+		mDamage(config.get<int>(KEY_DAMAGE)),
+		mSpeed(config.get<int>(KEY_SPEED)) {
+	setSpeed(angle(direction), mSpeed);
 	setAngle(direction);
 }
 

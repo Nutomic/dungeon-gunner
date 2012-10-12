@@ -7,7 +7,6 @@
 
 #include "Game.h"
 #include "util/Loader.h"
-
 #include "util/Yaml.h"
 
 /**
