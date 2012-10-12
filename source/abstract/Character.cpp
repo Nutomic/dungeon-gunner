@@ -20,7 +20,7 @@ std::vector<Character*> Character::mCharacterInstances = std::vector<Character*>
  */
 Character::Character(const Instances& instances, const String& texturePath,
 	const PhysicalData& data, const Yaml& config) :
-		Sprite(texturePath, data),
+		Sprite(config, data),
 		mMaxHealth(config.get<int>(KEY_HEALTH)),
 		mCurrentHealth(mMaxHealth),
 		mInstances(instances) {

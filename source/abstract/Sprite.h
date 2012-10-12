@@ -13,10 +13,12 @@
 #include <Thor/Resources.hpp>
 
 #include "Physical.h"
-#include "../util/Vector.h"
 #include "../util/String.h"
+#include "../util/Vector.h"
+#include "../util/Yaml.h"
 
 class Physical;
+class Yaml;
 
 /**
  * Represents a drawable object.
@@ -26,7 +28,7 @@ class Physical;
 class Sprite : public sf::Drawable, public Physical {
 // Public functions.
 public:
-	Sprite(const String& texturePath, const PhysicalData& data);
+	Sprite(const Yaml& config, const PhysicalData& data);
 	Sprite(const std::shared_ptr<sf::Texture>& texture, const PhysicalData& data);
 	virtual ~Sprite() = 0;
 
@@ -36,6 +38,8 @@ protected:
 
 // Private variables.
 private:
+	static const String KEY_TEXTURE;
+
 	std::shared_ptr<sf::Texture> mTexture;
 	Vector2i mSize;
 };

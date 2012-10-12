@@ -10,14 +10,17 @@
 #include "../util/Loader.h"
 #include "../util/ResourceManager.h"
 
+const String Sprite::KEY_TEXTURE = "texture";
+
 /**
  * Loads sprite from ResourceManager, sets world position.
  *
  * @param texturePath Relative path to the texture file in the resource folder.
  */
-Sprite::Sprite(const String& texturePath, const PhysicalData& data) :
+Sprite::Sprite(const Yaml& config, const PhysicalData& data) :
 		Physical(data),
-		mTexture(ResourceManager::i().acquire(Loader::i().fromFile<sf::Texture>(texturePath))),
+		mTexture(ResourceManager::i().acquire(Loader::i()
+				.fromFile<sf::Texture>(config.get<String>(KEY_TEXTURE)))),
 		mSize(data.size) {
 }
 
