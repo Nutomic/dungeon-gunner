@@ -13,6 +13,7 @@
 #include "../Instances.h"
 #include "../abstract/Physical.h"
 #include "../particle/Emitter.h"
+#include "../util/Yaml.h"
 
 class Emitter;
 class Instances;
@@ -26,8 +27,7 @@ class Physical;
 class Weapon : public Emitter {
 // Public functions.
 public:
-	Weapon(const Instances& instances, Physical& holder, const Vector2i& holderSize);
-	~Weapon();
+	Weapon(const Instances& instances, Physical& holder, const Yaml& config);
 
 	void fire();
 
@@ -37,12 +37,14 @@ protected:
 
 // Private variables.
 private:
-	static const int BULLET_DAMAGE;
+	static const String KEY_DAMAGE;
 
 	Physical& mHolder;
 	std::shared_ptr<sf::Texture> mBulletTexture;
 	b2World& mWorld;
+
 	const Vector2f mOffset; //< Offset to the point where bullets are inserted (from holder center).
+	const int mDamage;
 };
 
 #endif /* DG_WEAPON_H_ */

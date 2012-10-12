@@ -16,24 +16,22 @@
 #include "../util/Loader.h"
 #include "../util/ResourceManager.h"
 
-const int Weapon::BULLET_DAMAGE = 10;
+const String Weapon::KEY_DAMAGE = "damage";
 
-Weapon::Weapon(const Instances& instances, Physical& holder, const Vector2i& holderSize) :
+Weapon::Weapon(const Instances& instances, Physical& holder, const Yaml& config) :
 		Emitter(instances.collection),
 		mHolder(holder),
 		mBulletTexture(ResourceManager::i()
                          .acquire(Loader::i().fromFile<sf::Texture>("bullet.png"))),
 		mWorld(instances.world),
-		mOffset(0, std::max(holderSize.x, holderSize.y) / 2 +
+		mOffset(0, std::max(mHolder.getSize().x, mHolder.getSize().y) / 2 +
 			b2_linearSlop +
-			std::max(Bullet::SIZE.x, Bullet::SIZE.y) / 2) {
-}
-
-Weapon::~Weapon() {
+			std::max(Bullet::SIZE.x, Bullet::SIZE.y) / 2),
+		mDamage(config.get<int>(KEY_DAMAGE)) {
 }
 
 /**
- * Call on any button press/refire.
+ * Pull the trigger.
  */
 void
 Weapon::fire() {
@@ -47,5 +45,5 @@ Weapon::createParticle() {
 	Vector2f offset(- mOffset);
 	thor::rotate(offset, mHolder.getAngle());
 	return std::shared_ptr<Particle>(new Bullet(mHolder.getPosition() + offset,
-			mWorld, mBulletTexture, mHolder, mHolder.getAngle(), BULLET_DAMAGE));
+			mWorld, mBulletTexture, mHolder, mHolder.getAngle(), mDamage));
 }
