@@ -11,7 +11,7 @@
 #include <vector>
 
 #include "Sprite.h"
-#include "../Instances.h"
+#include "../util/Instances.h"
 #include "../util/String.h"
 #include "../util/Yaml.h"
 

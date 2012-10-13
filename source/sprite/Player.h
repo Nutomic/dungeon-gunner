@@ -11,7 +11,7 @@
 #include <SFML/System.hpp>
 #include <SFML/Graphics.hpp>
 
-#include "../Instances.h"
+#include "../util/Instances.h"
 #include "../Pathfinder.h"
 #include "../abstract/Character.h"
 #include "../items/Weapon.h"

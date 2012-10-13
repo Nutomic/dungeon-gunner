@@ -8,7 +8,7 @@
 #ifndef DG_ENEMY_H_
 #define DG_ENEMY_H
 
-#include "../Instances.h"
+#include "../util/Instances.h"
 #include "../abstract/Character.h"
 #include "../util/Collection.h"
 #include "../util/Vector.h"

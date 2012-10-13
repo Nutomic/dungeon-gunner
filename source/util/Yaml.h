@@ -27,19 +27,8 @@ public:
 
 	static void setFolder(const String& folder);
 
-	/**
-	 * Gets a value of a specified type by key. Throws exception if key not found.
-	 *
-	 * @param key The string by which to select the return value.
-	 * @tparam T The type of the return value.
-	 * @return The value of the specified key.
-	 */
 	template <typename T>
-	T get(const String& key) const {
-		T tmp;
-		mNode[key] >> tmp;
-		return tmp;
-	};
+	T get(const String& key) const;
 
 // Private variables.
 private:
@@ -60,6 +49,20 @@ namespace {
 		node[0] >> vector.x;
 		node[1] >> vector.y;
 	}
+};
+
+/**
+ * Gets a value of a specified type by key. Throws exception if key not found.
+ *
+ * @param key The string by which to select the return value.
+ * @tparam T The type of the return value.
+ * @return The value of the specified key.
+ */
+template <typename T>
+T Yaml::get(const String& key) const {
+	T tmp;
+	mNode[key] >> tmp;
+	return tmp;
 };
 
 #endif /* DG_YAML_H_ */

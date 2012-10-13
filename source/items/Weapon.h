@@ -10,7 +10,7 @@
 
 #include <Thor/Particles.hpp>
 
-#include "../Instances.h"
+#include "../util/Instances.h"
 #include "../abstract/Physical.h"
 #include "../particle/Emitter.h"
 #include "../util/Yaml.h"

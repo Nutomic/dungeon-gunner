@@ -29,13 +29,16 @@ template <class T>
 class Singleton : public sf::NonCopyable {
 // Public functions.
 public:
-	/**
-	* Returns the instance of T.
-	*/
-	static T& i() {
-		static T s;
-		return s;
-	};
+	static T& i();
+};
+
+/**
+* Returns the instance of T.
+*/
+template <class T>
+T& Singleton<T>::i() {
+	static T s;
+	return s;
 };
 
 #endif /* DG_SINGLETON_H_ */

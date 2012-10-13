@@ -9,7 +9,7 @@
 
 #include <Thor/Graphics.hpp>
 
-#include "Instances.h"
+#include "util/Instances.h"
 #include "abstract/Character.h"
 #include "sprite/Cover.h"
 #include "sprite/Enemy.h"
