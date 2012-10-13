@@ -13,6 +13,9 @@
 #include <yaml-cpp/yaml.h>
 
 #include "String.h"
+#include "Vector.h"
+
+namespace details {};
 
 /**
  * Interface to a YAML file.
@@ -23,6 +26,7 @@ public:
 	Yaml(const String& filename);
 
 	static void setFolder(const String& folder);
+
 	/**
 	 * Gets a value of a specified type by key. Throws exception if key not found.
 	 *
@@ -41,6 +45,21 @@ public:
 private:
 	static String mFolder;
 	YAML::Node mNode;
+};
+
+/**
+ * Stream output operators to specialize Yaml::get for other types.
+ */
+namespace {
+	void operator>>(const YAML::Node& node, Vector2i& vector) {
+		node[0] >> vector.x;
+		node[1] >> vector.y;
+	}
+
+	void operator>>(const YAML::Node& node, Vector2f& vector) {
+		node[0] >> vector.x;
+		node[1] >> vector.y;
+	}
 };
 
 #endif /* DG_YAML_H_ */

@@ -11,14 +11,17 @@
 
 #include <Thor/Vectors.hpp>
 
+const String Physical::KEY_SIZE = "size";
+
 /**
  * Initializes Box2D body.
  *
  * @param data Data needed for construction.
  */
-Physical::Physical(const PhysicalData& data) :
+Physical::Physical(const PhysicalData& data, const Yaml& config) :
 		mDelete(false) {
-	assert(data.size != Vector2i());
+	Vector2i size = config.get<Vector2i>(KEY_SIZE);
+	assert(size != Vector2i());
 
 	b2BodyDef bodyDef;
 	bodyDef.type = (data.moving)
@@ -34,14 +37,14 @@ Physical::Physical(const PhysicalData& data) :
 
 	b2Shape* shape;
 	if (data.circle) {
-		assert(data.size.x == data.size.y);
+		assert(size.x == size.y);
 		shape = new b2CircleShape;
-		shape->m_radius = pixelToMeter(data.size.x) / 2;
+		shape->m_radius = pixelToMeter(size.x) / 2;
 	}
 	else {
 		b2PolygonShape* box = new b2PolygonShape;
-		box->SetAsBox(pixelToMeter(data.size.x) / 2,
-				      pixelToMeter(data.size.y) / 2);
+		box->SetAsBox(pixelToMeter(size.x) / 2,
+				      pixelToMeter(size.y) / 2);
 		shape = dynamic_cast<b2Shape*>(box);
 	}
 
@@ -70,16 +73,15 @@ Physical::~Physical() {
  *
  * @link Physical::PhysicalData
  */
-Physical::PhysicalData::PhysicalData( const Vector2f& position, const Vector2i& size,
-		b2World& world, uint16 category, uint16 maskExclude, bool moving, bool bullet, bool circle) :
-	position(position),
-	size(size),
-	world(world),
-	category(category),
-	maskExclude(maskExclude),
-	moving(moving),
-	bullet(bullet),
-	circle(circle) {
+Physical::PhysicalData::PhysicalData( const Vector2f& position, b2World& world, uint16 category,
+	uint16 maskExclude, bool moving, bool bullet, bool circle) :
+		position(position),
+		world(world),
+		category(category),
+		maskExclude(maskExclude),
+		moving(moving),
+		bullet(bullet),
+		circle(circle) {
 }
 
 /**

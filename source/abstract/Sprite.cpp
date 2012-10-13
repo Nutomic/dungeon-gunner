@@ -18,10 +18,10 @@ const String Sprite::KEY_TEXTURE = "texture";
  * @param texturePath Relative path to the texture file in the resource folder.
  */
 Sprite::Sprite(const Yaml& config, const PhysicalData& data) :
-		Physical(data),
+		Physical(data, config),
 		mTexture(ResourceManager::i().acquire(Loader::i()
 				.fromFile<sf::Texture>(config.get<String>(KEY_TEXTURE)))),
-		mSize(data.size) {
+		mSize(Vector2i(getSize())) {
 }
 
 /**
@@ -30,9 +30,9 @@ Sprite::Sprite(const Yaml& config, const PhysicalData& data) :
  * @param texture Pointer to the texture to be used (must already be loaded).
  */
 Sprite::Sprite(const std::shared_ptr<sf::Texture>& texture, const PhysicalData& data) :
-		Physical(data),
+		Physical(data, Yaml("tile.yaml")),
 		mTexture(texture),
-		mSize(data.size) {
+		mSize(Vector2i(getSize())) {
 
 }
 /**

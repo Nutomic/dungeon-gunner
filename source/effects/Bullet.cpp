@@ -25,7 +25,7 @@ const String Bullet::KEY_SPEED = "speed";
 Bullet::Bullet(const Vector2f& position, b2World& world, Physical& shooter, float direction,
 	const Yaml& config) :
 		Particle(ResourceManager::i().acquire(Loader::i().fromFile<sf::Texture>("bullet.png")),
-				PhysicalData(position, SIZE, world, CATEGORY_PARTICLE, CATEGORY_PARTICLE,
+				PhysicalData(position, world, CATEGORY_PARTICLE, CATEGORY_PARTICLE,
 				true, true, true), config),
 		mShooter(shooter),
 		mDamage(config.get<int>(KEY_DAMAGE)),

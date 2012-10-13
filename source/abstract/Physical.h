@@ -10,7 +10,11 @@
 
 #include <Box2D/Box2D.h>
 
+#include "../util/String.h"
 #include "../util/Vector.h"
+#include "../util/Yaml.h"
+
+class Yaml;
 
 /**
  * An object with physical properties.
@@ -26,13 +30,10 @@ public:
 	class PhysicalData {
 	public:
 		PhysicalData() = default;
-		PhysicalData(const Vector2f& position, const Vector2i& size, b2World& world,
-				uint16 category, uint16 maskExclude, bool moving, bool bullet = false,
-				bool circle = false);
+		PhysicalData(const Vector2f& position, b2World& world, uint16 category,
+				uint16 maskExclude, bool moving, bool bullet = false, bool circle = false);
 		/// World position of the body in pixel coordinates.
 		const Vector2f& position;
-		/// Pixel size of the body if it is a box.
-		Vector2i size;
 		/// Box2D world object.
 		b2World& world;
 		/// The category for collision filtering. Only one may be set. @link Physical::Category
@@ -72,7 +73,7 @@ public:
 
 // Public functions.
 public:
-	Physical(const PhysicalData& data);
+	Physical(const PhysicalData& data, const Yaml& config);
 	virtual ~Physical() = 0;
 
 	Vector2f getPosition() const;
@@ -97,6 +98,8 @@ protected:
 
 // Private variables.
 private:
+	static const String KEY_SIZE;
+
 	b2Body* mBody;
 	bool mDelete;
 };

@@ -34,7 +34,7 @@ TileManager::TileManager(b2World& world) :
  */
 TileManager::Tile::Tile(Type type, const TilePosition& position, b2World& world) :
 		Sprite(getTexture(type), PhysicalData(Vector2f(position.x * TILE_SIZE.x, position.y * TILE_SIZE.y),
-				TILE_SIZE, world, CATEGORY_WORLD, (type == Type::FLOOR) ? MASK_NONE : MASK_ALL, false)),
+				world, CATEGORY_WORLD, (type == Type::FLOOR) ? MASK_NONE : MASK_ALL, false)),
 		mType(type) {
 }
 
