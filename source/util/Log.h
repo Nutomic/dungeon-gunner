@@ -46,10 +46,19 @@
 #define LOG_I(str) std::cout << __FILE__ << ":" << __LINE__ << " " << "Info:    " << str << std::endl
 
 /**
- * Adds an output operator specalization for Vector2f
+ * Adds an output operator specalization for Vector2f.
  */
 inline std::ostream&
 operator<<(std::ostream& os, const Vector2f& vector) {
+    os << "(" << vector.x << ", " << vector.y << ")";
+    return os;
+}
+
+/**
+ * Adds an output operator specalization for Vector2i
+ */
+inline std::ostream&
+operator<<(std::ostream& os, const Vector2i& vector) {
     os << "(" << vector.x << ", " << vector.y << ")";
     return os;
 }
