@@ -21,7 +21,6 @@ const float Player::POINT_REACHED_DISTANCE = 1.0f;
 Player::Player(const Instances& instances, const Vector2f& position, const Yaml& config) :
 		Character(instances, "player.png", PhysicalData(position, instances.world,
 				CATEGORY_ACTOR, MASK_ALL, true, false, true), config),
-		mWeapon(instances, *this, Yaml("weapon.yaml")),
 		mDirection(0),
 		mPathfinder(instances.pathfinder) {
 }
@@ -41,7 +40,7 @@ Player::setCrosshairPosition(const Vector2f& position) {
  */
 void
 Player::fire() {
-	mWeapon.fire();
+	Character::fire();
 }
 
 /**

@@ -25,6 +25,7 @@ Character::Character(const Instances& instances, const String& texturePath,
 		mMaxHealth(config.get<int>(KEY_HEALTH)),
 		mCurrentHealth(mMaxHealth),
 		mMovementSpeed(config.get<float>(KEY_SPEED)),
+		mWeapon(instances, *this, Yaml("weapon.yaml")),
 		mInstances(instances) {
 		mCharacterInstances.push_back(this);
 }
@@ -92,4 +93,12 @@ Character::onDeath() {
 float
 Character::getMovementSpeed() const {
 	return mMovementSpeed;
+}
+
+/**
+ * Fire the attached weapon.
+ */
+void
+Character::fire() {
+	mWeapon.fire();
 }

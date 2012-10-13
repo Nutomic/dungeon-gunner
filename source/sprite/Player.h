@@ -59,11 +59,8 @@ private:
 	/// The distance to a point where it is considered reached.
 	static const float POINT_REACHED_DISTANCE;
 
-	Weapon mWeapon; //< Weapon object used for Player::fire().
 	Vector2f mCrosshairPosition; //< Relative position of the point to fire at (mouse cursor).
-
 	uint8 mDirection; //< Current movement direction for direct control.
-
 	Pathfinder& mPathfinder;
 	std::vector<Vector2f> mPath;
 };

@@ -11,10 +11,12 @@
 #include <vector>
 
 #include "Sprite.h"
+#include "../items/Weapon.h"
 #include "../util/Instances.h"
 #include "../util/String.h"
 #include "../util/Yaml.h"
 
+class Weapon;
 class Instances;
 class Sprite;
 class Yaml;
@@ -38,6 +40,7 @@ protected:
 	virtual void onThink(float elapsedTime);
 	virtual void onDeath();
 	float getMovementSpeed() const;
+	void fire();
 
 // Private variables.
 private:
@@ -49,6 +52,7 @@ private:
 	const int mMaxHealth;
 	int mCurrentHealth; //< Current health. Between 0 and mMaxHealth.
 	const float mMovementSpeed;
+	Weapon mWeapon;
 	Instances mInstances;
 };
 
