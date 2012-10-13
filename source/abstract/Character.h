@@ -37,15 +37,18 @@ public:
 protected:
 	virtual void onThink(float elapsedTime);
 	virtual void onDeath();
+	float getMovementSpeed() const;
 
 // Private variables.
 private:
 	static const String KEY_HEALTH;
+	static const String KEY_SPEED;
 
 	static std::vector<Character*> mCharacterInstances;
 
 	const int mMaxHealth;
 	int mCurrentHealth; //< Current health. Between 0 and mMaxHealth.
+	const float mMovementSpeed;
 	Instances mInstances;
 };
 

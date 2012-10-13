@@ -56,7 +56,6 @@ private:
 
 // Private variables.
 private:
-	static const float SPEED;
 	/// The distance to a point where it is considered reached.
 	static const float POINT_REACHED_DISTANCE;
 

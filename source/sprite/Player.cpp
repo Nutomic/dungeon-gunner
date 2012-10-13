@@ -13,7 +13,6 @@
 #include "../items/Weapon.h"
 #include "../util/String.h"
 
-const float Player::SPEED = 100.0f;
 const float Player::POINT_REACHED_DISTANCE = 1.0f;
 
 /**
@@ -56,7 +55,7 @@ Player::move(const Vector2f& destination) {
 	mPath = mPathfinder.getPath(*this, destination);
 	// Make sure we found a path.
 	if (mPath != std::vector<Vector2f>()) {
-		setSpeed(*mPath.end() - getPosition(), SPEED);
+		setSpeed(*mPath.end() - getPosition(), getMovementSpeed());
 	}
 	// Otherwise stop (in case this was called during movement).
 	else {
@@ -92,7 +91,7 @@ Player::setDirection(Direction direction, bool unset) {
 	if (mDirection & (uint8) Direction::UP) {
 		dirVec.y += - 1.0f;
 	}
-	setSpeed(dirVec, SPEED);
+	setSpeed(dirVec, getMovementSpeed());
 }
 
 /**
@@ -107,7 +106,7 @@ Player::onThink(float elapsedTime) {
 			mPath.pop_back();
 			if (!mPath.empty()) {
 				// Move to next.
-				setSpeed(*mPath.end() - getPosition(), SPEED);
+				setSpeed(*mPath.end() - getPosition(), getMovementSpeed());
 			}
 			else {
 				// Reached destination.

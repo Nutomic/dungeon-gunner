@@ -13,6 +13,7 @@
 #include "../sprite/Body.h"
 
 const String Character::KEY_HEALTH = "health";
+const String Character::KEY_SPEED = "speed";
 std::vector<Character*> Character::mCharacterInstances = std::vector<Character*>();
 
 /**
@@ -23,6 +24,7 @@ Character::Character(const Instances& instances, const String& texturePath,
 		Sprite(config, data),
 		mMaxHealth(config.get<int>(KEY_HEALTH)),
 		mCurrentHealth(mMaxHealth),
+		mMovementSpeed(config.get<float>(KEY_SPEED)),
 		mInstances(instances) {
 		mCharacterInstances.push_back(this);
 }
@@ -82,4 +84,12 @@ Character::onThink(float elapsedTime) {
  */
 void
 Character::onDeath() {
+}
+
+/**
+ * Gets the default movement speed (walking) of the character.
+ */
+float
+Character::getMovementSpeed() const {
+	return mMovementSpeed;
 }
