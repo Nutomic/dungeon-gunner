@@ -10,10 +10,14 @@
 #include <algorithm>
 #include <assert.h>
 
+#include <Thor/Vectors.hpp>
+
 #include "../sprite/Body.h"
+#include "../util/Log.h"
 
 const String Character::KEY_HEALTH = "health";
 const String Character::KEY_SPEED = "speed";
+const float Character::POINT_REACHED_DISTANCE = 1.0f;
 std::vector<Character*> Character::mCharacterInstances = std::vector<Character*>();
 
 /**
@@ -26,7 +30,8 @@ Character::Character(const Instances& instances, const String& texturePath,
 		mCurrentHealth(mMaxHealth),
 		mMovementSpeed(config.get<float>(KEY_SPEED)),
 		mWeapon(instances, *this, Yaml("weapon.yaml")),
-		mInstances(instances) {
+		mInstances(instances),
+		mStartPathfinding(false) {
 		mCharacterInstances.push_back(this);
 }
 
@@ -101,4 +106,47 @@ Character::getMovementSpeed() const {
 void
 Character::fire() {
 	mWeapon.fire();
+}
+
+/**
+ * Set a destination to be walked to. Call move() for the actual movement.
+ *
+ * @param destination An absolute point to move towards.
+ * @return True if a path was found.
+ */
+bool
+Character::setDestination(const Vector2f& destination) {
+	mPath = mInstances.pathfinder.getPath(*this, destination);
+	// Make sure we found a path.
+	if (mPath.empty()) {
+		LOG_I("No path found to destination.");
+	} else {
+		mStartPathfinding = true;
+	}
+	return mStartPathfinding;
+}
+
+/**
+ * Move towards a destination. Call setDestination() for setting the destination.
+ * This should be called from think().
+ */
+void
+Character::move() {
+	if (!mPath.empty()) {
+		if (mStartPathfinding) {
+			setSpeed(*mPath.end() - getPosition(), mMovementSpeed);
+		}
+		if (thor::length(*mPath.end() - getPosition()) < POINT_REACHED_DISTANCE) {
+			// Reached a path node.
+			mPath.pop_back();
+			if (!mPath.empty()) {
+				// Move to next path node.
+				setSpeed(*mPath.end() - getPosition(), mMovementSpeed);
+			}
+			else {
+				LOG_I("Reached destination.");
+				setSpeed(Vector2f(), 0);
+			}
+		}
+	}
 }

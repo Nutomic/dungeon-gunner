@@ -13,16 +13,13 @@
 #include "../items/Weapon.h"
 #include "../util/String.h"
 
-const float Player::POINT_REACHED_DISTANCE = 1.0f;
-
 /**
  * Initializes Sprite.
  */
 Player::Player(const Instances& instances, const Vector2f& position, const Yaml& config) :
 		Character(instances, "player.png", PhysicalData(position, instances.world,
 				CATEGORY_ACTOR, MASK_ALL, true, false, true), config),
-		mDirection(0),
-		mPathfinder(instances.pathfinder) {
+		mDirection(0) {
 }
 
 /**
@@ -51,15 +48,7 @@ Player::fire() {
  */
 void
 Player::move(const Vector2f& destination) {
-	mPath = mPathfinder.getPath(*this, destination);
-	// Make sure we found a path.
-	if (mPath != std::vector<Vector2f>()) {
-		setSpeed(*mPath.end() - getPosition(), getMovementSpeed());
-	}
-	// Otherwise stop (in case this was called during movement).
-	else {
-		setSpeed(Vector2f(), 0);
-	}
+	setDestination(destination);
 }
 
 /**
@@ -98,20 +87,9 @@ Player::setDirection(Direction direction, bool unset) {
  */
 void
 Player::onThink(float elapsedTime) {
-	// Stop if we are close enough to destination.
-	if (!mPath.empty()) {
-		// Reached a point.
-		if (thor::length(*mPath.end() - getPosition()) < POINT_REACHED_DISTANCE) {
-			mPath.pop_back();
-			if (!mPath.empty()) {
-				// Move to next.
-				setSpeed(*mPath.end() - getPosition(), getMovementSpeed());
-			}
-			else {
-				// Reached destination.
-				setSpeed(Vector2f(), 0);
-			}
-		}
+	if (!mDirection) {
+		// Only use path finding movement if no direct input movement active.
+		Character::move();
 	}
 	// Look towards crosshair.
 	setAngle(angle(mCrosshairPosition));
@@ -123,6 +101,6 @@ Player::onThink(float elapsedTime) {
 void
 Player::onCollide(Physical& other, uint16 category) {
 	if (category != CATEGORY_PARTICLE) {
-		mPath.clear();
+		setDestination(getPosition());
 	}
 }

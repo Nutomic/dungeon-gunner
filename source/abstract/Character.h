@@ -41,11 +41,15 @@ protected:
 	virtual void onDeath();
 	float getMovementSpeed() const;
 	void fire();
+	bool setDestination(const Vector2f& destination);
+	void move();
 
 // Private variables.
 private:
 	static const String KEY_HEALTH;
 	static const String KEY_SPEED;
+	/// The distance to a point where it is considered reached.
+	static const float POINT_REACHED_DISTANCE;
 
 	static std::vector<Character*> mCharacterInstances;
 
@@ -54,6 +58,8 @@ private:
 	const float mMovementSpeed;
 	Weapon mWeapon;
 	Instances mInstances;
+	std::vector<Vector2f> mPath; //< Contains nodes to reach a set destination.
+	bool mStartPathfinding; //< True if a movement destination was just set.
 };
 
 #endif /* DG_ACTOR_H_ */

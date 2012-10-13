@@ -56,13 +56,8 @@ private:
 
 // Private variables.
 private:
-	/// The distance to a point where it is considered reached.
-	static const float POINT_REACHED_DISTANCE;
-
 	Vector2f mCrosshairPosition; //< Relative position of the point to fire at (mouse cursor).
 	uint8 mDirection; //< Current movement direction for direct control.
-	Pathfinder& mPathfinder;
-	std::vector<Vector2f> mPath;
 };
 
 #endif /* DG_PLAYER_H_ */
