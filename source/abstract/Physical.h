@@ -73,7 +73,7 @@ public:
 
 // Public functions.
 public:
-	Physical(const PhysicalData& data, const Yaml& config);
+	Physical(const PhysicalData& data, const Yaml& config, const Vector2i& pSize = Vector2i());
 	virtual ~Physical() = 0;
 
 	Vector2f getPosition() const;

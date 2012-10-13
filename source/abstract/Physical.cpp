@@ -18,9 +18,11 @@ const String Physical::KEY_SIZE = "size";
  *
  * @param data Data needed for construction.
  */
-Physical::Physical(const PhysicalData& data, const Yaml& config) :
+Physical::Physical(const PhysicalData& data, const Yaml& config, const Vector2i& pSize) :
 		mDelete(false) {
-	Vector2i size = config.get<Vector2i>(KEY_SIZE);
+	Vector2i size = (pSize == Vector2i())
+		? config.get<Vector2i>(KEY_SIZE)
+		: pSize;
 	assert(size != Vector2i());
 
 	b2BodyDef bodyDef;
