@@ -14,7 +14,6 @@
 #include "../util/String.h"
 
 const float Player::SPEED = 100.0f;
-const Vector2i Player::SIZE = Vector2i(50, 50);
 const float Player::POINT_REACHED_DISTANCE = 1.0f;
 
 /**

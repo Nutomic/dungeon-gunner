@@ -20,10 +20,12 @@ Weapon::Weapon(const Instances& instances, Physical& holder, const Yaml& config)
 		Emitter(instances.collection),
 		mHolder(holder),
 		mWorld(instances.world),
-		mOffset(0, std::max(mHolder.getSize().x, mHolder.getSize().y) / 2 +
-			b2_linearSlop +
-			std::max(Bullet::SIZE.x, Bullet::SIZE.y) / 2),
 		mBullet(config.get<String>(KEY_BULLET)) {
+	Yaml bullet(mBullet);
+	Vector2i bulletSize = bullet.get<Vector2i>(Physical::KEY_SIZE);
+	mOffset = Vector2f(0, std::max(mHolder.getSize().x, mHolder.getSize().y) / 2 +
+			b2_linearSlop +
+			std::max(bulletSize.x, bulletSize.y) / 2);
 }
 
 /**
@@ -40,6 +42,6 @@ Weapon::createParticle() {
 	// Minus to account for positive y-axis going downwards in SFML.
 	Vector2f offset(- mOffset);
 	thor::rotate(offset, mHolder.getAngle());
-	return std::shared_ptr<Particle>(new Bullet(mHolder.getPosition() + offset, 	mWorld,
+	return std::shared_ptr<Particle>(new Bullet(mHolder.getPosition() + offset, mWorld,
 			mHolder, mHolder.getAngle(), Yaml(mBullet)));
 }

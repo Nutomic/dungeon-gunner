@@ -25,17 +25,6 @@ Sprite::Sprite(const Yaml& config, const PhysicalData& data) :
 }
 
 /**
- * Loads sprite from ResourceManager, sets world position. Use this if the texture has already been loaded.
- *
- * @param texture Pointer to the texture to be used (must already be loaded).
- */
-Sprite::Sprite(const std::shared_ptr<sf::Texture>& texture, const PhysicalData& data) :
-		Physical(data, Yaml("tile.yaml")),
-		mTexture(texture),
-		mSize(Vector2i(getSize())) {
-
-}
-/**
  * Does nothing.
  */
 Sprite::~Sprite() {

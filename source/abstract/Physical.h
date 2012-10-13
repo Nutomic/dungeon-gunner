@@ -89,6 +89,10 @@ public:
 	virtual bool doesCollide(Physical& other);
 	virtual void onCollide(Physical& other, uint16 category);
 
+// Public variables.
+public:
+	static const String KEY_SIZE;
+
 // Protected functions.
 protected:
 	void setDelete(bool value);
@@ -98,8 +102,6 @@ protected:
 
 // Private variables.
 private:
-	static const String KEY_SIZE;
-
 	b2Body* mBody;
 	bool mDelete;
 };

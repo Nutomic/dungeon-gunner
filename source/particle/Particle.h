@@ -20,8 +20,7 @@ class Yaml;
 class Particle : public Sprite {
 // Public functions.
 public:
-	Particle(const std::shared_ptr<sf::Texture>& texture, const PhysicalData& data,
-			const Yaml& config);
+	Particle(const Yaml& config, const PhysicalData& data);
 	virtual ~Particle();
 };
 

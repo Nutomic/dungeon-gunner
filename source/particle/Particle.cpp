@@ -7,9 +7,8 @@
 
 #include "Particle.h"
 
-Particle::Particle(const std::shared_ptr<sf::Texture>& texture, const PhysicalData& data,
-	const Yaml& config) :
-		Sprite(texture, data) {
+Particle::Particle(const Yaml& config, const PhysicalData& data) :
+		Sprite(config, data) {
 }
 
 Particle::~Particle() {

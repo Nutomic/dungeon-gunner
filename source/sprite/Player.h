@@ -57,7 +57,6 @@ private:
 // Private variables.
 private:
 	static const float SPEED;
-	static const Vector2i SIZE;
 	/// The distance to a point where it is considered reached.
 	static const float POINT_REACHED_DISTANCE;
 

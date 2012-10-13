@@ -12,12 +12,11 @@
 #include <memory>
 #include <vector>
 
-#include <SFML/Graphics.hpp>
-
 #include <Box2D/Box2D.h>
 
 #include "util/Vector.h"
 #include "abstract/Sprite.h"
+#include "util/String.h"
 
 class Sprite;
 
@@ -70,7 +69,7 @@ public:
 	Type getType() const;
 	TilePosition getTilePosition() const;
 
-	static std::shared_ptr<sf::Texture> getTexture(Type type);
+	static String getConfig(Type type);
 
 // Private variables.
 private:

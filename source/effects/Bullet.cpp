@@ -11,7 +11,6 @@
 #include "../util/Loader.h"
 #include "../util/ResourceManager.h"
 
-const Vector2i Bullet::SIZE = Vector2i(20, 20);
 const String Bullet::KEY_DAMAGE = "damage";
 const String Bullet::KEY_SPEED = "speed";
 
@@ -24,9 +23,8 @@ const String Bullet::KEY_SPEED = "speed";
  */
 Bullet::Bullet(const Vector2f& position, b2World& world, Physical& shooter, float direction,
 	const Yaml& config) :
-		Particle(ResourceManager::i().acquire(Loader::i().fromFile<sf::Texture>("bullet.png")),
-				PhysicalData(position, world, CATEGORY_PARTICLE, CATEGORY_PARTICLE,
-				true, true, true), config),
+		Particle(config, PhysicalData(position, world, CATEGORY_PARTICLE, CATEGORY_PARTICLE,
+				true, true, true)),
 		mShooter(shooter),
 		mDamage(config.get<int>(KEY_DAMAGE)),
 		mSpeed(config.get<int>(KEY_SPEED)) {

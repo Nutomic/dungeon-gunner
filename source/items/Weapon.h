@@ -43,7 +43,7 @@ private:
 	Physical& mHolder;
 	b2World& mWorld;
 
-	const Vector2f mOffset; //< Offset to the point where bullets are inserted (from holder center).
+	Vector2f mOffset; //< Offset to the point where bullets are inserted (from holder center).
 	const String mBullet;
 };
 

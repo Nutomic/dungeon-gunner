@@ -33,7 +33,7 @@ TileManager::TileManager(b2World& world) :
  * @param world Box2D world object.
  */
 TileManager::Tile::Tile(Type type, const TilePosition& position, b2World& world) :
-		Sprite(getTexture(type), PhysicalData(Vector2f(position.x * TILE_SIZE.x, position.y * TILE_SIZE.y),
+		Sprite(Yaml(getConfig(type)), PhysicalData(Vector2f(position.x * TILE_SIZE.x, position.y * TILE_SIZE.y),
 				world, CATEGORY_WORLD, (type == Type::FLOOR) ? MASK_NONE : MASK_ALL, false)),
 		mType(type) {
 }
@@ -44,20 +44,20 @@ TileManager::Tile::Tile(Type type, const TilePosition& position, b2World& world)
  * @param type The type of tile to load a resource key for.
  * @return Resource key to the correct texture.
  */
-std::shared_ptr<sf::Texture>
-TileManager::Tile::getTexture(Type type) {
+String
+TileManager::Tile::getConfig(Type type) {
 	String filename;
 	switch (type) {
 	case Type::FLOOR:
-		filename = "floor.png";
+		filename = "tile_floor.yaml";
 		break;
 	case Type::WALL:
-		filename = "wall.png";
+		filename = "tile_wall.yaml";
 		break;
 	default:
 		throw new aurora::Exception("Invalid tile type.");
 	}
-	return ResourceManager::i().acquire(Loader::i().fromFile<sf::Texture>(filename));
+	return filename;
 }
 
 /**
