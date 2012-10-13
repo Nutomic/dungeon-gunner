@@ -295,10 +295,11 @@ Pathfinder::Pathfinder(b2World& world) :
  *
  * The path returned is in reverse order so that the immediate next point to move to can be
  * accessed via pop_back().
+ * Returns an empty vector on failure.
  *
  * @param physical The object to be moved.
  * @param to The position to find a path to.
- * @return The path from physical.getPostion() to destination.
+ * @return The path from physical.getPostion() to destination. Empty on failure.
  *
  * TODO: Objects are only recognized partially, examples:
  *    Mostly ignores Cover.
