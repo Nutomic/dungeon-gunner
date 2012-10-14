@@ -23,8 +23,7 @@
 #include <boost/graph/filtered_graph.hpp>
 #include <boost/graph/astar_search.hpp>
 
-#include "util/Log.h"
-#include <typeinfo>
+#include "../util/Log.h"
 
 // Boost interface type declarations.
 enum class Direction;

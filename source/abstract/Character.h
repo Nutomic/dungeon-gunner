@@ -12,8 +12,8 @@
 
 #include "Sprite.h"
 #include "../items/Weapon.h"
-#include "../util/Instances.h"
-#include "../util/String.h"
+#include "../types/Instances.h"
+#include "../types/String.h"
 #include "../util/Yaml.h"
 
 class Weapon;

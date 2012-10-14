@@ -12,8 +12,8 @@
 
 #include <yaml-cpp/yaml.h>
 
-#include "String.h"
-#include "Vector.h"
+#include "../types/String.h"
+#include "../types/Vector.h"
 
 namespace details {};
 

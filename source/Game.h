@@ -15,11 +15,11 @@
 
 #include <Box2D/Box2D.h>
 
-#include "Pathfinder.h"
-#include "TileManager.h"
-#include "sprite/Player.h"
+#include "sprites/TileManager.h"
+#include "sprites/Player.h"
+#include "types/String.h"
 #include "util/Collection.h"
-#include "util/String.h"
+#include "util/Pathfinder.h"
 
 class Player;
 class Collection;

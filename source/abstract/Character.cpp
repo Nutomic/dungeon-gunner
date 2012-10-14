@@ -12,7 +12,7 @@
 
 #include <Thor/Vectors.hpp>
 
-#include "../sprite/Body.h"
+#include "../sprites/Body.h"
 #include "../util/Log.h"
 
 const String Character::KEY_HEALTH = "health";

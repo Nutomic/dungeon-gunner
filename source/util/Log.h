@@ -10,7 +10,7 @@
 
 #include <iostream>
 
-#include "Vector.h"
+#include "../types/Vector.h"
 
 /**
  * Logging functions for different levels.

@@ -10,9 +10,9 @@
 
 #include <Box2D/Box2D.h>
 
-#include "../Pathfinder.h"
-#include "../TileManager.h"
-#include "Collection.h"
+#include "../sprites/TileManager.h"
+#include "../util/Collection.h"
+#include "../util/Pathfinder.h"
 
 class Pathfinder;
 class TileManager;

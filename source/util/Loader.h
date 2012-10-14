@@ -16,7 +16,7 @@
 
 #include <Thor/Resources.hpp>
 
-#include "Singleton.h"
+#include "../abstract/Singleton.h"
 
 template <class T>
 class Singleton;

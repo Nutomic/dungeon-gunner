@@ -9,13 +9,13 @@
 
 #include <Thor/Graphics.hpp>
 
-#include "util/Instances.h"
 #include "abstract/Character.h"
-#include "sprite/Cover.h"
-#include "sprite/Enemy.h"
+#include "sprites/Cover.h"
+#include "sprites/Enemy.h"
+#include "types/Instances.h"
+#include "types/String.h"
 #include "util/Loader.h"
 #include "util/ResourceManager.h"
-#include "util/String.h"
 
 /// Goal amount of frames per second.
 const int Game::FPS_GOAL = 60;

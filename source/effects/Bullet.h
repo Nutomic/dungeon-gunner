@@ -9,7 +9,7 @@
 #define DG_BULLET_H_
 
 #include "../particle/Particle.h"
-#include "../util/String.h"
+#include "../types/String.h"
 #include "../util/Yaml.h"
 
 class Particle;

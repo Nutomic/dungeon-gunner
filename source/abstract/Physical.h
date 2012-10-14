@@ -10,8 +10,8 @@
 
 #include <Box2D/Box2D.h>
 
-#include "../util/String.h"
-#include "../util/Vector.h"
+#include "../types/String.h"
+#include "../types/Vector.h"
 #include "../util/Yaml.h"
 
 class Yaml;

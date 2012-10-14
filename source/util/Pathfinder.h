@@ -10,8 +10,8 @@
 
 #include <Box2D/Box2D.h>
 
-#include "abstract/Physical.h"
-#include "util/Vector.h"
+#include "../abstract/Physical.h"
+#include "../types/Vector.h"
 
 /**
  * Interface class for Boost Graph A* library.
