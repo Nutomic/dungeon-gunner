@@ -15,8 +15,6 @@
 #include "../types/String.h"
 #include "../types/Vector.h"
 
-namespace details {};
-
 /**
  * Interface to a YAML file.
  */
@@ -24,6 +22,7 @@ class Yaml {
 // Public functions.
 public:
 	Yaml(const String& filename);
+	~Yaml();
 
 	static void setFolder(const String& folder);
 
@@ -33,6 +32,7 @@ public:
 // Private variables.
 private:
 	static String mFolder;
+	std::ifstream mFile;
 	YAML::Node mNode;
 };
 

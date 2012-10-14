@@ -7,16 +7,25 @@
 
 #include "Yaml.h"
 
+#include "../util/Log.h"
+
 String Yaml::mFolder = "";
 
 /**
  * Creates a readable object from a YAML file. The path must be relative to the directory
  * set in setFolder().
  */
-Yaml::Yaml(const String& filename) {
-	std::ifstream file(mFolder+filename);
-	YAML::Parser parser(file);
+Yaml::Yaml(const String& filename) :
+		mFile(mFolder+filename) {
+	if (mFile.fail()) {
+		LOG_W("Failed to open YAML file: " << mFolder << filename);
+	}
+	YAML::Parser parser(mFile);
 	parser.GetNextDocument(mNode);
+}
+
+Yaml::~Yaml() {
+	mFile.close();
 }
 
 /**
