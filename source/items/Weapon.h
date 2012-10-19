@@ -13,11 +13,13 @@
 #include "../abstract/Physical.h"
 #include "../particle/Emitter.h"
 #include "../types/Instances.h"
+#include "../util/Timer.h"
 #include "../util/Yaml.h"
 
 class Emitter;
 class Instances;
 class Physical;
+class Timer;
 class Yaml;
 
 /**
@@ -39,12 +41,15 @@ protected:
 // Private variables.
 private:
 	static const String KEY_BULLET;
+	static const String KEY_INTERVAL;
 
 	Physical& mHolder;
 	b2World& mWorld;
 
 	Vector2f mOffset; //< Offset to the point where bullets are inserted (from holder center).
 	const String mBullet;
+	Timer mTimer;
+
 };
 
 #endif /* DG_WEAPON_H_ */
