@@ -5,8 +5,8 @@
  *      Author: Felix
  */
 
-#ifndef VECTOR_H_
-#define VECTOR_H_
+#ifndef DG_VECTOR_H_
+#define DG_VECTOR_H_
 
 #include <math.h>
 
@@ -80,5 +80,4 @@ angle(float in) {
 	return Vector2f(sin(in), cos(in));
 }
 
-
-#endif /* VECTOR_H_ */
+#endif /* DG_VECTOR_H_ */
