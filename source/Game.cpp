@@ -10,7 +10,6 @@
 #include <Thor/Graphics.hpp>
 
 #include "abstract/Character.h"
-#include "sprites/Cover.h"
 #include "sprites/Enemy.h"
 #include "types/Instances.h"
 #include "types/String.h"
@@ -32,7 +31,7 @@ Game::Game(sf::RenderWindow& window) :
 		mView(Vector2f(0, 0), mWindow.getView().getSize()),
 		//mFps("test"),
 		mTileManager(mWorld),
-		mPathfinder(mWorld),
+		mPathfinder(mTileManager),
 		mElapsed(0),
 		mQuit(false),
 		mPaused(false) {
@@ -62,8 +61,6 @@ Game::generate() {
 	Instances instances(mPathfinder, mTileManager, mCollection, mWorld);
 
 	mCollection.insert(std::shared_ptr<Sprite>(new Enemy(instances, Vector2f(400.0f, 200.0f), Yaml("enemy.yaml"))));
-	mCollection.insert(std::shared_ptr<Sprite>(new Cover(Vector2f(300, 200), Vector2i(100, 150),
-			mWorld, Yaml("cover.yaml"))));
 
 	mPlayer = std::unique_ptr<Player>(new Player(instances, Vector2f(200.0f, 100.0f), Yaml("player.yaml")));
 }
