@@ -12,7 +12,9 @@
 #include "../util/ResourceManager.h"
 
 const String Bullet::KEY_DAMAGE = "damage";
+const int Bullet::DEFAULT_DAMAGE = 10;
 const String Bullet::KEY_SPEED = "speed";
+const float Bullet::DEFAULT_SPEED = 500;
 
 /**
  * Places a bullet in the world.
@@ -26,8 +28,8 @@ Bullet::Bullet(const Vector2f& position, b2World& world, Body& shooter, float di
 		Particle(config, PhysicalData(position, world, CATEGORY_PARTICLE, CATEGORY_PARTICLE,
 				true, true, true)),
 		mShooter(shooter),
-		mDamage(config.get<int>(KEY_DAMAGE)),
-		mSpeed(config.get<int>(KEY_SPEED)) {
+		mDamage(config.get(KEY_DAMAGE, DEFAULT_DAMAGE)),
+		mSpeed(config.get(KEY_SPEED, DEFAULT_SPEED)) {
 	setSpeed(angle(direction), mSpeed);
 	setAngle(direction);
 }

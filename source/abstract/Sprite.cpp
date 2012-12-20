@@ -9,8 +9,10 @@
 
 #include "../util/Loader.h"
 #include "../util/ResourceManager.h"
+#include "../util/Log.h"
 
 const String Sprite::KEY_TEXTURE = "texture";
+const String Sprite::DEFAULT_TEXTURE = "";
 
 /**
  * Loads sprite from ResourceManager, sets world position.
@@ -19,9 +21,13 @@ const String Sprite::KEY_TEXTURE = "texture";
  */
 Sprite::Sprite(const Yaml& config, const PhysicalData& data, const Vector2i& size) :
 		Body(data, config, size),
-		mTexture(ResourceManager::i().acquire(Loader::i()
-				.fromFile<sf::Texture>(config.get<String>(KEY_TEXTURE)))),
 		mSize(Vector2i(getSize())) {
+	String texture = config.get(KEY_TEXTURE, DEFAULT_TEXTURE);
+	if (texture == "") {
+		LOG_E("Failed to read texture from YAML file " << config.getFilename());
+	}
+	mTexture = ResourceManager::i().acquire(Loader::i()
+			.fromFile<sf::Texture>(texture));
 }
 
 /**

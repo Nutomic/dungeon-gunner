@@ -47,7 +47,9 @@ protected:
 // Private variables.
 private:
 	static const String KEY_HEALTH;
+	static const int DEFAULT_HEALTH;
 	static const String KEY_SPEED;
+	static const float DEFAULT_SPEED;
 	/// The distance to a point where it is considered reached.
 	static const float POINT_REACHED_DISTANCE;
 

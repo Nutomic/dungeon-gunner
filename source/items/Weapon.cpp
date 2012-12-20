@@ -15,16 +15,18 @@
 #include "../effects/Bullet.h"
 
 const String Weapon::KEY_BULLET = "bullet";
+const String Weapon::DEFAULT_BULLET = "bullet.yaml";
 const String Weapon::KEY_INTERVAL = "interval";
+const int Weapon::DEFAULT_INTERVAL = 250;
 
 Weapon::Weapon(const Instances& instances, Body& holder, const Yaml& config) :
 		Emitter(instances.collection),
 		mHolder(holder),
 		mWorld(instances.world),
-		mBullet(config.get<String>(KEY_BULLET)),
-		mTimer(sf::milliseconds(config.get<int>(KEY_INTERVAL))) {
+		mBullet(config.get(KEY_BULLET, DEFAULT_BULLET)),
+		mTimer(sf::milliseconds(config.get(KEY_INTERVAL, DEFAULT_INTERVAL))) {
 	Yaml bullet(mBullet);
-	Vector2i bulletSize = bullet.get<Vector2i>(Body::KEY_SIZE);
+	Vector2i bulletSize = bullet.get(Body::KEY_SIZE, Body::DEFAULT_SIZE);
 	mOffset = Vector2f(0, std::max(mHolder.getSize().x, mHolder.getSize().y) / 2 +
 			b2_linearSlop +
 			std::max(bulletSize.x, bulletSize.y) / 2);

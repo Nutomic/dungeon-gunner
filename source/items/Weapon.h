@@ -41,7 +41,9 @@ protected:
 // Private variables.
 private:
 	static const String KEY_BULLET;
+	static const String DEFAULT_BULLET;
 	static const String KEY_INTERVAL;
+	static const int DEFAULT_INTERVAL;
 
 	Body& mHolder;
 	b2World& mWorld;

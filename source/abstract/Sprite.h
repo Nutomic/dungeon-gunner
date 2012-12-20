@@ -39,6 +39,7 @@ protected:
 // Private variables.
 private:
 	static const String KEY_TEXTURE;
+	static const String DEFAULT_TEXTURE;
 
 	std::shared_ptr<sf::Texture> mTexture;
 	Vector2i mSize;

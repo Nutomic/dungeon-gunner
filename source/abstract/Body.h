@@ -92,6 +92,7 @@ public:
 // Public variables.
 public:
 	static const String KEY_SIZE;
+	static const Vector2i DEFAULT_SIZE;
 
 // Protected functions.
 protected:

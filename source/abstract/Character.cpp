@@ -16,7 +16,9 @@
 #include "../util/Log.h"
 
 const String Character::KEY_HEALTH = "health";
+const int Character::DEFAULT_HEALTH = 100;
 const String Character::KEY_SPEED = "speed";
+const float Character::DEFAULT_SPEED = 100;
 const float Character::POINT_REACHED_DISTANCE = 1.0f;
 std::vector<Character*> Character::mCharacterInstances = std::vector<Character*>();
 
@@ -26,9 +28,9 @@ std::vector<Character*> Character::mCharacterInstances = std::vector<Character*>
 Character::Character(const Instances& instances, const String& texturePath,
 	const PhysicalData& data, const Yaml& config) :
 		Sprite(config, data),
-		mMaxHealth(config.get<int>(KEY_HEALTH)),
+		mMaxHealth(config.get(KEY_HEALTH, DEFAULT_HEALTH)),
 		mCurrentHealth(mMaxHealth),
-		mMovementSpeed(config.get<float>(KEY_SPEED)),
+		mMovementSpeed(config.get(KEY_SPEED, DEFAULT_SPEED)),
 		mWeapon(instances, *this, Yaml("weapon.yaml")),
 		mInstances(instances),
 		mStartPathfinding(false) {

@@ -16,7 +16,8 @@ String Yaml::mFolder = "";
  * set in setFolder().
  */
 Yaml::Yaml(const String& filename) :
-		mFile(mFolder+filename) {
+		mFilename(mFolder+filename),
+		mFile(mFilename) {
 	if (mFile.fail()) {
 		LOG_W("Failed to open YAML file: " << mFolder << filename);
 	}
@@ -26,6 +27,14 @@ Yaml::Yaml(const String& filename) :
 
 Yaml::~Yaml() {
 	mFile.close();
+}
+
+/**
+ * Return path and name of the file opened in this object.
+ */
+String
+Yaml::getFilename() const {
+	return mFilename;
 }
 
 /**

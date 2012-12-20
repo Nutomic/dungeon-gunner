@@ -12,6 +12,7 @@
 #include <Thor/Vectors.hpp>
 
 const String Body::KEY_SIZE = "size";
+const Vector2i Body::DEFAULT_SIZE = Vector2i(50, 50);
 
 /**
  * Initializes Box2D body.
@@ -21,7 +22,7 @@ const String Body::KEY_SIZE = "size";
 Body::Body(const PhysicalData& data, const Yaml& config, const Vector2i& pSize) :
 		mDelete(false) {
 	Vector2i size = (pSize == Vector2i())
-		? config.get<Vector2i>(KEY_SIZE)
+		? config.get(KEY_SIZE, DEFAULT_SIZE)
 		: pSize;
 	assert(size != Vector2i());
 

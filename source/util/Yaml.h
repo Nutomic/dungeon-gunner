@@ -24,14 +24,18 @@ public:
 	Yaml(const String& filename);
 	~Yaml();
 
+	String getFilename() const;
+
 	static void setFolder(const String& folder);
 
 	template <typename T>
-	T get(const String& key) const;
+	T get(const String& key, const T& defaultValue) const;
 
 // Private variables.
 private:
 	static String mFolder;
+
+	String mFilename;
 	std::ifstream mFile;
 	YAML::Node mNode;
 };
@@ -59,10 +63,15 @@ namespace {
  * @return The value of the specified key.
  */
 template <typename T>
-T Yaml::get(const String& key) const {
-	T tmp;
-	mNode[key] >> tmp;
-	return tmp;
+T Yaml::get(const String& key, const T& defaultValue) const {
+	if (const YAML::Node* node = mNode.FindValue(key)) {
+		T value;
+		*node >> value;
+		return value;
+	}
+	else {
+		return defaultValue;
+	}
 };
 
 #endif /* DG_YAML_H_ */

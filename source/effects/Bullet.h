@@ -30,7 +30,9 @@ public:
 // Private variables.
 private:
 	static const String KEY_DAMAGE;
+	static const int DEFAULT_DAMAGE;
 	static const String KEY_SPEED;
+	static const float DEFAULT_SPEED;
 
 	Body& mShooter;
 	const int mDamage;
