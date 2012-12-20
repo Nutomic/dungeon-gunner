@@ -1,12 +1,12 @@
 /*
- * Physical.h
+ * Body.h
  *
  *  Created on: 11.08.2012
  *      Author: Felix
  */
 
-#ifndef DG_PHYSICAL_H_
-#define DG_PHYSICAL_H_
+#ifndef DG_BODY_H_
+#define DG_BODY_H_
 
 #include <Box2D/Box2D.h>
 
@@ -107,4 +107,4 @@ private:
 	bool mDelete;
 };
 
-#endif /* DG_PHYSICAL_H_ */
+#endif /* DG_BODY_H_ */

@@ -1,12 +1,12 @@
 /*
- * astar.h
+ * pathfinder.h
  *
  *  Created on: 24.09.2012
  *      Author: Felix
  */
 
-#ifndef ASTAR_H_
-#define ASTAR_H_
+#ifndef PATHFINDER_H_
+#define PATHFINDER_H_
 
 #include <Box2D/Box2D.h>
 
@@ -32,4 +32,4 @@ private:
 	b2World& mWorld;
 };
 
-#endif /* ASTAR_H_ */
+#endif /* PATHFINDER_H_ */
