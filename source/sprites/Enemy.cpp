@@ -7,7 +7,7 @@
 
 #include "Enemy.h"
 
-#include "Body.h"
+#include "Corpse.h"
 
 Enemy::Enemy(const Instances& instances, const Vector2f& position, const Yaml& config) :
 		Character(instances, "enemy.png", PhysicalData(position, instances.world,

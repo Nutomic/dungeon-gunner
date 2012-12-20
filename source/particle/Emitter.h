@@ -8,11 +8,11 @@
 #ifndef DG_EMITTER_H_
 #define DG_EMITTER_H_
 
-#include "../abstract/Physical.h"
+#include "../abstract/Body.h"
 #include "../util/Collection.h"
 #include "Particle.h"
 
-class Physical;
+class Body;
 class Collection;
 class Particle;
 

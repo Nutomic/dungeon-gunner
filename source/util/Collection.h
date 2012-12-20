@@ -36,7 +36,7 @@ private:
 
 // Private variables.
 private:
-	std::map<Physical::Category, std::vector<std::shared_ptr<Sprite> > > mDrawables;
+	std::map<Body::Category, std::vector<std::shared_ptr<Sprite> > > mDrawables;
 };
 
 #endif /* DG_COLLECTION_H_ */

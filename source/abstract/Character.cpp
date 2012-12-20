@@ -12,7 +12,7 @@
 
 #include <Thor/Vectors.hpp>
 
-#include "../sprites/Body.h"
+#include "../sprites/Corpse.h"
 #include "../util/Log.h"
 
 const String Character::KEY_HEALTH = "health";
@@ -44,7 +44,7 @@ Character::~Character() {
 	assert(it != mCharacterInstances.end());
 	mCharacterInstances.erase(it);
 
-	mInstances.collection.insert(std::shared_ptr<Sprite>(new Body(mInstances.world,
+	mInstances.collection.insert(std::shared_ptr<Sprite>(new Corpse(mInstances.world,
 			getPosition(), Yaml("body.yaml"))));
 }
 

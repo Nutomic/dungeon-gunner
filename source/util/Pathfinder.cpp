@@ -305,7 +305,7 @@ Pathfinder::Pathfinder(b2World& world) :
  *    Sometimes moves into wall and instantly out again.
  */
 std::vector<Vector2f>
-Pathfinder::getPath(Physical& physical, const Vector2f& destination) {
+Pathfinder::getPath(Body& physical, const Vector2f& destination) {
     Vertex start(vertex(physical.getPosition()));
     Vertex goal(vertex(destination));
 
@@ -389,7 +389,7 @@ FilterVertex::operator()(Vertex const& vertex) const {
 
 bool
 FilterVertex::Callback::ReportFixture(b2Fixture* fixture) {
-	Physical& physical = *static_cast<Physical*>(fixture->GetBody()->GetUserData());
+	Body& physical = *static_cast<Body*>(fixture->GetBody()->GetUserData());
 	if (!physical.isMovable() && physical.isSolid()) {
 		empty = false;
 		return true;

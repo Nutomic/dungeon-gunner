@@ -251,8 +251,8 @@ Game::getFps() {
  */
 void
 Game::BeginContact(b2Contact* contact) {
-	Physical& first = *static_cast<Physical*>(contact->GetFixtureA()->GetBody()->GetUserData());
-	Physical& second = *static_cast<Physical*>(contact->GetFixtureB()->GetBody()->GetUserData());
+	Body& first = *static_cast<Body*>(contact->GetFixtureA()->GetBody()->GetUserData());
+	Body& second = *static_cast<Body*>(contact->GetFixtureB()->GetBody()->GetUserData());
 
 	if (!first.doesCollide(second) || !second.doesCollide(first)) {
 		contact->SetEnabled(false);

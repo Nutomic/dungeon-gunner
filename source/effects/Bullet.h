@@ -21,18 +21,18 @@ class Yaml;
 class Bullet : public Particle {
 // Public functions.
 public:
-	Bullet(const Vector2f& position, b2World& world, Physical& shooter, float direction,
+	Bullet(const Vector2f& position, b2World& world, Body& shooter, float direction,
 			const Yaml& config);
 
-	void onCollide(Physical& other, uint16 category);
-	bool doesCollide(Physical& other);
+	void onCollide(Body& other, uint16 category);
+	bool doesCollide(Body& other);
 
 // Private variables.
 private:
 	static const String KEY_DAMAGE;
 	static const String KEY_SPEED;
 
-	Physical& mShooter;
+	Body& mShooter;
 	const int mDamage;
 	const float mSpeed;
 };

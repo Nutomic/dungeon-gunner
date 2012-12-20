@@ -17,14 +17,14 @@
 const String Weapon::KEY_BULLET = "bullet";
 const String Weapon::KEY_INTERVAL = "interval";
 
-Weapon::Weapon(const Instances& instances, Physical& holder, const Yaml& config) :
+Weapon::Weapon(const Instances& instances, Body& holder, const Yaml& config) :
 		Emitter(instances.collection),
 		mHolder(holder),
 		mWorld(instances.world),
 		mBullet(config.get<String>(KEY_BULLET)),
 		mTimer(sf::milliseconds(config.get<int>(KEY_INTERVAL))) {
 	Yaml bullet(mBullet);
-	Vector2i bulletSize = bullet.get<Vector2i>(Physical::KEY_SIZE);
+	Vector2i bulletSize = bullet.get<Vector2i>(Body::KEY_SIZE);
 	mOffset = Vector2f(0, std::max(mHolder.getSize().x, mHolder.getSize().y) / 2 +
 			b2_linearSlop +
 			std::max(bulletSize.x, bulletSize.y) / 2);

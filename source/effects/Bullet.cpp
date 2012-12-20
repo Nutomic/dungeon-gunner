@@ -21,7 +21,7 @@ const String Bullet::KEY_SPEED = "speed";
  * @param world Box2d world.
  * @param texture Texture to display for bullet.
  */
-Bullet::Bullet(const Vector2f& position, b2World& world, Physical& shooter, float direction,
+Bullet::Bullet(const Vector2f& position, b2World& world, Body& shooter, float direction,
 	const Yaml& config) :
 		Particle(config, PhysicalData(position, world, CATEGORY_PARTICLE, CATEGORY_PARTICLE,
 				true, true, true)),
@@ -36,7 +36,7 @@ Bullet::Bullet(const Vector2f& position, b2World& world, Physical& shooter, floa
  * @copydoc Physical::onCollide
  */
 void
-Bullet::onCollide(Physical& other, uint16 type) {
+Bullet::onCollide(Body& other, uint16 type) {
 	// Make sure we do not damage twice.
 	if (!getDelete()) {
 		// Call onShot on other, with damage as param.
@@ -49,6 +49,6 @@ Bullet::onCollide(Physical& other, uint16 type) {
 }
 
 bool
-Bullet::doesCollide(Physical& other) {
+Bullet::doesCollide(Body& other) {
 	return &other != &mShooter;
 }

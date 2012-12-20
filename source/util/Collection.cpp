@@ -15,7 +15,7 @@
  */
 void
 Collection::insert(std::shared_ptr<Sprite> drawable) {
-	Physical::Category cat = drawable->getCategory();
+	Body::Category cat = drawable->getCategory();
 	auto item = std::find(mDrawables[cat].begin(), mDrawables[cat].end(), drawable);
 	if (item == mDrawables[cat].end()) {
 		mDrawables[cat].push_back(drawable);

@@ -18,7 +18,7 @@ const String Sprite::KEY_TEXTURE = "texture";
  * @param texturePath Relative path to the texture file in the resource folder.
  */
 Sprite::Sprite(const Yaml& config, const PhysicalData& data, const Vector2i& size) :
-		Physical(data, config, size),
+		Body(data, config, size),
 		mTexture(ResourceManager::i().acquire(Loader::i()
 				.fromFile<sf::Texture>(config.get<String>(KEY_TEXTURE)))),
 		mSize(Vector2i(getSize())) {

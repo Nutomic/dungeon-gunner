@@ -21,7 +21,7 @@ class Yaml;
  *
  * @warning May only handle bodies with one fixture.
  */
-class Physical {
+class Body {
 // Public types.
 public:
 	/**
@@ -73,8 +73,8 @@ public:
 
 // Public functions.
 public:
-	Physical(const PhysicalData& data, const Yaml& config, const Vector2i& pSize = Vector2i());
-	virtual ~Physical() = 0;
+	Body(const PhysicalData& data, const Yaml& config, const Vector2i& pSize = Vector2i());
+	virtual ~Body() = 0;
 
 	Vector2f getPosition() const;
 	Vector2f getSpeed() const;
@@ -86,8 +86,8 @@ public:
 	bool isSolid() const;
 	bool isMovable() const;
 
-	virtual bool doesCollide(Physical& other);
-	virtual void onCollide(Physical& other, uint16 category);
+	virtual bool doesCollide(Body& other);
+	virtual void onCollide(Body& other, uint16 category);
 
 // Public variables.
 public:

@@ -10,7 +10,7 @@
 
 #include <Box2D/Box2D.h>
 
-#include "../abstract/Physical.h"
+#include "../abstract/Body.h"
 #include "../types/Vector.h"
 
 /**
@@ -21,7 +21,7 @@ class Pathfinder {
 public:
 	Pathfinder(b2World& world);
 
-	std::vector<Vector2f> getPath(Physical& physical, const Vector2f& destination);
+	std::vector<Vector2f> getPath(Body& physical, const Vector2f& destination);
 
 // Private variables.
 private:

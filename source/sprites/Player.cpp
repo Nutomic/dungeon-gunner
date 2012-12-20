@@ -99,7 +99,7 @@ Player::onThink(float elapsedTime) {
  * Stop movement if we collide with anything except bullets.
  */
 void
-Player::onCollide(Physical& other, uint16 category) {
+Player::onCollide(Body& other, uint16 category) {
 	if (category != CATEGORY_PARTICLE) {
 		setDestination(getPosition());
 	}

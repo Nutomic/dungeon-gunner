@@ -1,24 +1,24 @@
 /*
- * Physical.cpp
+ * Body.cpp
  *
  *  Created on: 11.08.2012
  *      Author: Felix
  */
 
-#include "Physical.h"
+#include "Body.h"
 
 #include <math.h>
 
 #include <Thor/Vectors.hpp>
 
-const String Physical::KEY_SIZE = "size";
+const String Body::KEY_SIZE = "size";
 
 /**
  * Initializes Box2D body.
  *
  * @param data Data needed for construction.
  */
-Physical::Physical(const PhysicalData& data, const Yaml& config, const Vector2i& pSize) :
+Body::Body(const PhysicalData& data, const Yaml& config, const Vector2i& pSize) :
 		mDelete(false) {
 	Vector2i size = (pSize == Vector2i())
 		? config.get<Vector2i>(KEY_SIZE)
@@ -66,7 +66,7 @@ Physical::Physical(const PhysicalData& data, const Yaml& config, const Vector2i&
 /**
  * Removes body from world.
  */
-Physical::~Physical() {
+Body::~Body() {
 	mBody->GetWorld()->DestroyBody(mBody);
 }
 
@@ -75,7 +75,7 @@ Physical::~Physical() {
  *
  * @link Physical::PhysicalData
  */
-Physical::PhysicalData::PhysicalData( const Vector2f& position, b2World& world, uint16 category,
+Body::PhysicalData::PhysicalData( const Vector2f& position, b2World& world, uint16 category,
 	uint16 maskExclude, bool moving, bool bullet, bool circle) :
 		position(position),
 		world(world),
@@ -90,7 +90,7 @@ Physical::PhysicalData::PhysicalData( const Vector2f& position, b2World& world, 
  * Returns the position of the sprite (center).
  */
 Vector2f
-Physical::getPosition() const {
+Body::getPosition() const {
 	return vector(mBody->GetPosition());
 }
 
@@ -98,7 +98,7 @@ Physical::getPosition() const {
  * Returns the movement speed of the body.
  */
 Vector2f
-Physical::getSpeed() const {
+Body::getSpeed() const {
 	return vector(mBody->GetLinearVelocity());
 }
 
@@ -106,7 +106,7 @@ Physical::getSpeed() const {
  * Returns the rotation of the body (converted to an SFML angle).
  */
 float
-Physical::getAngle() const {
+Body::getAngle() const {
 	return thor::toDegree(mBody->GetAngle());
 }
 
@@ -114,15 +114,15 @@ Physical::getAngle() const {
  * Returns true if this object should be deleted.
  */
 bool
-Physical::getDelete() const {
+Body::getDelete() const {
 	return mDelete;
 }
 
 /**
  * Returns the Physical::Category of this object.
  */
-Physical::Category
-Physical::getCategory() const {
+Body::Category
+Body::getCategory() const {
 	return (Category) mBody->GetFixtureList()->GetFilterData().categoryBits;
 }
 
@@ -130,7 +130,7 @@ Physical::getCategory() const {
  * Returns the size of the body as a vector.
  */
 Vector2f
-Physical::getSize() const {
+Body::getSize() const {
 	b2AABB aabb(mBody->GetFixtureList()->GetAABB(0));
 	return vector(aabb.upperBound - aabb.lowerBound);
 }
@@ -139,7 +139,7 @@ Physical::getSize() const {
  * Returns true if collisions are enabled for the body.
  */
 bool
-Physical::isSolid() const {
+Body::isSolid() const {
 	return mBody->GetFixtureList()->GetFilterData().maskBits != 0;
 }
 
@@ -147,7 +147,7 @@ Physical::isSolid() const {
  * Returns true if the body is able to move.
  */
 bool
-Physical::isMovable() const {
+Body::isMovable() const {
 	return mBody->GetType() != b2_staticBody;
 }
 
@@ -159,7 +159,7 @@ Physical::isMovable() const {
  * @return True if the objects should collide.
  */
 bool
-Physical::doesCollide(Physical& other) {
+Body::doesCollide(Body& other) {
 	return true;
 }
 
@@ -171,14 +171,14 @@ Physical::doesCollide(Physical& other) {
  * @param category The Category of the other object (as passed in constructor).
  */
 void
-Physical::onCollide(Physical& other, uint16 type) {
+Body::onCollide(Body& other, uint16 type) {
 }
 
 /**
  * Set to true to mark this object for deletion from the world.
  */
 void
-Physical::setDelete(bool value) {
+Body::setDelete(bool value) {
 	mDelete = value;
 }
 
@@ -189,7 +189,7 @@ Physical::setDelete(bool value) {
  * @param speed The value of the movement speed to be used.
  */
 void
-Physical::setSpeed(Vector2f direction, float speed) {
+Body::setSpeed(Vector2f direction, float speed) {
 	if (direction != Vector2f()) {
 		direction = thor::unitVector<float>(direction);
 	}
@@ -201,6 +201,6 @@ Physical::setSpeed(Vector2f direction, float speed) {
  * Sets the angle of the body based on the direction of a vector.
  */
 void
-Physical::setAngle(float angle) {
+Body::setAngle(float angle) {
 	mBody->SetTransform(mBody->GetPosition(), thor::toRadian(angle));
 }

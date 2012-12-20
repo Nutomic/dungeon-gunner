@@ -12,12 +12,12 @@
 
 #include <Thor/Resources.hpp>
 
-#include "Physical.h"
+#include "Body.h"
 #include "../types/String.h"
 #include "../types/Vector.h"
 #include "../util/Yaml.h"
 
-class Physical;
+class Body;
 class Yaml;
 
 /**
@@ -25,7 +25,7 @@ class Yaml;
  *
  * Handles drawing to world.
  */
-class Sprite : public sf::Drawable, public Physical {
+class Sprite : public sf::Drawable, public Body {
 // Public functions.
 public:
 	Sprite(const Yaml& config, const PhysicalData& data, const Vector2i& size = Vector2i());

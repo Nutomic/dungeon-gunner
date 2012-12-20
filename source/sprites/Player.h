@@ -51,7 +51,7 @@ public:
 
 // Private functions.
 private:
-	void onCollide(Physical& other, uint16 category);
+	void onCollide(Body& other, uint16 category);
 	void onThink(float elapsedTime);
 
 // Private variables.
