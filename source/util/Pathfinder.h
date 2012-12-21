@@ -13,23 +13,14 @@
 #include "../abstract/Body.h"
 #include "../types/Vector.h"
 
-/**
- * Interface class for Boost Graph A* library.
- */
+class Body;
+
 class Pathfinder {
 // Public functions.
 public:
-	Pathfinder(b2World& world);
+	Pathfinder();
 
 	std::vector<Vector2f> getPath(Body& physical, const Vector2f& destination);
-
-// Private variables.
-private:
-	/// The size of a vertex in pixels. Should be between the size of the moving object
-	/// and TileManager::TILE_SIZE.
-	static const Vector2f VERTEX_SIZE;
-
-	b2World& mWorld;
 };
 
 #endif /* PATHFINDER_H_ */
