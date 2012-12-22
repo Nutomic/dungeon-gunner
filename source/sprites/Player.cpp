@@ -61,22 +61,22 @@ Player::move(const Vector2f& destination) {
 void
 Player::setDirection(Direction direction, bool unset) {
 	if (unset) {
-		mDirection = mDirection & ~(uint8) direction;
+		mDirection = mDirection & ~direction;
 	} else {
-		mDirection = mDirection | (uint8) direction;
+		mDirection = mDirection | direction;
 	}
 	// Convert directions into a vector.
 	Vector2f dirVec(0, 0);
-	if (mDirection & (uint8) Direction::RIGHT) {
+	if (mDirection & Direction::RIGHT) {
 		dirVec.x += 1.0f;
 	}
-	if (mDirection & (uint8) Direction::LEFT) {
+	if (mDirection & Direction::LEFT) {
 		dirVec.x += - 1.0f;
 	}
-	if (mDirection & (uint8) Direction::DOWN) {
+	if (mDirection & Direction::DOWN) {
 		dirVec.y += 1.0f;
 	}
-	if (mDirection & (uint8) Direction::UP) {
+	if (mDirection & Direction::UP) {
 		dirVec.y += - 1.0f;
 	}
 	setSpeed(dirVec, getMovementSpeed());
@@ -92,14 +92,14 @@ Player::onThink(float elapsedTime) {
 		Character::move();
 	}
 	// Look towards crosshair.
-	setAngle(angle(mCrosshairPosition));
+	setAngle(thor::polarAngle(mCrosshairPosition));
 }
 
 /**
  * Stop movement if we collide with anything except bullets.
  */
 void
-Player::onCollide(Body& other, uint16 category) {
+Player::onCollide(Body& other, Category category) {
 	if (category != CATEGORY_PARTICLE) {
 		setDestination(getPosition());
 	}

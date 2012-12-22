@@ -25,10 +25,11 @@ Weapon::Weapon(const Instances& instances, Body& holder, const Yaml& config) :
 		mWorld(instances.world),
 		mBullet(config.get(KEY_BULLET, DEFAULT_BULLET)),
 		mTimer(sf::milliseconds(config.get(KEY_INTERVAL, DEFAULT_INTERVAL))) {
+	Vector2f holderSize = mHolder.getSize();
 	Yaml bullet(mBullet);
-	Vector2i bulletSize = bullet.get(Body::KEY_SIZE, Body::DEFAULT_SIZE);
-	mOffset = Vector2f(0, std::max(mHolder.getSize().x, mHolder.getSize().y) / 2 +
-			b2_linearSlop +
+	Vector2i bulletSize = bullet.get(Body::KEY_SIZE, Vector2i());
+	mOffset = Vector2f(0,
+			std::max(holderSize.x, holderSize.y) / 2 +
 			std::max(bulletSize.x, bulletSize.y) / 2);
 }
 

@@ -7,6 +7,8 @@
 
 #include "Bullet.h"
 
+#include <Thor/Vectors.hpp>
+
 #include "../abstract/Character.h"
 #include "../util/Loader.h"
 #include "../util/ResourceManager.h"
@@ -23,14 +25,16 @@ const float Bullet::DEFAULT_SPEED = 500;
  * @param world Box2d world.
  * @param texture Texture to display for bullet.
  */
-Bullet::Bullet(const Vector2f& position, b2World& world, Body& shooter, float direction,
+Bullet::Bullet(const Vector2f& position, World& world, Body& shooter, float direction,
 	const Yaml& config) :
 		Particle(config, PhysicalData(position, world, CATEGORY_PARTICLE, CATEGORY_PARTICLE,
 				true, true, true)),
 		mShooter(shooter),
 		mDamage(config.get(KEY_DAMAGE, DEFAULT_DAMAGE)),
 		mSpeed(config.get(KEY_SPEED, DEFAULT_SPEED)) {
-	setSpeed(angle(direction), mSpeed);
+	Vector2f dir(1.0f, 0);
+	thor::setPolarAngle(dir, direction);
+	setSpeed(dir, mSpeed);
 	setAngle(direction);
 }
 
@@ -38,7 +42,7 @@ Bullet::Bullet(const Vector2f& position, b2World& world, Body& shooter, float di
  * @copydoc Physical::onCollide
  */
 void
-Bullet::onCollide(Body& other, uint16 type) {
+Bullet::onCollide(Body& other, Category type) {
 	// Make sure we do not damage twice.
 	if (!getDelete()) {
 		// Call onShot on other, with damage as param.

@@ -13,28 +13,27 @@
 
 #include <Thor/Resources.hpp>
 
-#include <Box2D/Box2D.h>
-
+#include "World.h"
 #include "sprites/TileManager.h"
 #include "sprites/Player.h"
 #include "types/String.h"
 #include "util/Collection.h"
 #include "util/Pathfinder.h"
 
+class World;
 class Player;
 class Collection;
 
 /*
  * Use vertex for tiles.
  */
-class Game : private sf::NonCopyable, public b2ContactListener {
+class Game : private sf::NonCopyable {
 // Public functions.
 public:
 	Game(sf::RenderWindow& window);
 	~Game();
 
 	void loop();
-    void BeginContact(b2Contact* contact);
 
 // Private functions.
 private:
@@ -55,7 +54,7 @@ private:
 	static const int FPS_GOAL;
 	static const float TICKS_GOAL;
 
-	b2World mWorld;
+	World mWorld;
 
 	sf::RenderWindow& mWindow;
 	sf::Clock mClock;

@@ -26,18 +26,15 @@ const float Game::TICKS_GOAL = 1000 / Game::FPS_GOAL;
  * Initializes game, including window and objects (sprites).
  */
 Game::Game(sf::RenderWindow& window) :
-		mWorld(b2Vec2(0, 0)),
 		mWindow(window),
 		mView(Vector2f(0, 0), mWindow.getView().getSize()),
 		//mFps("test"),
 		mTileManager(mWorld),
-		mPathfinder(mTileManager),
 		mElapsed(0),
 		mQuit(false),
 		mPaused(false) {
 	mWindow.setFramerateLimit(FPS_GOAL);
 	mWindow.setKeyRepeatEnabled(true);
-	mWorld.SetContactListener(this);
 
 	generate();
 }
@@ -83,7 +80,7 @@ Game::loop() {
 
 		for (; !mPaused && (left >= TICKS_GOAL); left -= TICKS_GOAL) {
 			Character::think(TICKS_GOAL);
-			mWorld.Step(1.0f / FPS_GOAL, 8, 3);
+			mWorld.step();
 
 			mCollection.checkDelete();
 		}
@@ -244,20 +241,4 @@ Game::render() {
 String
 Game::getFps() {
 	return str((mElapsed != 0) ? 1000.0f / mElapsed : 0.0f, 2);
-}
-
-/**
- * Begin of collision, call callback function on both objects.
- */
-void
-Game::BeginContact(b2Contact* contact) {
-	Body& first = *static_cast<Body*>(contact->GetFixtureA()->GetBody()->GetUserData());
-	Body& second = *static_cast<Body*>(contact->GetFixtureB()->GetBody()->GetUserData());
-
-	if (!first.doesCollide(second) || !second.doesCollide(first)) {
-		contact->SetEnabled(false);
-		return;
-	}
-	first.onCollide(second, second.getCategory());
-	second.onCollide(first, first.getCategory());
 }

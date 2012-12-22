@@ -8,12 +8,12 @@
 #ifndef DG_INSTANCES_H_
 #define DG_INSTANCES_H_
 
-#include <Box2D/Box2D.h>
-
+#include "../World.h"
 #include "../sprites/TileManager.h"
 #include "../util/Collection.h"
 #include "../util/Pathfinder.h"
 
+class World;
 class Pathfinder;
 class TileManager;
 class Collection;
@@ -23,13 +23,13 @@ class Collection;
  */
 struct Instances {
 	Instances() = default;
-	Instances(Pathfinder& p, TileManager& t, Collection& c, b2World& w) :
+	Instances(Pathfinder& p, TileManager& t, Collection& c, World& w) :
 			pathfinder(p), tilemanager(t), collection(c), world(w) {};
 
 	Pathfinder& pathfinder;
 	TileManager& tilemanager;
 	Collection& collection;
-	b2World& world;
+	World& world;
 };
 
 #endif /* DG_INSTANCES_H_ */

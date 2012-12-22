@@ -30,7 +30,7 @@ private:
 
 // Private variablese.
 private:
-	b2World& mWorld;
+	World& mWorld;
 	Collection& mCollection;
 };
 

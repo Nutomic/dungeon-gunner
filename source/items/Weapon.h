@@ -46,7 +46,7 @@ private:
 	static const int DEFAULT_INTERVAL;
 
 	Body& mHolder;
-	b2World& mWorld;
+	World& mWorld;
 
 	Vector2f mOffset; //< Offset to the point where bullets are inserted (from holder center).
 	const String mBullet;

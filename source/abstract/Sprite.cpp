@@ -31,7 +31,7 @@ Sprite::Sprite(const Yaml& config, const PhysicalData& data, const Vector2i& siz
 }
 
 /**
- * Does nothing.
+ * Used to make this class pure virtual without any pure virtual function.
  */
 Sprite::~Sprite() {
 }

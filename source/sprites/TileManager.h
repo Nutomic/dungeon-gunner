@@ -9,15 +9,14 @@
 #define DG_TILEMANAGER_H_
 
 #include <map>
-#include <memory>
 #include <vector>
 
-#include <Box2D/Box2D.h>
-
+#include "../World.h"
 #include "../abstract/Sprite.h"
 #include "../types/Vector.h"
 #include "../types/String.h"
 
+class World;
 class Sprite;
 
 class TileManager : public sf::Drawable {
@@ -40,7 +39,7 @@ public:
 
 // Public functions.
 public:
-	TileManager(b2World& world);
+	TileManager(World& world);
 
 	void setTile(const TilePosition& position, Type type);
 
@@ -54,7 +53,7 @@ private:
 
 // Private variables.
 private:
-	b2World& mWorld;
+	World& mWorld;
 	std::vector<std::unique_ptr<Tile> > mTiles;
 };
 
@@ -64,7 +63,7 @@ private:
 class TileManager::Tile : public Sprite {
 // Public functions.
 public:
-	Tile(Type type, const TilePosition& position, b2World& world);
+	Tile(Type type, const TilePosition& position, World& world);
 
 	Type getType() const;
 	TilePosition getTilePosition() const;

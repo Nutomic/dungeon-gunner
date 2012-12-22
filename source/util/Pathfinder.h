@@ -8,8 +8,6 @@
 #ifndef PATHFINDER_H_
 #define PATHFINDER_H_
 
-#include <Box2D/Box2D.h>
-
 #include "../abstract/Body.h"
 #include "../types/Vector.h"
 

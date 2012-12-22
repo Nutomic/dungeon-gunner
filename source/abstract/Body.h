@@ -8,12 +8,12 @@
 #ifndef DG_BODY_H_
 #define DG_BODY_H_
 
-#include <Box2D/Box2D.h>
-
+#include "../World.h"
 #include "../types/String.h"
 #include "../types/Vector.h"
 #include "../util/Yaml.h"
 
+class World;
 class Yaml;
 
 /**
@@ -24,31 +24,6 @@ class Yaml;
 class Body {
 // Public types.
 public:
-	/**
-	 * POD container that carries all data required to construct this class.
-	 */
-	class PhysicalData {
-	public:
-		PhysicalData() = default;
-		PhysicalData(const Vector2f& position, b2World& world, uint16 category,
-				uint16 maskExclude, bool moving, bool bullet = false, bool circle = false);
-		/// World position of the body in pixel coordinates.
-		const Vector2f& position;
-		/// Box2D world object.
-		b2World& world;
-		/// The category for collision filtering. Only one may be set. @link Physical::Category
-		uint16 category;
-		/// All categories set here will have collisions disabled with this object.
-		uint16 maskExclude;
-		/// True if the body may move on its own (player, monster).
-		bool moving;
-		/// True if the object is a bullet.
-		bool bullet;
-		/// True if the body collides as a circle. Radius is side length / 2,
-		/// both sides must be equal.
-		bool circle;
-	};
-
 	/**
 	 * Categories of physical objects, for Box2D collision filtering.
 	 * The order of categories is also used for render order in Collection::draw()
@@ -61,6 +36,31 @@ public:
 		CATEGORY_NONSOLID = 1 << 2,
 		CATEGORY_PARTICLE = 1 << 3,
 		CATEGORY_ACTOR = 1 << 4
+	};
+
+	/**
+	 * POD container that carries all data required to construct this class.
+	 */
+	class PhysicalData {
+	public:
+		PhysicalData() = default;
+		PhysicalData(const Vector2f& position, World& world, Category category,
+				unsigned short maskExclude, bool moving, bool bullet = false, bool circle = false);
+		/// World position of the body in pixel coordinates.
+		const Vector2f& position;
+		/// Box2D world object.
+		World& world;
+		/// The category for collision filtering. Only one may be set. @link Physical::Category
+		Category category;
+		/// All categories set here will have collisions disabled with this object.
+		unsigned short maskExclude;
+		/// True if the body may move on its own (player, monster).
+		bool moving;
+		/// True if the object is a bullet.
+		bool bullet;
+		/// True if the body collides as a circle. Radius is side length / 2,
+		/// both sides must be equal.
+		bool circle;
 	};
 
 	/**
@@ -87,7 +87,7 @@ public:
 	bool isMovable() const;
 
 	virtual bool doesCollide(Body& other);
-	virtual void onCollide(Body& other, uint16 category);
+	virtual void onCollide(Body& other, Category category);
 
 // Public variables.
 public:
@@ -103,7 +103,6 @@ protected:
 
 // Private variables.
 private:
-	b2Body* mBody;
 	bool mDelete;
 };
 

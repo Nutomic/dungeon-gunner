@@ -21,63 +21,19 @@ const Vector2i Body::DEFAULT_SIZE = Vector2i(50, 50);
  */
 Body::Body(const PhysicalData& data, const Yaml& config, const Vector2i& pSize) :
 		mDelete(false) {
-	Vector2i size = (pSize == Vector2i())
-		? config.get(KEY_SIZE, DEFAULT_SIZE)
-		: pSize;
-	assert(size != Vector2i());
-
-	b2BodyDef bodyDef;
-	bodyDef.type = (data.moving)
-						? b2_dynamicBody
-						: b2_staticBody;
-	bodyDef.position = vector(data.position);
-	bodyDef.allowSleep = true;
-	bodyDef.fixedRotation = true;
-	bodyDef.bullet = data.bullet;
-	bodyDef.userData = this;
-
-	mBody = data.world.CreateBody(&bodyDef);
-
-	b2Shape* shape;
-	if (data.circle) {
-		assert(size.x == size.y);
-		shape = new b2CircleShape;
-		shape->m_radius = pixelToMeter(size.x) / 2;
-	}
-	else {
-		b2PolygonShape* box = new b2PolygonShape;
-		box->SetAsBox(pixelToMeter(size.x) / 2,
-				      pixelToMeter(size.y) / 2);
-		shape = dynamic_cast<b2Shape*>(box);
-	}
-
-	b2FixtureDef fixtureDef;
-	fixtureDef.shape = shape;
-	fixtureDef.density = 1.0f;
-	fixtureDef.filter.categoryBits = data.category;
-	fixtureDef.filter.maskBits = ~data.maskExclude;
-	fixtureDef.restitution = 0;
-	fixtureDef.density = (data.bullet) ? 0 : 10000;
-
-	mBody->CreateFixture(&fixtureDef);
-
-	delete shape;
 }
 
 /**
- * Removes body from world.
+ * Used to make this class pure virtual without any pure virtual function.
  */
 Body::~Body() {
-	mBody->GetWorld()->DestroyBody(mBody);
 }
 
 /**
  * Initializes container.
- *
- * @link Physical::PhysicalData
  */
-Body::PhysicalData::PhysicalData( const Vector2f& position, b2World& world, uint16 category,
-	uint16 maskExclude, bool moving, bool bullet, bool circle) :
+Body::PhysicalData::PhysicalData( const Vector2f& position, World& world, Category category,
+	unsigned short maskExclude, bool moving, bool bullet, bool circle) :
 		position(position),
 		world(world),
 		category(category),
@@ -92,7 +48,7 @@ Body::PhysicalData::PhysicalData( const Vector2f& position, b2World& world, uint
  */
 Vector2f
 Body::getPosition() const {
-	return vector(mBody->GetPosition());
+	return Vector2f();
 }
 
 /**
@@ -100,7 +56,7 @@ Body::getPosition() const {
  */
 Vector2f
 Body::getSpeed() const {
-	return vector(mBody->GetLinearVelocity());
+	return Vector2f();
 }
 
 /**
@@ -108,7 +64,7 @@ Body::getSpeed() const {
  */
 float
 Body::getAngle() const {
-	return thor::toDegree(mBody->GetAngle());
+	return 0;
 }
 
 /**
@@ -124,7 +80,7 @@ Body::getDelete() const {
  */
 Body::Category
 Body::getCategory() const {
-	return (Category) mBody->GetFixtureList()->GetFilterData().categoryBits;
+	return CATEGORY_WORLD;
 }
 
 /**
@@ -132,8 +88,7 @@ Body::getCategory() const {
  */
 Vector2f
 Body::getSize() const {
-	b2AABB aabb(mBody->GetFixtureList()->GetAABB(0));
-	return vector(aabb.upperBound - aabb.lowerBound);
+	return Vector2f();
 }
 
 /**
@@ -141,7 +96,7 @@ Body::getSize() const {
  */
 bool
 Body::isSolid() const {
-	return mBody->GetFixtureList()->GetFilterData().maskBits != 0;
+	return false;
 }
 
 /**
@@ -149,7 +104,7 @@ Body::isSolid() const {
  */
 bool
 Body::isMovable() const {
-	return mBody->GetType() != b2_staticBody;
+	return false;
 }
 
 /**
@@ -172,7 +127,7 @@ Body::doesCollide(Body& other) {
  * @param category The Category of the other object (as passed in constructor).
  */
 void
-Body::onCollide(Body& other, uint16 type) {
+Body::onCollide(Body& other, Category type) {
 }
 
 /**
@@ -191,11 +146,6 @@ Body::setDelete(bool value) {
  */
 void
 Body::setSpeed(Vector2f direction, float speed) {
-	if (direction != Vector2f()) {
-		direction = thor::unitVector<float>(direction);
-	}
-	direction *= speed;
-	mBody->SetLinearVelocity(vector(direction));
 }
 
 /**
@@ -203,5 +153,4 @@ Body::setSpeed(Vector2f direction, float speed) {
  */
 void
 Body::setAngle(float angle) {
-	mBody->SetTransform(mBody->GetPosition(), thor::toRadian(angle));
 }

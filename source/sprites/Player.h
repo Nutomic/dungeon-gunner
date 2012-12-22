@@ -33,7 +33,7 @@ public:
 	/**
 	 * Movement directions that can be set via Player::setDirection().
 	 */
-	enum class Direction : uint8 {
+	enum Direction : unsigned char {
 		RIGHT = 1 << 0,
 		LEFT = 1 << 1,
 		UP = 1 << 2,
@@ -51,13 +51,13 @@ public:
 
 // Private functions.
 private:
-	void onCollide(Body& other, uint16 category);
+	void onCollide(Body& other, Category category);
 	void onThink(float elapsedTime);
 
 // Private variables.
 private:
 	Vector2f mCrosshairPosition; //< Relative position of the point to fire at (mouse cursor).
-	uint8 mDirection; //< Current movement direction for direct control.
+	unsigned char mDirection; //< Current movement direction for direct control.
 };
 
 #endif /* DG_PLAYER_H_ */

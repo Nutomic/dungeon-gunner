@@ -7,7 +7,7 @@
 
 #include "Corpse.h"
 
-Corpse::Corpse(b2World& world, const Vector2f& position, const Yaml& config) :
+Corpse::Corpse(World& world, const Vector2f& position, const Yaml& config) :
 		Sprite(config, PhysicalData(position, world, CATEGORY_NONSOLID, MASK_NONE, false)) {
 }
 

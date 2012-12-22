@@ -21,7 +21,7 @@ const Vector2i TileManager::TILE_SIZE = Vector2i(100, 100);
  *
  * @param world Box2D world to create (physical) tiles in.
  */
-TileManager::TileManager(b2World& world) :
+TileManager::TileManager(World& world) :
 		mWorld(world) {
 }
 
@@ -32,7 +32,7 @@ TileManager::TileManager(b2World& world) :
  * @param pPosition Position of the tile in tile coordinates.
  * @param world Box2D world object.
  */
-TileManager::Tile::Tile(Type type, const TilePosition& position, b2World& world) :
+TileManager::Tile::Tile(Type type, const TilePosition& position, World& world) :
 		Sprite(Yaml(getConfig(type)), PhysicalData(Vector2f(position.x * TILE_SIZE.x, position.y * TILE_SIZE.y),
 				world, CATEGORY_WORLD, (type == Type::FLOOR) ? MASK_NONE : MASK_ALL, false)),
 		mType(type) {

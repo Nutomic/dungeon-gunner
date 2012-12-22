@@ -10,7 +10,7 @@
 #include <assert.h>
 
 /**
- * INitializes time limit to zero.
+ * Initializes time limit to zero.
  */
 Timer::Timer() {
 }
