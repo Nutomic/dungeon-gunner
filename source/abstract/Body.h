@@ -68,7 +68,7 @@ public:
 	sf::Vector2i getSize() const;
 
 	virtual bool doesCollide(Body& other);
-	virtual void onCollide(Body& other, Category category);
+	virtual void onCollide(Body& other);
 
 // Public variables.
 public:

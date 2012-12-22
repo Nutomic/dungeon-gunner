@@ -41,11 +41,11 @@ Bullet::Bullet(const sf::Vector2f& position, Body& shooter, float direction,
  * @copydoc Physical::onCollide
  */
 void
-Bullet::onCollide(Body& other, Category type) {
+Bullet::onCollide(Body& other) {
 	// Make sure we do not damage twice.
 	if (!getDelete()) {
 		// Call onShot on other, with damage as param.
-		if (type == CATEGORY_ACTOR) {
+		if (other.getCategory() == CATEGORY_ACTOR) {
 			Character& a = dynamic_cast<Character&>(other);
 			a.onDamage(mDamage);
 		}

@@ -50,7 +50,7 @@ public:
 
 // Private functions.
 private:
-	void onCollide(Body& other, Category category);
+	void onCollide(Body& other);
 	void onThink(float elapsedTime);
 
 // Private variables.

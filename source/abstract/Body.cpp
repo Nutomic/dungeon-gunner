@@ -110,10 +110,9 @@ Body::doesCollide(Body& other) {
  * to manage collision events.
  *
  * @param other Reference to the other Physical in the collision.
- * @param category The Category of the other object (as passed in constructor).
  */
 void
-Body::onCollide(Body& other, Category type) {
+Body::onCollide(Body& other) {
 }
 
 /**

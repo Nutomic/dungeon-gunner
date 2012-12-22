@@ -25,7 +25,7 @@ public:
 	Bullet(const sf::Vector2f& position, Body& shooter, float direction,
 			const Yaml& config);
 
-	void onCollide(Body& other, Category category);
+	void onCollide(Body& other);
 	bool doesCollide(Body& other);
 
 // Private variables.
