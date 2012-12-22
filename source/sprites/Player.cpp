@@ -16,9 +16,12 @@
 /**
  * Initializes Sprite.
  */
-Player::Player(const Instances& instances, const Vector2f& position, const Yaml& config) :
-		Character(instances, "player.png", PhysicalData(position, instances.world,
-				CATEGORY_ACTOR, MASK_ALL, true, false, true), config),
+Player::Player(World& world, Collection& collection, Pathfinder& pathfinder,
+	const Vector2f& position, const Yaml& config) :
+		Character(world, collection, pathfinder, "player.png",
+				PhysicalData(position, world, CATEGORY_ACTOR, MASK_ALL, true,
+						false, true),
+				config),
 		mDirection(0) {
 }
 

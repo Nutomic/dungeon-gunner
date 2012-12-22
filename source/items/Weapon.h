@@ -12,7 +12,6 @@
 
 #include "../abstract/Body.h"
 #include "../particle/Emitter.h"
-#include "../types/Instances.h"
 #include "../util/Timer.h"
 #include "../util/Yaml.h"
 
@@ -30,7 +29,7 @@ class Yaml;
 class Weapon : public Emitter {
 // Public functions.
 public:
-	Weapon(const Instances& instances, Body& holder, const Yaml& config);
+	Weapon(World& world, Collection& collection, Body& holder, const Yaml& config);
 
 	void fire();
 

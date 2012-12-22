@@ -11,7 +11,6 @@
 
 #include "abstract/Character.h"
 #include "sprites/Enemy.h"
-#include "types/Instances.h"
 #include "types/String.h"
 #include "util/Loader.h"
 #include "util/ResourceManager.h"
@@ -50,11 +49,11 @@ Game::generate() {
 	for (int x = 1; x < 5; x++)
 		mTileManager.setTile(TileManager::TilePosition(x, 4), TileManager::Type::WALL);
 
-	Instances instances(mPathfinder, mTileManager, mCollection, mWorld);
+	mCollection.insert(std::shared_ptr<Sprite>(new Enemy(mWorld, mCollection, mPathfinder,
+			Vector2f(400.0f, 200.0f), Yaml("enemy.yaml"))));
 
-	mCollection.insert(std::shared_ptr<Sprite>(new Enemy(instances, Vector2f(400.0f, 200.0f), Yaml("enemy.yaml"))));
-
-	mPlayer = std::unique_ptr<Player>(new Player(instances, Vector2f(200.0f, 100.0f), Yaml("player.yaml")));
+	mPlayer = std::unique_ptr<Player>(new Player(mWorld, mCollection, mPathfinder,
+			Vector2f(200.0f, 100.0f), Yaml("player.yaml")));
 }
 /**
  * Closes window.

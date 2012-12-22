@@ -25,28 +25,29 @@ std::vector<Character*> Character::mCharacterInstances = std::vector<Character*>
 /**
  * Saves pointer to this instance in static var for think().
  */
-Character::Character(const Instances& instances, const String& texturePath,
-	const PhysicalData& data, const Yaml& config) :
+Character::Character(World& world, Collection& collection, Pathfinder& pathfinder,
+		const String& texturePath, const PhysicalData& data, const Yaml& config) :
 		Sprite(config, data),
+		mCollection(collection),
+		mPathfinder(pathfinder),
+		mWorld(world),
 		mMaxHealth(config.get(KEY_HEALTH, DEFAULT_HEALTH)),
 		mCurrentHealth(mMaxHealth),
 		mMovementSpeed(config.get(KEY_SPEED, DEFAULT_SPEED)),
-		mWeapon(instances, *this, Yaml("weapon.yaml")),
-		mInstances(instances),
+		mWeapon(world, collection, *this, Yaml("weapon.yaml")),
 		mStartPathfinding(false) {
 		mCharacterInstances.push_back(this);
 }
 
 /**
- * Deletes pointer from static variable mCharacterInstances, inserts body into world
- * (done here to avoid altering Box2D data during timestep).
+ * Deletes pointer from static variable mCharacterInstances, inserts body into world.
  */
 Character::~Character() {
 	auto it = std::find(mCharacterInstances.begin(), mCharacterInstances.end(), this);
 	assert(it != mCharacterInstances.end());
 	mCharacterInstances.erase(it);
 
-	mInstances.collection.insert(std::shared_ptr<Sprite>(new Corpse(mInstances.world,
+	mCollection.insert(std::shared_ptr<Sprite>(new Corpse(mWorld,
 			getPosition(), Yaml("body.yaml"))));
 }
 
@@ -118,7 +119,7 @@ Character::fire() {
  */
 bool
 Character::setDestination(const Vector2f& destination) {
-	mPath = mInstances.pathfinder.getPath(*this, destination);
+	mPath = mPathfinder.getPath(*this, destination);
 	// Make sure we found a path.
 	if (mPath.empty()) {
 		LOG_I("No path found to destination.");

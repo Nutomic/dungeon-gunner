@@ -19,10 +19,10 @@ const String Weapon::DEFAULT_BULLET = "bullet.yaml";
 const String Weapon::KEY_INTERVAL = "interval";
 const int Weapon::DEFAULT_INTERVAL = 250;
 
-Weapon::Weapon(const Instances& instances, Body& holder, const Yaml& config) :
-		Emitter(instances.collection),
+Weapon::Weapon(World& world, Collection& collection, Body& holder, const Yaml& config) :
+		Emitter(collection),
 		mHolder(holder),
-		mWorld(instances.world),
+		mWorld(world),
 		mBullet(config.get(KEY_BULLET, DEFAULT_BULLET)),
 		mTimer(sf::milliseconds(config.get(KEY_INTERVAL, DEFAULT_INTERVAL))) {
 	Vector2f holderSize = mHolder.getSize();

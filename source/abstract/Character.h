@@ -11,14 +11,17 @@
 #include <vector>
 
 #include "Sprite.h"
+#include "../World.h"
 #include "../items/Weapon.h"
-#include "../types/Instances.h"
 #include "../types/String.h"
+#include "../util/Pathfinder.h"
 #include "../util/Yaml.h"
 
+class World;
 class Weapon;
 class Instances;
 class Sprite;
+class Pathfinder;
 class Yaml;
 
 /**
@@ -27,8 +30,8 @@ class Yaml;
 class Character : public Sprite {
 // Public functions.
 public:
-	Character(const Instances& instances, const String& texturePath,
-		const PhysicalData& data, const Yaml& config);
+	Character(World& world, Collection& collection, Pathfinder& pathfinder,
+			const String& texturePath, const PhysicalData& data, const Yaml& config);
 	virtual ~Character() = 0;
 
 	static void think(float elapsedTime);
@@ -55,11 +58,14 @@ private:
 
 	static std::vector<Character*> mCharacterInstances;
 
+	Collection& mCollection;
+	Pathfinder& mPathfinder;
+	World& mWorld;
+
 	const int mMaxHealth;
 	int mCurrentHealth; //< Current health. Between 0 and mMaxHealth.
 	const float mMovementSpeed;
 	Weapon mWeapon;
-	Instances mInstances;
 	std::vector<Vector2f> mPath; //< Contains nodes to reach a set destination.
 	bool mStartPathfinding; //< True if a movement destination was just set.
 };

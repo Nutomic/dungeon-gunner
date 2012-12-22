@@ -13,7 +13,6 @@
 
 #include "../abstract/Character.h"
 #include "../items/Weapon.h"
-#include "../types/Instances.h"
 #include "../types/Vector.h"
 #include "../util/Pathfinder.h"
 #include "../util/Yaml.h"
@@ -42,7 +41,8 @@ public:
 
 // Public functions.
 public:
-	Player(const Instances& instances, const Vector2f& position, const Yaml& config);
+	Player(World& world, Collection& collection, Pathfinder& pathfinder,
+			const Vector2f& position, const Yaml& config);
 
 	void setCrosshairPosition(const Vector2f& position);
 	void fire();
