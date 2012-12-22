@@ -7,14 +7,15 @@
 
 #include "TileManager.h"
 
+#include <string>
+
 #include <Thor/Resources.hpp>
 
 #include "../abstract/Sprite.h"
-#include "../types/String.h"
 #include "../util/Loader.h"
 #include "../util/ResourceManager.h"
 
-const Vector2i TileManager::TILE_SIZE = Vector2i(100, 100);
+const sf::Vector2i TileManager::TILE_SIZE = sf::Vector2i(100, 100);
 
 /**
  * Loads tile resources.
@@ -34,7 +35,7 @@ TileManager::TileManager(World& world) :
  */
 TileManager::Tile::Tile(Type type, const TilePosition& position) :
 		Sprite(Yaml(getConfig(type)), Data(
-				Vector2f(position.x * TILE_SIZE.x, position.y * TILE_SIZE.y), 0,
+				sf::Vector2f(position.x * TILE_SIZE.x, position.y * TILE_SIZE.y), 0,
 				CATEGORY_WORLD, (type == Type::FLOOR) ? MASK_NONE : MASK_ALL)),
 		mType(type) {
 }
@@ -45,9 +46,9 @@ TileManager::Tile::Tile(Type type, const TilePosition& position) :
  * @param type The type of tile to load a resource key for.
  * @return Resource key to the correct texture.
  */
-String
+std::string
 TileManager::Tile::getConfig(Type type) {
-	String filename;
+	std::string filename;
 	switch (type) {
 	case Type::FLOOR:
 		filename = "tile_floor.yaml";

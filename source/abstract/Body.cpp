@@ -11,15 +11,15 @@
 
 #include <Thor/Vectors.hpp>
 
-const String Body::KEY_SIZE = "size";
-const Vector2i Body::DEFAULT_SIZE = Vector2i(50, 50);
+const std::string Body::KEY_SIZE = "size";
+const sf::Vector2i Body::DEFAULT_SIZE = sf::Vector2i(50, 50);
 
 /**
  * Initializes Box2D body.
  *
  * @param data Data needed for construction.
  */
-Body::Body(const Data& data, const Yaml& config, const Vector2i& pSize) :
+Body::Body(const Data& data, const Yaml& config, const sf::Vector2i& pSize) :
 		mPosition(data.position),
 		mSize(config.get(KEY_SIZE, DEFAULT_SIZE)),
 		mAngle(0),
@@ -37,7 +37,7 @@ Body::~Body() {
 /**
  * Initializes container.
  */
-Body::Data::Data(const Vector2f& position, float angle,
+Body::Data::Data(const sf::Vector2f& position, float angle,
 		Category category, unsigned short maskExclude) :
 		position(position),
 		angle(angle),
@@ -48,7 +48,7 @@ Body::Data::Data(const Vector2f& position, float angle,
 /**
  * Returns the position of the sprite (center).
  */
-Vector2f
+sf::Vector2f
 Body::getPosition() const {
 	return mPosition;
 }
@@ -56,7 +56,7 @@ Body::getPosition() const {
 /**
  * Returns the movement speed of the body.
  */
-Vector2f
+sf::Vector2f
 Body::getSpeed() const {
 	return mSpeed;
 }
@@ -88,7 +88,7 @@ Body::getCategory() const {
 /**
  * Returns the size of the body as a vector.
  */
-Vector2i
+sf::Vector2i
 Body::getSize() const {
 	return mSize;
 }
@@ -131,8 +131,8 @@ Body::setDelete(bool value) {
  * @param speed The value of the movement speed to be used.
  */
 void
-Body::setSpeed(Vector2f direction, float speed) {
-	if (direction != Vector2f()) {
+Body::setSpeed(sf::Vector2f direction, float speed) {
+	if (direction != sf::Vector2f()) {
 		thor::setLength(direction, speed);
 	}
 	mSpeed = direction;

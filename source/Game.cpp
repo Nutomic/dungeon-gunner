@@ -7,11 +7,12 @@
 
 #include "Game.h"
 
+#include <string>
+
 #include <Thor/Graphics.hpp>
 
 #include "abstract/Character.h"
 #include "sprites/Enemy.h"
-#include "types/String.h"
 #include "util/Loader.h"
 #include "util/ResourceManager.h"
 
@@ -23,7 +24,7 @@ const int Game::FPS_GOAL = 60;
  */
 Game::Game(sf::RenderWindow& window) :
 		mWindow(window),
-		mView(Vector2f(0, 0), mWindow.getView().getSize()),
+		mView(sf::Vector2f(0, 0), mWindow.getView().getSize()),
 		mTileManager(mWorld),
 		mQuit(false),
 		mPaused(false) {
@@ -50,10 +51,10 @@ Game::generate() {
 		mTileManager.setTile(TileManager::TilePosition(x, 4), TileManager::Type::WALL);
 
 	mWorld.insert(std::shared_ptr<Sprite>(new Enemy(mWorld, mPathfinder,
-			Vector2f(400.0f, 200.0f), Yaml("enemy.yaml"))));
+			sf::Vector2f(400.0f, 200.0f), Yaml("enemy.yaml"))));
 
 	mPlayer = std::shared_ptr<Player>(new Player(mWorld, mPathfinder,
-			Vector2f(200.0f, 100.0f), Yaml("player.yaml")));
+			sf::Vector2f(200.0f, 100.0f), Yaml("player.yaml")));
 	mWorld.insert(mPlayer);
 }
 /**
@@ -172,7 +173,7 @@ Game::keyDown(const sf::Event& event) {
  */
 sf::Vector2<float>
 Game::convertCoordinates(int x, int y) {
-	return mWindow.convertCoords(Vector2i(x, y), mView);
+	return mWindow.convertCoords(sf::Vector2i(x, y), mView);
 }
 
 /**

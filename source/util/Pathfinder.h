@@ -8,8 +8,9 @@
 #ifndef PATHFINDER_H_
 #define PATHFINDER_H_
 
+#include <SFML/System.hpp>
+
 #include "../abstract/Body.h"
-#include "../types/Vector.h"
 
 class Body;
 
@@ -18,7 +19,7 @@ class Pathfinder {
 public:
 	Pathfinder();
 
-	std::vector<Vector2f> getPath(Body& physical, const Vector2f& destination);
+	std::vector<sf::Vector2f> getPath(Body& physical, const sf::Vector2f& destination);
 };
 
 #endif /* PATHFINDER_H_ */

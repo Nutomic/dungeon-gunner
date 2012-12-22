@@ -8,12 +8,12 @@
 #ifndef DG_YAML_H_
 #define DG_YAML_H_
 
+#include <string>
 #include <fstream>
 
 #include <yaml-cpp/yaml.h>
 
-#include "../types/String.h"
-#include "../types/Vector.h"
+#include <SFML/System.hpp>
 
 /**
  * Interface to a YAML file.
@@ -21,21 +21,21 @@
 class Yaml {
 // Public functions.
 public:
-	Yaml(const String& filename);
+	Yaml(const std::string& filename);
 	~Yaml();
 
-	String getFilename() const;
+	std::string getFilename() const;
 
-	static void setFolder(const String& folder);
+	static void setFolder(const std::string& folder);
 
 	template <typename T>
-	T get(const String& key, const T& defaultValue) const;
+	T get(const std::string& key, const T& defaultValue) const;
 
 // Private variables.
 private:
-	static String mFolder;
+	static std::string mFolder;
 
-	String mFilename;
+	std::string mFilename;
 	std::ifstream mFile;
 	YAML::Node mNode;
 };
@@ -44,12 +44,12 @@ private:
  * Stream output operators to specialize Yaml::get for other types.
  */
 namespace {
-	void operator>>(const YAML::Node& node, Vector2i& vector) {
+	void operator>>(const YAML::Node& node, sf::Vector2i& vector) {
 		node[0] >> vector.x;
 		node[1] >> vector.y;
 	}
 
-	void operator>>(const YAML::Node& node, Vector2f& vector) {
+	void operator>>(const YAML::Node& node, sf::Vector2f& vector) {
 		node[0] >> vector.x;
 		node[1] >> vector.y;
 	}
@@ -63,7 +63,7 @@ namespace {
  * @return The value of the specified key.
  */
 template <typename T>
-T Yaml::get(const String& key, const T& defaultValue) const {
+T Yaml::get(const std::string& key, const T& defaultValue) const {
 	if (const YAML::Node* node = mNode.FindValue(key)) {
 		T value;
 		*node >> value;

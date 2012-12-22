@@ -13,9 +13,9 @@
 #include "../util/Loader.h"
 #include "../util/ResourceManager.h"
 
-const String Bullet::KEY_DAMAGE = "damage";
+const std::string Bullet::KEY_DAMAGE = "damage";
 const int Bullet::DEFAULT_DAMAGE = 10;
-const String Bullet::KEY_SPEED = "speed";
+const std::string Bullet::KEY_SPEED = "speed";
 const float Bullet::DEFAULT_SPEED = 500;
 
 /**
@@ -25,13 +25,13 @@ const float Bullet::DEFAULT_SPEED = 500;
  * @param world Box2d world.
  * @param texture Texture to display for bullet.
  */
-Bullet::Bullet(const Vector2f& position, Body& shooter, float direction,
+Bullet::Bullet(const sf::Vector2f& position, Body& shooter, float direction,
 	const Yaml& config) :
 		Particle(config, Data(position, 0, CATEGORY_PARTICLE, CATEGORY_PARTICLE)),
 		mShooter(shooter),
 		mDamage(config.get(KEY_DAMAGE, DEFAULT_DAMAGE)),
 		mSpeed(config.get(KEY_SPEED, DEFAULT_SPEED)) {
-	Vector2f dir(1.0f, 0);
+	sf::Vector2f dir(1.0f, 0);
 	thor::setPolarAngle(dir, direction);
 	setSpeed(dir, mSpeed);
 	setAngle(direction);

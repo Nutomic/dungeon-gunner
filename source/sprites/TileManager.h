@@ -13,8 +13,7 @@
 
 #include "../World.h"
 #include "../abstract/Sprite.h"
-#include "../types/Vector.h"
-#include "../types/String.h"
+#include <string>
 
 class World;
 class Sprite;
@@ -30,12 +29,12 @@ public:
 	/**
 	 * Uses the length/width of a tile as a unit.
 	 */
-	typedef Vector2i TilePosition;
+	typedef sf::Vector2i TilePosition;
 
 // Public variables.
 public:
 	/// The size of a single tile (pixels).
-	static const Vector2i TILE_SIZE;
+	static const sf::Vector2i TILE_SIZE;
 
 // Public functions.
 public:
@@ -68,7 +67,7 @@ public:
 	Type getType() const;
 	TilePosition getTilePosition() const;
 
-	static String getConfig(Type type);
+	static std::string getConfig(Type type);
 
 // Private variables.
 private:

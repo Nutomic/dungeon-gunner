@@ -8,8 +8,9 @@
 #ifndef DG_BULLET_H_
 #define DG_BULLET_H_
 
+#include <string>
+
 #include "../particle/Particle.h"
-#include "../types/String.h"
 #include "../util/Yaml.h"
 
 class Particle;
@@ -21,7 +22,7 @@ class Yaml;
 class Bullet : public Particle {
 // Public functions.
 public:
-	Bullet(const Vector2f& position, Body& shooter, float direction,
+	Bullet(const sf::Vector2f& position, Body& shooter, float direction,
 			const Yaml& config);
 
 	void onCollide(Body& other, Category category);
@@ -29,9 +30,9 @@ public:
 
 // Private variables.
 private:
-	static const String KEY_DAMAGE;
+	static const std::string KEY_DAMAGE;
 	static const int DEFAULT_DAMAGE;
-	static const String KEY_SPEED;
+	static const std::string KEY_SPEED;
 	static const float DEFAULT_SPEED;
 
 	Body& mShooter;

@@ -10,8 +10,6 @@
 
 #include <iostream>
 
-#include "../types/Vector.h"
-
 /**
  * Logging functions for different levels.
  *
@@ -46,19 +44,19 @@
 #define LOG_I(str) std::cout << __FILE__ << ":" << __LINE__ << " " << "Info:    " << str << std::endl
 
 /**
- * Adds an output operator specalization for Vector2f.
+ * Adds an output operator specalization for sf::Vector2f.
  */
 inline std::ostream&
-operator<<(std::ostream& os, const Vector2f& vector) {
+operator<<(std::ostream& os, const sf::Vector2f& vector) {
     os << "(" << vector.x << ", " << vector.y << ")";
     return os;
 }
 
 /**
- * Adds an output operator specalization for Vector2i
+ * Adds an output operator specalization for sf::Vector2i
  */
 inline std::ostream&
-operator<<(std::ostream& os, const Vector2i& vector) {
+operator<<(std::ostream& os, const sf::Vector2i& vector) {
     os << "(" << vector.x << ", " << vector.y << ")";
     return os;
 }

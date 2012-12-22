@@ -15,9 +15,9 @@
 #include "../sprites/Corpse.h"
 #include "../util/Log.h"
 
-const String Character::KEY_HEALTH = "health";
+const std::string Character::KEY_HEALTH = "health";
 const int Character::DEFAULT_HEALTH = 100;
-const String Character::KEY_SPEED = "speed";
+const std::string Character::KEY_SPEED = "speed";
 const float Character::DEFAULT_SPEED = 100;
 const float Character::POINT_REACHED_DISTANCE = 1.0f;
 std::vector<Character*> Character::mCharacterInstances = std::vector<Character*>();
@@ -116,7 +116,7 @@ Character::fire() {
  * @return True if a path was found.
  */
 bool
-Character::setDestination(const Vector2f& destination) {
+Character::setDestination(const sf::Vector2f& destination) {
 	mPath = mPathfinder.getPath(*this, destination);
 	// Make sure we found a path.
 	if (mPath.empty()) {
@@ -146,7 +146,7 @@ Character::move() {
 			}
 			else {
 				LOG_I("Reached destination.");
-				setSpeed(Vector2f(), 0);
+				setSpeed(sf::Vector2f(), 0);
 			}
 		}
 	}

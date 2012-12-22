@@ -13,7 +13,6 @@
 
 #include "../abstract/Character.h"
 #include "../items/Weapon.h"
-#include "../types/Vector.h"
 #include "../util/Pathfinder.h"
 #include "../util/Yaml.h"
 
@@ -42,11 +41,11 @@ public:
 // Public functions.
 public:
 	Player(World& world, Pathfinder& pathfinder,
-			const Vector2f& position, const Yaml& config);
+			const sf::Vector2f& position, const Yaml& config);
 
-	void setCrosshairPosition(const Vector2f& position);
+	void setCrosshairPosition(const sf::Vector2f& position);
 	void fire();
-	void move(const Vector2f& destination);
+	void move(const sf::Vector2f& destination);
 	void setDirection(Direction direction, bool unset);
 
 // Private functions.
@@ -56,7 +55,7 @@ private:
 
 // Private variables.
 private:
-	Vector2f mCrosshairPosition; //< Relative position of the point to fire at (mouse cursor).
+	sf::Vector2f mCrosshairPosition; //< Relative position of the point to fire at (mouse cursor).
 	unsigned char mDirection; //< Current movement direction for direct control.
 };
 

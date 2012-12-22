@@ -39,16 +39,16 @@ protected:
 
 // Private variables.
 private:
-	static const String KEY_BULLET;
-	static const String DEFAULT_BULLET;
-	static const String KEY_INTERVAL;
+	static const std::string KEY_BULLET;
+	static const std::string DEFAULT_BULLET;
+	static const std::string KEY_INTERVAL;
 	static const int DEFAULT_INTERVAL;
 
 	World& mWorld;
 	Body& mHolder;
 
-	Vector2f mOffset; //< Offset to the point where bullets are inserted (from holder center).
-	const String mBullet;
+	sf::Vector2f mOffset; //< Offset to the point where bullets are inserted (from holder center).
+	const std::string mBullet;
 	Timer mTimer;
 
 };

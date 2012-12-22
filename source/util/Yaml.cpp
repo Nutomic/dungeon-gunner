@@ -9,13 +9,13 @@
 
 #include "../util/Log.h"
 
-String Yaml::mFolder = "";
+std::string Yaml::mFolder = "";
 
 /**
  * Creates a readable object from a YAML file. The path must be relative to the directory
  * set in setFolder().
  */
-Yaml::Yaml(const String& filename) :
+Yaml::Yaml(const std::string& filename) :
 		mFilename(mFolder+filename),
 		mFile(mFilename) {
 	if (mFile.fail()) {
@@ -32,7 +32,7 @@ Yaml::~Yaml() {
 /**
  * Return path and name of the file opened in this object.
  */
-String
+std::string
 Yaml::getFilename() const {
 	return mFilename;
 }
@@ -42,6 +42,6 @@ Yaml::getFilename() const {
  * shorter strings as this does not have to be added everywhere.
  */
 void
-Yaml::setFolder(const String& folder) {
+Yaml::setFolder(const std::string& folder) {
 	mFolder = folder;
 }

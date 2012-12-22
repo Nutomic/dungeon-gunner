@@ -7,17 +7,17 @@
 
 #include "Player.h"
 
+#include <string>
+
 #include <Thor/Vectors.hpp>
 
 #include "../items/Weapon.h"
-#include "../types/String.h"
-#include "../types/Vector.h"
 
 /**
  * Initializes Sprite.
  */
 Player::Player(World& world, Pathfinder& pathfinder,
-	const Vector2f& position, const Yaml& config) :
+	const sf::Vector2f& position, const Yaml& config) :
 		Character(world, pathfinder,
 				Data(position, 0, CATEGORY_ACTOR, MASK_ALL),
 				config),
@@ -30,7 +30,7 @@ Player::Player(World& world, Pathfinder& pathfinder,
  * @param Absolute world coordinates of the crosshair.
  */
 void
-Player::setCrosshairPosition(const Vector2f& position) {
+Player::setCrosshairPosition(const sf::Vector2f& position) {
 	mCrosshairPosition = position - getPosition();
 }
 
@@ -49,7 +49,7 @@ Player::fire() {
  * @param destination Absolute world coordinate of the destination point.
  */
 void
-Player::move(const Vector2f& destination) {
+Player::move(const sf::Vector2f& destination) {
 	setDestination(destination);
 }
 
@@ -68,7 +68,7 @@ Player::setDirection(Direction direction, bool unset) {
 		mDirection = mDirection | direction;
 	}
 	// Convert directions into a vector.
-	Vector2f dirVec(0, 0);
+	sf::Vector2f dirVec(0, 0);
 	if (mDirection & Direction::RIGHT) {
 		dirVec.x += 1.0f;
 	}
@@ -94,7 +94,7 @@ Player::onThink(float elapsedTime) {
 		Character::move();
 	}
 	// Look towards crosshair.
-	if (mCrosshairPosition != Vector2f()) {
+	if (mCrosshairPosition != sf::Vector2f()) {
 		setAngle(thor::polarAngle(mCrosshairPosition) + 90);
 	}
 }

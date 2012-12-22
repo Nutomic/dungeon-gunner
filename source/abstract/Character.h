@@ -8,12 +8,12 @@
 #ifndef DG_ACTOR_H_
 #define DG_ACTOR_H_
 
+#include <string>
 #include <vector>
 
 #include "Sprite.h"
 #include "../World.h"
 #include "../items/Weapon.h"
-#include "../types/String.h"
 #include "../util/Pathfinder.h"
 #include "../util/Yaml.h"
 
@@ -44,14 +44,14 @@ protected:
 	virtual void onDeath();
 	float getMovementSpeed() const;
 	void fire();
-	bool setDestination(const Vector2f& destination);
+	bool setDestination(const sf::Vector2f& destination);
 	void move();
 
 // Private variables.
 private:
-	static const String KEY_HEALTH;
+	static const std::string KEY_HEALTH;
 	static const int DEFAULT_HEALTH;
-	static const String KEY_SPEED;
+	static const std::string KEY_SPEED;
 	static const float DEFAULT_SPEED;
 	/// The distance to a point where it is considered reached.
 	static const float POINT_REACHED_DISTANCE;
@@ -65,7 +65,7 @@ private:
 	int mCurrentHealth; //< Current health. Between 0 and mMaxHealth.
 	const float mMovementSpeed;
 	Weapon mWeapon;
-	std::vector<Vector2f> mPath; //< Contains nodes to reach a set destination.
+	std::vector<sf::Vector2f> mPath; //< Contains nodes to reach a set destination.
 	bool mStartPathfinding; //< True if a movement destination was just set.
 };
 

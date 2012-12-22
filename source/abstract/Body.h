@@ -8,8 +8,6 @@
 #ifndef DG_BODY_H_
 #define DG_BODY_H_
 
-#include "../types/String.h"
-#include "../types/Vector.h"
 #include "../util/Yaml.h"
 
 class Yaml;
@@ -42,8 +40,8 @@ public:
 	class Data {
 	public:
 		Data() = default;
-		Data(const Vector2f& position, float angle,	Category category, unsigned short maskExclude);
-		const Vector2f& position;
+		Data(const sf::Vector2f& position, float angle,	Category category, unsigned short maskExclude);
+		const sf::Vector2f& position;
 		float angle;
 		Category category;
 		unsigned short mask;
@@ -59,35 +57,35 @@ public:
 
 // Public functions.
 public:
-	Body(const Data& data, const Yaml& config, const Vector2i& pSize = Vector2i());
+	Body(const Data& data, const Yaml& config, const sf::Vector2i& pSize = sf::Vector2i());
 	virtual ~Body() = 0;
 
-	Vector2f getPosition() const;
-	Vector2f getSpeed() const;
+	sf::Vector2f getPosition() const;
+	sf::Vector2f getSpeed() const;
 	float getAngle() const;
 	bool getDelete() const;
 	Category getCategory() const;
-	Vector2i getSize() const;
+	sf::Vector2i getSize() const;
 
 	virtual bool doesCollide(Body& other);
 	virtual void onCollide(Body& other, Category category);
 
 // Public variables.
 public:
-	static const String KEY_SIZE;
-	static const Vector2i DEFAULT_SIZE;
+	static const std::string KEY_SIZE;
+	static const sf::Vector2i DEFAULT_SIZE;
 
 // Protected functions.
 protected:
 	void setDelete(bool value);
-	void setSpeed(Vector2f direction, float speed);
+	void setSpeed(sf::Vector2f direction, float speed);
 	void setAngle(float angle);
 
 // Private variables.
 private:
-	Vector2f mPosition;
-	Vector2i mSize;
-	Vector2f mSpeed;
+	sf::Vector2f mPosition;
+	sf::Vector2i mSize;
+	sf::Vector2f mSpeed;
 	float mAngle;
 	Category mCategory;
 	unsigned short mMask;

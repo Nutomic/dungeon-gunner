@@ -8,6 +8,8 @@
 #ifndef DG_GAME_H_
 #define DG_GAME_H_
 
+#include <string>
+
 #include <SFML/System.hpp>
 #include <SFML/Graphics.hpp>
 
@@ -15,7 +17,6 @@
 
 #include "sprites/TileManager.h"
 #include "sprites/Player.h"
-#include "types/String.h"
 #include "World.h"
 #include "util/Pathfinder.h"
 

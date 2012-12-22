@@ -8,9 +8,10 @@
 #ifndef DG_ENEMY_H_
 #define DG_ENEMY_H
 
+#include <SFML/System.hpp>
+
 #include "../abstract/Character.h"
 #include "../World.h"
-#include "../types/Vector.h"
 #include "../util/Yaml.h"
 
 class Character;
@@ -22,7 +23,7 @@ class Enemy : public Character {
 // Public functions.
 public:
 	Enemy(World& collection, Pathfinder& pathfinder,
-			const Vector2f& position, const Yaml& config);
+			const sf::Vector2f& position, const Yaml& config);
 
 // Private functions.
 private:
