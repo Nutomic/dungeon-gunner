@@ -31,7 +31,7 @@ class Character : public Sprite {
 // Public functions.
 public:
 	Character(World& world, Collection& collection, Pathfinder& pathfinder,
-			const String& texturePath, const PhysicalData& data, const Yaml& config);
+			const PhysicalData& data, const Yaml& config);
 	virtual ~Character() = 0;
 
 	static void think(float elapsedTime);

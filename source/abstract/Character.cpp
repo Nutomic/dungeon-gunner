@@ -26,7 +26,7 @@ std::vector<Character*> Character::mCharacterInstances = std::vector<Character*>
  * Saves pointer to this instance in static var for think().
  */
 Character::Character(World& world, Collection& collection, Pathfinder& pathfinder,
-		const String& texturePath, const PhysicalData& data, const Yaml& config) :
+		const PhysicalData& data, const Yaml& config) :
 		Sprite(config, data),
 		mCollection(collection),
 		mPathfinder(pathfinder),
