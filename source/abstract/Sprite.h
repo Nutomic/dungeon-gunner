@@ -28,7 +28,6 @@ class Sprite : public sf::Drawable, public Body {
 // Public functions.
 public:
 	Sprite(const Yaml& config, const Data& data, const sf::Vector2i& size = sf::Vector2i());
-	Sprite(const std::shared_ptr<sf::Texture>& texture, const Data& data);
 	virtual ~Sprite() = 0;
 
 // Protected functions.
