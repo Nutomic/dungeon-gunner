@@ -128,7 +128,7 @@ Body::setDelete(bool value) {
  * Sets movement speed and direction of the body. Set either value to zero to stop movement.
  *
  * @param direction The direction the body moves in, does not have to be normalized.
- * @param speed The value of the movement speed to be used.
+ * @param speed Movement speed in pixels per second.
  */
 void
 Body::setSpeed(sf::Vector2f direction, float speed) {
@@ -139,9 +139,17 @@ Body::setSpeed(sf::Vector2f direction, float speed) {
 }
 
 /**
- * Sets the angle of the body based on the direction of a vector.
+ * Sets the angle of the body.
  */
 void
 Body::setAngle(float angle) {
 	mAngle = angle;
+}
+
+/**
+ * Sets the position of thr body.
+ */
+void
+Body::setPosition(const sf::Vector2f& position) {
+	mPosition = position;
 }

@@ -77,9 +77,12 @@ public:
 
 // Protected functions.
 protected:
+	friend class World;
+
 	void setDelete(bool value);
 	void setSpeed(sf::Vector2f direction, float speed);
 	void setAngle(float angle);
+	void setPosition(const sf::Vector2f& position);
 
 // Private variables.
 private:

@@ -9,6 +9,8 @@
 
 #include <algorithm>
 
+#include <Thor/Vectors.hpp>
+
 /**
  * Insert a drawable into the group. Drawables should only be handled with shared_ptr.
  * An object can't be inserted more than once at the same level.
@@ -37,6 +39,13 @@ World::remove(std::shared_ptr<Sprite> drawable) {
 
 void
 World::step(int elapsed) {
+	for (auto v = mDrawables.begin(); v != mDrawables.end(); v++) {
+		for (auto item = v->second.begin(); item != v->second.end(); item++) {
+			sf::Vector2f speed = (*item)->getSpeed();
+			speed *= elapsed / 1000.0f;
+			(*item)->setPosition((*item)->getPosition() + speed);
+		}
+	}
 }
 
 /**
