@@ -32,7 +32,7 @@ Bullet::Bullet(const sf::Vector2f& position, Body& shooter, float direction,
 		mDamage(config.get(KEY_DAMAGE, DEFAULT_DAMAGE)),
 		mSpeed(config.get(KEY_SPEED, DEFAULT_SPEED)) {
 	sf::Vector2f dir(1.0f, 0);
-	thor::setPolarAngle(dir, direction);
+	thor::setPolarAngle(dir, direction - 90);
 	setSpeed(dir, mSpeed);
 	setAngle(direction);
 }
