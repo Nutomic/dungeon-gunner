@@ -39,35 +39,28 @@ public:
 private:
 	void input();
 	void render();
-	void tick();
 
 	void keyDown(const sf::Event& event);
 	void keyUp(const sf::Event& event);
 	void mouseUp(const sf::Event& event);
 
 	void generate();
-	String getFps();
 	sf::Vector2<float> convertCoordinates(int x, int y);
 
 // Private variables.
 private:
 	static const int FPS_GOAL;
-	static const float TICKS_GOAL;
 
 	World mWorld;
 
 	sf::RenderWindow& mWindow;
 	sf::Clock mClock;
 	sf::View mView;
-	//sf::Text mFps;
 
 	Collection mCollection;
 	TileManager mTileManager;
 	Pathfinder mPathfinder;
 	std::unique_ptr<Player> mPlayer;
-
-	/// Milliseconds since the last tick.
-	sf::Uint32 mElapsed;
 
 	bool mQuit;
 	bool mPaused;

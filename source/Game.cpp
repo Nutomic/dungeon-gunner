@@ -19,18 +19,13 @@
 /// Goal amount of frames per second.
 const int Game::FPS_GOAL = 60;
 
-/// Milliseconds per tick at FPS_GOAL.
-const float Game::TICKS_GOAL = 1000 / Game::FPS_GOAL;
-
 /**
  * Initializes game, including window and objects (sprites).
  */
 Game::Game(sf::RenderWindow& window) :
 		mWindow(window),
 		mView(Vector2f(0, 0), mWindow.getView().getSize()),
-		//mFps("test"),
 		mTileManager(mWorld),
-		mElapsed(0),
 		mQuit(false),
 		mPaused(false) {
 	mWindow.setFramerateLimit(FPS_GOAL);
@@ -73,35 +68,21 @@ Game::~Game() {
  */
 void
 Game::loop() {
-	sf::Uint32 left = 0;
 	while (!mQuit) {
 
 		input();
 
-		for (; !mPaused && (left >= TICKS_GOAL); left -= TICKS_GOAL) {
-			Character::think(TICKS_GOAL);
-			mWorld.step();
-
-			mCollection.checkDelete();
+		int elapsed = mClock.restart().asMilliseconds();
+		if (mPaused) {
+			elapsed = 0;
 		}
 
-		//mFps.setString(getFps());
+		Character::think(elapsed);
+		mCollection.checkDelete();
 
-		tick();
-		left += mElapsed;
+		mWorld.step();
 
 		render();
-	}
-}
-
-/**
- * Saves ticks since last call.
- */
-void
-Game::tick() {
-	mElapsed = mClock.restart().asMilliseconds();
-	if (mPaused) {
-		mElapsed = 0;
 	}
 }
 
@@ -230,15 +211,5 @@ Game::render() {
 	// Render GUI and static stuff.
 	mWindow.setView(mWindow.getDefaultView());
 
-	//mWindow.draw(mFps);
-
 	mWindow.display();
-}
-
-/**
- * Returns current FPS as string.
- */
-String
-Game::getFps() {
-	return str((mElapsed != 0) ? 1000.0f / mElapsed : 0.0f, 2);
 }
