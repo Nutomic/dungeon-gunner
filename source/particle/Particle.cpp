@@ -7,7 +7,7 @@
 
 #include "Particle.h"
 
-Particle::Particle(const Yaml& config, const PhysicalData& data) :
+Particle::Particle(const Yaml& config, const Data& data) :
 		Sprite(config, data) {
 }
 

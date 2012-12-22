@@ -12,8 +12,7 @@
 Enemy::Enemy(World& world, Collection& collection, Pathfinder& pathfinder,
 	const Vector2f& position, const Yaml& config) :
 		Character(world, collection, pathfinder,
-				PhysicalData(position, world, CATEGORY_ACTOR, MASK_ALL,
-						true, false, true),
+				Data(world, position, 0, CATEGORY_ACTOR, MASK_ALL),
 				config),
 		mWorld(world),
 		mCollection(collection) {

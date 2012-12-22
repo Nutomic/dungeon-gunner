@@ -25,7 +25,7 @@ Weapon::Weapon(World& world, Collection& collection, Body& holder, const Yaml& c
 		mWorld(world),
 		mBullet(config.get(KEY_BULLET, DEFAULT_BULLET)),
 		mTimer(sf::milliseconds(config.get(KEY_INTERVAL, DEFAULT_INTERVAL))) {
-	Vector2f holderSize = mHolder.getSize();
+	Vector2i holderSize = mHolder.getSize();
 	Yaml bullet(mBullet);
 	Vector2i bulletSize = bullet.get(Body::KEY_SIZE, Vector2i());
 	mOffset = Vector2f(0,

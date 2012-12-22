@@ -19,8 +19,7 @@
 Player::Player(World& world, Collection& collection, Pathfinder& pathfinder,
 	const Vector2f& position, const Yaml& config) :
 		Character(world, collection, pathfinder,
-				PhysicalData(position, world, CATEGORY_ACTOR, MASK_ALL, true,
-						false, true),
+				Data(world, position, 0, CATEGORY_ACTOR, MASK_ALL),
 				config),
 		mDirection(0) {
 }
@@ -95,7 +94,9 @@ Player::onThink(float elapsedTime) {
 		Character::move();
 	}
 	// Look towards crosshair.
-	setAngle(thor::polarAngle(mCrosshairPosition));
+	if (mCrosshairPosition != Vector2f()) {
+		setAngle(thor::polarAngle(mCrosshairPosition) + 90);
+	}
 }
 
 /**

@@ -20,7 +20,7 @@ class Yaml;
 class Particle : public Sprite {
 // Public functions.
 public:
-	Particle(const Yaml& config, const PhysicalData& data);
+	Particle(const Yaml& config, const Data& data);
 	virtual ~Particle();
 };
 

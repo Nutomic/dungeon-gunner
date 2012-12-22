@@ -33,8 +33,9 @@ TileManager::TileManager(World& world) :
  * @param world Box2D world object.
  */
 TileManager::Tile::Tile(Type type, const TilePosition& position, World& world) :
-		Sprite(Yaml(getConfig(type)), PhysicalData(Vector2f(position.x * TILE_SIZE.x, position.y * TILE_SIZE.y),
-				world, CATEGORY_WORLD, (type == Type::FLOOR) ? MASK_NONE : MASK_ALL, false)),
+		Sprite(Yaml(getConfig(type)), Data(world,
+				Vector2f(position.x * TILE_SIZE.x, position.y * TILE_SIZE.y), 0,
+				CATEGORY_WORLD, (type == Type::FLOOR) ? MASK_NONE : MASK_ALL)),
 		mType(type) {
 }
 

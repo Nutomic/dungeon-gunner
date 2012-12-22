@@ -39,41 +39,31 @@ public:
 	};
 
 	/**
-	 * POD container that carries all data required to construct this class.
+	 * POD container that carries all data required to construct an object of this class.
 	 */
-	class PhysicalData {
+	class Data {
 	public:
-		PhysicalData() = default;
-		PhysicalData(const Vector2f& position, World& world, Category category,
-				unsigned short maskExclude, bool moving, bool bullet = false, bool circle = false);
-		/// World position of the body in pixel coordinates.
-		const Vector2f& position;
-		/// Box2D world object.
+		Data() = default;
+		Data(World& world, const Vector2f& position, float angle,
+				Category category, unsigned short maskExclude);
 		World& world;
-		/// The category for collision filtering. Only one may be set. @link Physical::Category
+		const Vector2f& position;
+		float angle;
 		Category category;
-		/// All categories set here will have collisions disabled with this object.
-		unsigned short maskExclude;
-		/// True if the body may move on its own (player, monster).
-		bool moving;
-		/// True if the object is a bullet.
-		bool bullet;
-		/// True if the body collides as a circle. Radius is side length / 2,
-		/// both sides must be equal.
-		bool circle;
+		unsigned short mask;
 	};
 
 	/**
 	 * Common collision masking values.
 	 */
-	enum Mask {
+	enum Mask : unsigned short {
 		MASK_NONE = 0xffff, //< Disables any collisions.
 		MASK_ALL = 0 //< Enables all collisions.
 	};
 
 // Public functions.
 public:
-	Body(const PhysicalData& data, const Yaml& config, const Vector2i& pSize = Vector2i());
+	Body(const Data& data, const Yaml& config, const Vector2i& pSize = Vector2i());
 	virtual ~Body() = 0;
 
 	Vector2f getPosition() const;
@@ -81,10 +71,7 @@ public:
 	float getAngle() const;
 	bool getDelete() const;
 	Category getCategory() const;
-	Vector2f getSize() const;
-
-	bool isSolid() const;
-	bool isMovable() const;
+	Vector2i getSize() const;
 
 	virtual bool doesCollide(Body& other);
 	virtual void onCollide(Body& other, Category category);
@@ -100,9 +87,14 @@ protected:
 	void setSpeed(Vector2f direction, float speed);
 	void setAngle(float angle);
 
-
 // Private variables.
 private:
+	Vector2f mPosition;
+	Vector2i mSize;
+	Vector2f mSpeed;
+	float mAngle;
+	Category mCategory;
+	unsigned short mMask;
 	bool mDelete;
 };
 

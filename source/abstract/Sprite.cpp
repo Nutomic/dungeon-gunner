@@ -19,7 +19,7 @@ const String Sprite::DEFAULT_TEXTURE = "";
  *
  * @param texturePath Relative path to the texture file in the resource folder.
  */
-Sprite::Sprite(const Yaml& config, const PhysicalData& data, const Vector2i& size) :
+Sprite::Sprite(const Yaml& config, const Data& data, const Vector2i& size) :
 		Body(data, config, size),
 		mSize(Vector2i(getSize())) {
 	String texture = config.get(KEY_TEXTURE, DEFAULT_TEXTURE);

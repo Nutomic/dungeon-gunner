@@ -27,8 +27,7 @@ const float Bullet::DEFAULT_SPEED = 500;
  */
 Bullet::Bullet(const Vector2f& position, World& world, Body& shooter, float direction,
 	const Yaml& config) :
-		Particle(config, PhysicalData(position, world, CATEGORY_PARTICLE, CATEGORY_PARTICLE,
-				true, true, true)),
+		Particle(config, Data(world, position, 0, CATEGORY_PARTICLE, CATEGORY_PARTICLE)),
 		mShooter(shooter),
 		mDamage(config.get(KEY_DAMAGE, DEFAULT_DAMAGE)),
 		mSpeed(config.get(KEY_SPEED, DEFAULT_SPEED)) {

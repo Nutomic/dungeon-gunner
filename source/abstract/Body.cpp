@@ -19,7 +19,12 @@ const Vector2i Body::DEFAULT_SIZE = Vector2i(50, 50);
  *
  * @param data Data needed for construction.
  */
-Body::Body(const PhysicalData& data, const Yaml& config, const Vector2i& pSize) :
+Body::Body(const Data& data, const Yaml& config, const Vector2i& pSize) :
+		mPosition(data.position),
+		mSize(config.get(KEY_SIZE, DEFAULT_SIZE)),
+		mAngle(0),
+		mCategory(data.category),
+		mMask(data.mask),
 		mDelete(false) {
 }
 
@@ -32,15 +37,13 @@ Body::~Body() {
 /**
  * Initializes container.
  */
-Body::PhysicalData::PhysicalData( const Vector2f& position, World& world, Category category,
-	unsigned short maskExclude, bool moving, bool bullet, bool circle) :
-		position(position),
+Body::Data::Data(World& world, const Vector2f& position, float angle,
+		Category category, unsigned short maskExclude) :
 		world(world),
+		position(position),
+		angle(angle),
 		category(category),
-		maskExclude(maskExclude),
-		moving(moving),
-		bullet(bullet),
-		circle(circle) {
+		mask(maskExclude) {
 }
 
 /**
@@ -48,7 +51,7 @@ Body::PhysicalData::PhysicalData( const Vector2f& position, World& world, Catego
  */
 Vector2f
 Body::getPosition() const {
-	return Vector2f();
+	return mPosition;
 }
 
 /**
@@ -56,7 +59,7 @@ Body::getPosition() const {
  */
 Vector2f
 Body::getSpeed() const {
-	return Vector2f();
+	return mSpeed;
 }
 
 /**
@@ -64,7 +67,7 @@ Body::getSpeed() const {
  */
 float
 Body::getAngle() const {
-	return 0;
+	return mAngle;
 }
 
 /**
@@ -80,31 +83,15 @@ Body::getDelete() const {
  */
 Body::Category
 Body::getCategory() const {
-	return CATEGORY_WORLD;
+	return mCategory;
 }
 
 /**
  * Returns the size of the body as a vector.
  */
-Vector2f
+Vector2i
 Body::getSize() const {
-	return Vector2f();
-}
-
-/**
- * Returns true if collisions are enabled for the body.
- */
-bool
-Body::isSolid() const {
-	return false;
-}
-
-/**
- * Returns true if the body is able to move.
- */
-bool
-Body::isMovable() const {
-	return false;
+	return mSize;
 }
 
 /**
@@ -146,6 +133,10 @@ Body::setDelete(bool value) {
  */
 void
 Body::setSpeed(Vector2f direction, float speed) {
+	if (direction != Vector2f()) {
+		thor::setLength(direction, speed);
+	}
+	mSpeed = direction;
 }
 
 /**
@@ -153,4 +144,5 @@ Body::setSpeed(Vector2f direction, float speed) {
  */
 void
 Body::setAngle(float angle) {
+	mAngle = angle;
 }

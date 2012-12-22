@@ -28,8 +28,8 @@ class Yaml;
 class Sprite : public sf::Drawable, public Body {
 // Public functions.
 public:
-	Sprite(const Yaml& config, const PhysicalData& data, const Vector2i& size = Vector2i());
-	Sprite(const std::shared_ptr<sf::Texture>& texture, const PhysicalData& data);
+	Sprite(const Yaml& config, const Data& data, const Vector2i& size = Vector2i());
+	Sprite(const std::shared_ptr<sf::Texture>& texture, const Data& data);
 	virtual ~Sprite() = 0;
 
 // Protected functions.
