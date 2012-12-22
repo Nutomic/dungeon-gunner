@@ -16,10 +16,10 @@
 /**
  * Initializes Sprite.
  */
-Player::Player(World& world, Collection& collection, Pathfinder& pathfinder,
+Player::Player(World& world, Pathfinder& pathfinder,
 	const Vector2f& position, const Yaml& config) :
-		Character(world, collection, pathfinder,
-				Data(world, position, 0, CATEGORY_ACTOR, MASK_ALL),
+		Character(world, pathfinder,
+				Data(position, 0, CATEGORY_ACTOR, MASK_ALL),
 				config),
 		mDirection(0) {
 }

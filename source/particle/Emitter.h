@@ -9,17 +9,17 @@
 #define DG_EMITTER_H_
 
 #include "../abstract/Body.h"
-#include "../util/Collection.h"
+#include "../World.h"
 #include "Particle.h"
 
 class Body;
-class Collection;
+class World;
 class Particle;
 
 class Emitter {
 // Public functions.
 public:
-	Emitter(Collection& collection);
+	Emitter(World& collection);
 	virtual ~Emitter();
 
 // Protected functions.
@@ -30,7 +30,7 @@ protected:
 
 // Private variables.
 private:
-	Collection& mCollection;
+	World& mCollection;
 };
 
 #endif /* DG_EMITTER_H_ */

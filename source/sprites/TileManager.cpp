@@ -32,8 +32,8 @@ TileManager::TileManager(World& world) :
  * @param pPosition Position of the tile in tile coordinates.
  * @param world Box2D world object.
  */
-TileManager::Tile::Tile(Type type, const TilePosition& position, World& world) :
-		Sprite(Yaml(getConfig(type)), Data(world,
+TileManager::Tile::Tile(Type type, const TilePosition& position) :
+		Sprite(Yaml(getConfig(type)), Data(
 				Vector2f(position.x * TILE_SIZE.x, position.y * TILE_SIZE.y), 0,
 				CATEGORY_WORLD, (type == Type::FLOOR) ? MASK_NONE : MASK_ALL)),
 		mType(type) {
@@ -90,7 +90,9 @@ TileManager::setTile(const TilePosition& position, Type type) {
 			mTiles.erase(it);
 		}
 	}
-	mTiles.push_back(std::unique_ptr<Tile>(new Tile(type, position, mWorld)));
+	std::shared_ptr<Tile> tile = std::shared_ptr<Tile>(new Tile(type, position));
+	mTiles.push_back(tile);
+	mWorld.insert(tile);
 }
 
 /**

@@ -37,9 +37,8 @@ Body::~Body() {
 /**
  * Initializes container.
  */
-Body::Data::Data(World& world, const Vector2f& position, float angle,
+Body::Data::Data(const Vector2f& position, float angle,
 		Category category, unsigned short maskExclude) :
-		world(world),
 		position(position),
 		angle(angle),
 		category(category),

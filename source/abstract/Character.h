@@ -30,7 +30,7 @@ class Yaml;
 class Character : public Sprite {
 // Public functions.
 public:
-	Character(World& world, Collection& collection, Pathfinder& pathfinder,
+	Character(World& world, Pathfinder& pathfinder,
 			const Data& data, const Yaml& config);
 	virtual ~Character() = 0;
 
@@ -58,9 +58,8 @@ private:
 
 	static std::vector<Character*> mCharacterInstances;
 
-	Collection& mCollection;
-	Pathfinder& mPathfinder;
 	World& mWorld;
+	Pathfinder& mPathfinder;
 
 	const int mMaxHealth;
 	int mCurrentHealth; //< Current health. Between 0 and mMaxHealth.

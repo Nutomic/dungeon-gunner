@@ -49,11 +49,12 @@ Game::generate() {
 	for (int x = 1; x < 5; x++)
 		mTileManager.setTile(TileManager::TilePosition(x, 4), TileManager::Type::WALL);
 
-	mCollection.insert(std::shared_ptr<Sprite>(new Enemy(mWorld, mCollection, mPathfinder,
+	mWorld.insert(std::shared_ptr<Sprite>(new Enemy(mWorld, mPathfinder,
 			Vector2f(400.0f, 200.0f), Yaml("enemy.yaml"))));
 
-	mPlayer = std::unique_ptr<Player>(new Player(mWorld, mCollection, mPathfinder,
+	mPlayer = std::shared_ptr<Player>(new Player(mWorld, mPathfinder,
 			Vector2f(200.0f, 100.0f), Yaml("player.yaml")));
+	mWorld.insert(mPlayer);
 }
 /**
  * Closes window.
@@ -77,9 +78,9 @@ Game::loop() {
 		}
 
 		Character::think(elapsed);
-		mCollection.checkDelete();
+		mWorld.checkDelete();
 
-		mWorld.step();
+		mWorld.step(elapsed);
 
 		render();
 	}
@@ -203,9 +204,7 @@ Game::render() {
 	// Render world and dynamic stuff.
 	mWindow.setView(mView);
 
-	mWindow.draw(mTileManager);
-	mWindow.draw(mCollection);
-	mWindow.draw(*mPlayer);
+	mWindow.draw(mWorld);
 
 	// Render GUI and static stuff.
 	mWindow.setView(mWindow.getDefaultView());

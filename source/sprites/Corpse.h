@@ -17,7 +17,7 @@ class Yaml;
 class Corpse : public Sprite {
 // Public functions.
 public:
-	Corpse(World& world, const Vector2f& position, const Yaml& config);
+	Corpse(const Vector2f& position, const Yaml& config);
 };
 
 #endif /* DG_CORPSE_H_ */

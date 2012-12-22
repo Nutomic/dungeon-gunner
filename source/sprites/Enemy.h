@@ -8,32 +8,25 @@
 #ifndef DG_ENEMY_H_
 #define DG_ENEMY_H
 
-#include "../World.h"
 #include "../abstract/Character.h"
-#include "../util/Collection.h"
+#include "../World.h"
 #include "../types/Vector.h"
 #include "../util/Yaml.h"
 
-class World;
 class Character;
-class Collection;
+class World;
 class Instances;
 class Yaml;
 
 class Enemy : public Character {
 // Public functions.
 public:
-	Enemy(World& world, Collection& collection, Pathfinder& pathfinder,
+	Enemy(World& collection, Pathfinder& pathfinder,
 			const Vector2f& position, const Yaml& config);
 
 // Private functions.
 private:
 	void onThink(float elapsedTime);
-
-// Private variablese.
-private:
-	World& mWorld;
-	Collection& mCollection;
 };
 
 #endif /* DG_ENEMY_H_ */

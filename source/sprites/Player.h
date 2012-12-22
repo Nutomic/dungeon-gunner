@@ -41,7 +41,7 @@ public:
 
 // Public functions.
 public:
-	Player(World& world, Collection& collection, Pathfinder& pathfinder,
+	Player(World& world, Pathfinder& pathfinder,
 			const Vector2f& position, const Yaml& config);
 
 	void setCrosshairPosition(const Vector2f& position);

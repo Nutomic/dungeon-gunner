@@ -29,7 +29,7 @@ class Yaml;
 class Weapon : public Emitter {
 // Public functions.
 public:
-	Weapon(World& world, Collection& collection, Body& holder, const Yaml& config);
+	Weapon(World& world, Body& holder, const Yaml& config);
 
 	void fire();
 
@@ -44,8 +44,8 @@ private:
 	static const String KEY_INTERVAL;
 	static const int DEFAULT_INTERVAL;
 
-	Body& mHolder;
 	World& mWorld;
+	Body& mHolder;
 
 	Vector2f mOffset; //< Offset to the point where bullets are inserted (from holder center).
 	const String mBullet;

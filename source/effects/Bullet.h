@@ -21,7 +21,7 @@ class Yaml;
 class Bullet : public Particle {
 // Public functions.
 public:
-	Bullet(const Vector2f& position, World& world, Body& shooter, float direction,
+	Bullet(const Vector2f& position, Body& shooter, float direction,
 			const Yaml& config);
 
 	void onCollide(Body& other, Category category);

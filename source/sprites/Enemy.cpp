@@ -9,13 +9,11 @@
 
 #include "Corpse.h"
 
-Enemy::Enemy(World& world, Collection& collection, Pathfinder& pathfinder,
+Enemy::Enemy(World& collection, Pathfinder& pathfinder,
 	const Vector2f& position, const Yaml& config) :
-		Character(world, collection, pathfinder,
-				Data(world, position, 0, CATEGORY_ACTOR, MASK_ALL),
-				config),
-		mWorld(world),
-		mCollection(collection) {
+		Character(collection, pathfinder,
+				Data(position, 0, CATEGORY_ACTOR, MASK_ALL),
+				config) {
 }
 
 void

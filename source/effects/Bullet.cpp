@@ -25,9 +25,9 @@ const float Bullet::DEFAULT_SPEED = 500;
  * @param world Box2d world.
  * @param texture Texture to display for bullet.
  */
-Bullet::Bullet(const Vector2f& position, World& world, Body& shooter, float direction,
+Bullet::Bullet(const Vector2f& position, Body& shooter, float direction,
 	const Yaml& config) :
-		Particle(config, Data(world, position, 0, CATEGORY_PARTICLE, CATEGORY_PARTICLE)),
+		Particle(config, Data(position, 0, CATEGORY_PARTICLE, CATEGORY_PARTICLE)),
 		mShooter(shooter),
 		mDamage(config.get(KEY_DAMAGE, DEFAULT_DAMAGE)),
 		mSpeed(config.get(KEY_SPEED, DEFAULT_SPEED)) {

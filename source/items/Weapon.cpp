@@ -11,7 +11,7 @@
 
 #include <thor/Vectors.hpp>
 
-#include "../util/Collection.h"
+#include "../World.h"
 #include "../effects/Bullet.h"
 
 const String Weapon::KEY_BULLET = "bullet";
@@ -19,10 +19,10 @@ const String Weapon::DEFAULT_BULLET = "bullet.yaml";
 const String Weapon::KEY_INTERVAL = "interval";
 const int Weapon::DEFAULT_INTERVAL = 250;
 
-Weapon::Weapon(World& world, Collection& collection, Body& holder, const Yaml& config) :
-		Emitter(collection),
-		mHolder(holder),
+Weapon::Weapon(World& world, Body& holder, const Yaml& config) :
+		Emitter(world),
 		mWorld(world),
+		mHolder(holder),
 		mBullet(config.get(KEY_BULLET, DEFAULT_BULLET)),
 		mTimer(sf::milliseconds(config.get(KEY_INTERVAL, DEFAULT_INTERVAL))) {
 	Vector2i holderSize = mHolder.getSize();
@@ -50,6 +50,6 @@ Weapon::createParticle() {
 	// Minus to account for positive y-axis going downwards in SFML.
 	Vector2f offset(- mOffset);
 	thor::rotate(offset, mHolder.getAngle());
-	return std::shared_ptr<Particle>(new Bullet(mHolder.getPosition() + offset, mWorld,
+	return std::shared_ptr<Particle>(new Bullet(mHolder.getPosition() + offset,
 			mHolder, mHolder.getAngle(), Yaml(mBullet)));
 }

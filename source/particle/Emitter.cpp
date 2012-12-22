@@ -7,7 +7,7 @@
 
 #include "Emitter.h"
 
-Emitter::Emitter(Collection& collection) :
+Emitter::Emitter(World& collection) :
 		mCollection(collection) {
 }
 

@@ -13,16 +13,14 @@
 
 #include <Thor/Resources.hpp>
 
-#include "World.h"
 #include "sprites/TileManager.h"
 #include "sprites/Player.h"
 #include "types/String.h"
-#include "util/Collection.h"
+#include "World.h"
 #include "util/Pathfinder.h"
 
-class World;
 class Player;
-class Collection;
+class World;
 
 /*
  * Use vertex for tiles.
@@ -51,16 +49,14 @@ private:
 private:
 	static const int FPS_GOAL;
 
-	World mWorld;
-
 	sf::RenderWindow& mWindow;
 	sf::Clock mClock;
 	sf::View mView;
 
-	Collection mCollection;
+	World mWorld;
 	TileManager mTileManager;
 	Pathfinder mPathfinder;
-	std::unique_ptr<Player> mPlayer;
+	std::shared_ptr<Player> mPlayer;
 
 	bool mQuit;
 	bool mPaused;

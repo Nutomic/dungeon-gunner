@@ -54,7 +54,7 @@ private:
 // Private variables.
 private:
 	World& mWorld;
-	std::vector<std::unique_ptr<Tile> > mTiles;
+	std::vector<std::shared_ptr<Tile> > mTiles;
 };
 
 /**
@@ -63,7 +63,7 @@ private:
 class TileManager::Tile : public Sprite {
 // Public functions.
 public:
-	Tile(Type type, const TilePosition& position, World& world);
+	Tile(Type type, const TilePosition& position);
 
 	Type getType() const;
 	TilePosition getTilePosition() const;

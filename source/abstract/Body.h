@@ -8,12 +8,10 @@
 #ifndef DG_BODY_H_
 #define DG_BODY_H_
 
-#include "../World.h"
 #include "../types/String.h"
 #include "../types/Vector.h"
 #include "../util/Yaml.h"
 
-class World;
 class Yaml;
 
 /**
@@ -44,9 +42,7 @@ public:
 	class Data {
 	public:
 		Data() = default;
-		Data(World& world, const Vector2f& position, float angle,
-				Category category, unsigned short maskExclude);
-		World& world;
+		Data(const Vector2f& position, float angle,	Category category, unsigned short maskExclude);
 		const Vector2f& position;
 		float angle;
 		Category category;

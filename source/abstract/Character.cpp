@@ -25,16 +25,15 @@ std::vector<Character*> Character::mCharacterInstances = std::vector<Character*>
 /**
  * Saves pointer to this instance in static var for think().
  */
-Character::Character(World& world, Collection& collection, Pathfinder& pathfinder,
+Character::Character(World& world, Pathfinder& pathfinder,
 		const Data& data, const Yaml& config) :
 		Sprite(config, data),
-		mCollection(collection),
-		mPathfinder(pathfinder),
 		mWorld(world),
+		mPathfinder(pathfinder),
 		mMaxHealth(config.get(KEY_HEALTH, DEFAULT_HEALTH)),
 		mCurrentHealth(mMaxHealth),
 		mMovementSpeed(config.get(KEY_SPEED, DEFAULT_SPEED)),
-		mWeapon(world, collection, *this, Yaml("weapon.yaml")),
+		mWeapon(world, *this, Yaml("weapon.yaml")),
 		mStartPathfinding(false) {
 		mCharacterInstances.push_back(this);
 }
@@ -47,8 +46,7 @@ Character::~Character() {
 	assert(it != mCharacterInstances.end());
 	mCharacterInstances.erase(it);
 
-	mCollection.insert(std::shared_ptr<Sprite>(new Corpse(mWorld,
-			getPosition(), Yaml("body.yaml"))));
+	mWorld.insert(std::shared_ptr<Sprite>(new Corpse(getPosition(), Yaml("body.yaml"))));
 }
 
 /**
