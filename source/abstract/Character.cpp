@@ -20,6 +20,8 @@ const int Character::DEFAULT_HEALTH = 100;
 const std::string Character::KEY_SPEED = "speed";
 const float Character::DEFAULT_SPEED = 100;
 const float Character::POINT_REACHED_DISTANCE = 1.0f;
+const std::string Character::KEY_WEAPON = "weapon";
+const std::string Character::DEFAULT_WEAPON = "weapon.yaml";
 std::vector<Character*> Character::mCharacterInstances = std::vector<Character*>();
 
 /**
@@ -33,7 +35,7 @@ Character::Character(World& world, Pathfinder& pathfinder,
 		mMaxHealth(config.get(KEY_HEALTH, DEFAULT_HEALTH)),
 		mCurrentHealth(mMaxHealth),
 		mMovementSpeed(config.get(KEY_SPEED, DEFAULT_SPEED)),
-		mWeapon(world, *this, Yaml("weapon.yaml")),
+		mWeapon(world, *this, Yaml(config.get(KEY_WEAPON, DEFAULT_WEAPON))),
 		mStartPathfinding(false) {
 		mCharacterInstances.push_back(this);
 }

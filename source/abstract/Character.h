@@ -53,6 +53,8 @@ private:
 	static const int DEFAULT_HEALTH;
 	static const std::string KEY_SPEED;
 	static const float DEFAULT_SPEED;
+	static const std::string KEY_WEAPON;
+	static const std::string DEFAULT_WEAPON;
 	/// The distance to a point where it is considered reached.
 	static const float POINT_REACHED_DISTANCE;
 
