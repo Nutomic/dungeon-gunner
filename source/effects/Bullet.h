@@ -26,7 +26,6 @@ public:
 			const Yaml& config);
 
 	void onCollide(Sprite& other);
-	void doesCollide(Sprite& other);
 
 // Private variables.
 private:

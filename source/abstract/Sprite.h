@@ -65,7 +65,6 @@ public:
 	sf::Vector2f getSize() const;
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
-	virtual bool doesCollide(Sprite& other);
 	virtual void onCollide(Sprite& other);
 
 // Public variables.

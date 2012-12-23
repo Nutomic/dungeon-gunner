@@ -52,8 +52,3 @@ Bullet::onCollide(Sprite& other) {
 		setDelete(true);
 	}
 }
-
-bool
-Bullet::doesCollide(Sprite& other) {
-	return &other != &mShooter;
-}

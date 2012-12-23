@@ -129,18 +129,6 @@ Sprite::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 }
 
 /**
- * This method filters collisions with other sprites. Implement it if you want to
- * limit collisions to/with certain objects. Default implementation always returns true.
- *
- * @param other The Sprite this object is about to collide with.
- * @return True if the objects should collide.
- */
-bool
-Sprite::doesCollide(Sprite& other) {
-	return true;
-}
-
-/**
  * Called when a collision with another Sprite occured. Override this method
  * to manage collision events.
  *
