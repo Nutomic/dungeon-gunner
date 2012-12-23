@@ -27,7 +27,7 @@ std::vector<Character*> Character::mCharacterInstances = std::vector<Character*>
  */
 Character::Character(World& world, Pathfinder& pathfinder,
 		const Data& data, const Yaml& config) :
-		Sprite(config, data),
+		Sprite(data, config),
 		mWorld(world),
 		mPathfinder(pathfinder),
 		mMaxHealth(config.get(KEY_HEALTH, DEFAULT_HEALTH)),

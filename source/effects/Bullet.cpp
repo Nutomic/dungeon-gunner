@@ -25,7 +25,7 @@ const float Bullet::DEFAULT_SPEED = 500;
  * @param world Box2d world.
  * @param texture Texture to display for bullet.
  */
-Bullet::Bullet(const sf::Vector2f& position, Body& shooter, float direction,
+Bullet::Bullet(const sf::Vector2f& position, Sprite& shooter, float direction,
 	const Yaml& config) :
 		Particle(config, Data(position, 0, CATEGORY_PARTICLE, CATEGORY_PARTICLE)),
 		mShooter(shooter),
@@ -41,7 +41,7 @@ Bullet::Bullet(const sf::Vector2f& position, Body& shooter, float direction,
  * @copydoc Physical::onCollide
  */
 void
-Bullet::onCollide(Body& other) {
+Bullet::onCollide(Sprite& other) {
 	// Make sure we do not damage twice.
 	if (!getDelete()) {
 		// Call onShot on other, with damage as param.
@@ -54,6 +54,6 @@ Bullet::onCollide(Body& other) {
 }
 
 bool
-Bullet::doesCollide(Body& other) {
+Bullet::doesCollide(Sprite& other) {
 	return &other != &mShooter;
 }

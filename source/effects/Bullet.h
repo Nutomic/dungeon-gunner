@@ -22,11 +22,11 @@ class Yaml;
 class Bullet : public Particle {
 // Public functions.
 public:
-	Bullet(const sf::Vector2f& position, Body& shooter, float direction,
+	Bullet(const sf::Vector2f& position, Sprite& shooter, float direction,
 			const Yaml& config);
 
-	void onCollide(Body& other);
-	bool doesCollide(Body& other);
+	void onCollide(Sprite& other);
+	void doesCollide(Sprite& other);
 
 // Private variables.
 private:
@@ -35,7 +35,7 @@ private:
 	static const std::string KEY_SPEED;
 	static const float DEFAULT_SPEED;
 
-	Body& mShooter;
+	Sprite& mShooter;
 	const int mDamage;
 	const float mSpeed;
 };

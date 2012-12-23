@@ -19,15 +19,15 @@ const std::string Weapon::DEFAULT_BULLET = "bullet.yaml";
 const std::string Weapon::KEY_INTERVAL = "interval";
 const int Weapon::DEFAULT_INTERVAL = 250;
 
-Weapon::Weapon(World& world, Body& holder, const Yaml& config) :
+Weapon::Weapon(World& world, Sprite& holder, const Yaml& config) :
 		Emitter(world),
 		mWorld(world),
 		mHolder(holder),
 		mBullet(config.get(KEY_BULLET, DEFAULT_BULLET)),
 		mTimer(sf::milliseconds(config.get(KEY_INTERVAL, DEFAULT_INTERVAL))) {
-	sf::Vector2i holderSize = mHolder.getSize();
+	sf::Vector2f holderSize = mHolder.getSize();
 	Yaml bullet(mBullet);
-	sf::Vector2i bulletSize = bullet.get(Body::KEY_SIZE, sf::Vector2i());
+	sf::Vector2f bulletSize = bullet.get(Sprite::KEY_SIZE, sf::Vector2f());
 	mOffset = sf::Vector2f(0,
 			std::max(holderSize.x, holderSize.y) / 2 +
 			std::max(bulletSize.x, bulletSize.y) / 2);

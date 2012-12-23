@@ -34,9 +34,9 @@ TileManager::TileManager(World& world) :
  * @param world Box2D world object.
  */
 TileManager::Tile::Tile(Type type, const TilePosition& position) :
-		Sprite(Yaml(getConfig(type)), Data(
-				sf::Vector2f(position.x * TILE_SIZE.x, position.y * TILE_SIZE.y), 0,
-				CATEGORY_WORLD, (type == Type::FLOOR) ? MASK_NONE : MASK_ALL)),
+		Sprite(Data(sf::Vector2f(position.x * TILE_SIZE.x, position.y * TILE_SIZE.y),
+				0, CATEGORY_WORLD, (type == Type::FLOOR) ? MASK_NONE : MASK_ALL),
+				Yaml(getConfig(type))),
 		mType(type) {
 }
 

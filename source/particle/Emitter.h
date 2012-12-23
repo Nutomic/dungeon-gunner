@@ -8,11 +8,11 @@
 #ifndef DG_EMITTER_H_
 #define DG_EMITTER_H_
 
-#include "../abstract/Body.h"
+#include "../abstract/Sprite.h"
 #include "../World.h"
 #include "Particle.h"
 
-class Body;
+class Sprite;
 class World;
 class Particle;
 

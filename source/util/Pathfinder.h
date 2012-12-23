@@ -10,16 +10,16 @@
 
 #include <SFML/System.hpp>
 
-#include "../abstract/Body.h"
+#include "../abstract/Sprite.h"
 
-class Body;
+class Sprite;
 
 class Pathfinder {
 // Public functions.
 public:
 	Pathfinder();
 
-	std::vector<sf::Vector2f> getPath(Body& physical, const sf::Vector2f& destination);
+	std::vector<sf::Vector2f> getPath(Sprite& physical, const sf::Vector2f& destination);
 };
 
 #endif /* PATHFINDER_H_ */

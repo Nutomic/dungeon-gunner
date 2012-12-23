@@ -10,14 +10,14 @@
 
 #include <Thor/Particles.hpp>
 
-#include "../abstract/Body.h"
+#include "../abstract/Sprite.h"
 #include "../particle/Emitter.h"
 #include "../util/Timer.h"
 #include "../util/Yaml.h"
 
 class Emitter;
 class Instances;
-class Body;
+class Sprite;
 class Timer;
 class Yaml;
 
@@ -29,7 +29,7 @@ class Yaml;
 class Weapon : public Emitter {
 // Public functions.
 public:
-	Weapon(World& world, Body& holder, const Yaml& config);
+	Weapon(World& world, Sprite& holder, const Yaml& config);
 
 	void fire();
 
@@ -45,7 +45,7 @@ private:
 	static const int DEFAULT_INTERVAL;
 
 	World& mWorld;
-	Body& mHolder;
+	Sprite& mHolder;
 
 	sf::Vector2f mOffset; //< Offset to the point where bullets are inserted (from holder center).
 	const std::string mBullet;

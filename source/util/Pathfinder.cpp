@@ -12,6 +12,6 @@ Pathfinder::Pathfinder() {
 }
 
 std::vector<sf::Vector2f>
-Pathfinder::getPath(Body& physical, const sf::Vector2f& destination) {
+Pathfinder::getPath(Sprite& physical, const sf::Vector2f& destination) {
 	return std::vector<sf::Vector2f>();
 }

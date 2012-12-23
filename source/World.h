@@ -13,10 +13,9 @@
 
 #include <SFML/Graphics.hpp>
 
-#include "abstract/Body.h"
 #include "abstract/Sprite.h"
 
-class Body;
+class Sprite;
 class Sprite;
 
 /**
@@ -39,7 +38,7 @@ private:
 
 // Private variables.
 private:
-	std::map<Body::Category, std::vector<std::shared_ptr<Sprite> > > mDrawables;
+	std::map<Sprite::Category, std::vector<std::shared_ptr<Sprite> > > mDrawables;
 };
 
 #endif /* DG_WORLD_H_ */

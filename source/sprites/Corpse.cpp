@@ -8,6 +8,6 @@
 #include "Corpse.h"
 
 Corpse::Corpse(const sf::Vector2f& position, const Yaml& config) :
-		Sprite(config, Data(position, 0, CATEGORY_NONSOLID, MASK_NONE)) {
+		Sprite(Data(position, 0, CATEGORY_NONSOLID, MASK_NONE), config) {
 }
 

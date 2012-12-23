@@ -8,7 +8,7 @@
 #include "Particle.h"
 
 Particle::Particle(const Yaml& config, const Data& data) :
-		Sprite(config, data) {
+		Sprite(data, config) {
 }
 
 Particle::~Particle() {

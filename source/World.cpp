@@ -17,7 +17,7 @@
  */
 void
 World::insert(std::shared_ptr<Sprite> drawable) {
-	Body::Category cat = drawable->getCategory();
+	Sprite::Category cat = drawable->getCategory();
 	auto item = std::find(mDrawables[cat].begin(), mDrawables[cat].end(), drawable);
 	if (item == mDrawables[cat].end()) {
 		mDrawables[cat].push_back(drawable);
