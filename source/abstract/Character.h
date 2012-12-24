@@ -43,7 +43,8 @@ protected:
 	virtual void onThink(float elapsedTime);
 	virtual void onDeath();
 	float getMovementSpeed() const;
-	void fire();
+	void pullTrigger();
+	void releaseTrigger();
 	bool setDestination(const sf::Vector2f& destination);
 	void move();
 

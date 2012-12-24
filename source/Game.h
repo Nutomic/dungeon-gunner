@@ -41,6 +41,7 @@ private:
 
 	void keyDown(const sf::Event& event);
 	void keyUp(const sf::Event& event);
+	void mouseDown(const sf::Event& event);
 	void mouseUp(const sf::Event& event);
 
 	void generate();

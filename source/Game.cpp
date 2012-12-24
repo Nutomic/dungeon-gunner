@@ -104,6 +104,9 @@ Game::input() {
 		case sf::Event::KeyReleased:
 			keyUp(event);
 			break;
+		case sf::Event::MouseButtonPressed:
+			mouseDown(event);
+			break;
 		case sf::Event::MouseButtonReleased:
 			mouseUp(event);
 			break;
@@ -176,6 +179,16 @@ Game::convertCoordinates(int x, int y) {
 	return mWindow.convertCoords(sf::Vector2i(x, y), mView);
 }
 
+void
+Game::mouseDown(const sf::Event& event) {
+	switch(event.mouseButton.button) {
+	case sf::Mouse::Left:
+		mPlayer->pullTrigger();
+		break;
+	default:
+		break;
+	}
+}
 /**
  * Handles mouse key up events.
  */
@@ -183,7 +196,7 @@ void
 Game::mouseUp(const sf::Event& event) {
 	switch (event.mouseButton.button) {
 	case sf::Mouse::Left:
-		mPlayer->fire();
+		mPlayer->releaseTrigger();
 		break;
 	case sf::Mouse::Right:
 		mPlayer->move(convertCoordinates(event.mouseButton.x, event.mouseButton.y));

@@ -59,6 +59,7 @@ Character::~Character() {
 void
 Character::think(float elapsedTime) {
 	for (auto i : mCharacterInstances) {
+		i->mWeapon.think();
 		i->onThink(elapsedTime);
 	}
 }
@@ -104,11 +105,19 @@ Character::getMovementSpeed() const {
 }
 
 /**
- * Fire the attached weapon.
+ * Pull the trigger on the attached weapon.
  */
 void
-Character::fire() {
-	mWeapon.fire();
+Character::pullTrigger() {
+	mWeapon.pullTrigger();
+}
+
+/**
+ * Release the trigger on the attached weapon.
+ */
+void
+Character::releaseTrigger() {
+	mWeapon.releaseTrigger();
 }
 
 /**

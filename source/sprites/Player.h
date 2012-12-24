@@ -44,7 +44,8 @@ public:
 			const sf::Vector2f& position, const Yaml& config);
 
 	void setCrosshairPosition(const sf::Vector2f& position);
-	void fire();
+	void pullTrigger();
+	void releaseTrigger();
 	void move(const sf::Vector2f& destination);
 	void setDirection(Direction direction, bool unset);
 

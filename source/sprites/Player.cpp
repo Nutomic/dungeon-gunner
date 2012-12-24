@@ -35,11 +35,19 @@ Player::setCrosshairPosition(const sf::Vector2f& position) {
 }
 
 /**
- * Fires the attached Weapon, emitting a Bullet object.
+ * Pull the trigger on the attached weapon.
  */
 void
-Player::fire() {
-	Character::fire();
+Player::pullTrigger() {
+	Character::pullTrigger();
+}
+
+/**
+ * Release the trigger on the attached weapon.
+ */
+void
+Player::releaseTrigger() {
+	Character::releaseTrigger();
 }
 
 /**

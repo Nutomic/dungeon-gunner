@@ -31,7 +31,9 @@ class Weapon : public Emitter {
 public:
 	Weapon(World& world, Sprite& holder, const Yaml& config);
 
-	void fire();
+	void pullTrigger();
+	void releaseTrigger();
+	void think();
 
 // Protected functions.
 protected:
@@ -43,6 +45,8 @@ private:
 	static const std::string DEFAULT_BULLET;
 	static const std::string KEY_INTERVAL;
 	static const int DEFAULT_INTERVAL;
+	static const std::string KEY_AUTOMATIC;
+	static const bool DEFAULT_AUTOMATIC;
 
 	World& mWorld;
 	Sprite& mHolder;
@@ -50,6 +54,8 @@ private:
 	sf::Vector2f mOffset; //< Offset to the point where bullets are inserted (from holder center).
 	const std::string mBullet;
 	Timer mTimer;
+	bool mFire;
+	bool mAutomatic;
 
 };
 
