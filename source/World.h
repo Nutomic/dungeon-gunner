@@ -34,7 +34,17 @@ public:
 
 // Private functions.
 private:
+	class Interval {
+	public:
+		float start;
+		float end;
+		Interval(float center, float radius);
+		Interval getOverlap(Interval other) const;
+		float getLength();
+	};
+
     void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+    bool testCollision(std::shared_ptr<Sprite> spriteA, std::shared_ptr<Sprite> spriteB, int elapsed) const;
 
 // Private variables.
 private:
