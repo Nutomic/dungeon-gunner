@@ -40,7 +40,8 @@ public:
 public:
 	TileManager(World& world);
 
-	void setTile(const TilePosition& position, Type type);
+	void insertTile(const TilePosition& position, Type type);
+	void removeTile(const TilePosition& position);
 
 // Private types.
 private:

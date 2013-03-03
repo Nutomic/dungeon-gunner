@@ -39,16 +39,23 @@ Game::Game(sf::RenderWindow& window) :
  */
 void
 Game::generate() {
-	for (int x = 0; x < 10; x++)
-		for (int y = 0; y < 10; y++)
-			mTileManager.setTile(TileManager::TilePosition(x, y), TileManager::Type::WALL);
+	for (int x = 0; x < 11; x++)
+		mTileManager.insertTile(TileManager::TilePosition(x, 0), TileManager::Type::WALL);
+	for (int x = 0; x < 11; x++)
+		mTileManager.insertTile(TileManager::TilePosition(x, 10), TileManager::Type::WALL);
+	for (int y = 1; y < 9; y++)
+		mTileManager.insertTile(TileManager::TilePosition(0, y), TileManager::Type::WALL);
+	for (int y = 1; y < 9; y++)
+		mTileManager.insertTile(TileManager::TilePosition(10, y), TileManager::Type::WALL);
 
-	for (int x = 1; x < 9; x++)
-		for (int y = 1; y < 9; y++)
-			mTileManager.setTile(TileManager::TilePosition(x, y), TileManager::Type::FLOOR);
+	for (int x = 1; x < 10; x++)
+		for (int y = 1; y < 10; y++)
+			mTileManager.insertTile(TileManager::TilePosition(x, y), TileManager::Type::FLOOR);
 
-	for (int x = 1; x < 5; x++)
-		mTileManager.setTile(TileManager::TilePosition(x, 4), TileManager::Type::WALL);
+	for (int x = 1; x < 5; x++) {
+		mTileManager.removeTile(TileManager::TilePosition(x, 4));
+		mTileManager.insertTile(TileManager::TilePosition(x, 4), TileManager::Type::WALL);
+	}
 
 	mWorld.insert(std::shared_ptr<Sprite>(new Enemy(mWorld, mPathfinder,
 			sf::Vector2f(400.0f, 200.0f), Yaml("enemy.yaml"))));

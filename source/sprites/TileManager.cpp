@@ -7,6 +7,7 @@
 
 #include "TileManager.h"
 
+#include <assert.h>
 #include <string>
 
 #include <Thor/Resources.hpp>
@@ -85,15 +86,30 @@ TileManager::Tile::getTilePosition() const {
  * @param type Type of tile to be inserted.
  */
 void
-TileManager::setTile(const TilePosition& position, Type type) {
+TileManager::insertTile(const TilePosition& position, Type type) {
+	#ifndef NDEBUG
 	for (auto it = mTiles.begin(); it != mTiles.end(); it++) {
 		if ((*it)->getTilePosition() == position) {
-			mTiles.erase(it);
+			// Inserted multiple tiles at the same position.
+			assert(false);
 		}
 	}
+	#endif
 	std::shared_ptr<Tile> tile = std::shared_ptr<Tile>(new Tile(type, position));
 	mTiles.push_back(tile);
 	mWorld.insert(tile);
+}
+
+
+void
+TileManager::removeTile(const TilePosition& position) {
+	for (auto it = mTiles.begin(); it != mTiles.end(); it++) {
+		if ((*it)->getTilePosition() == position) {
+			mWorld.remove(*it);
+			mTiles.erase(it);
+		}
+	}
+
 }
 
 /**
