@@ -30,9 +30,8 @@ public:
 	void insert(std::shared_ptr<Sprite> drawable);
 	void remove(std::shared_ptr<Sprite> drawable);
 	void step(int elapsed);
-	void checkDelete();
 
-// Private functions.
+// Private types.
 private:
 	class Interval {
 	public:
@@ -43,6 +42,8 @@ private:
 		float getLength();
 	};
 
+// Private functions.
+private:
     void draw(sf::RenderTarget& target, sf::RenderStates states) const;
     bool testCollision(std::shared_ptr<Sprite> spriteA, std::shared_ptr<Sprite> spriteB, int elapsed) const;
 

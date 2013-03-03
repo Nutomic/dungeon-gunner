@@ -86,7 +86,6 @@ Game::loop() {
 		}
 
 		Character::think(elapsed);
-		mWorld.checkDelete();
 
 		mWorld.step(elapsed);
 

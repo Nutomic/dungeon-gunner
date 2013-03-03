@@ -18,11 +18,12 @@
  */
 void
 World::insert(std::shared_ptr<Sprite> drawable) {
+#ifndef NDEBUG
 	Sprite::Category cat = drawable->getCategory();
 	auto item = std::find(mDrawables[cat].begin(), mDrawables[cat].end(), drawable);
-	if (item == mDrawables[cat].end()) {
-		mDrawables[cat].push_back(drawable);
-	}
+	assert(item == mDrawables[cat].end());
+#endif
+		mDrawables[drawable->getCategory()].push_back(drawable);
 }
 
 /**
@@ -38,29 +39,46 @@ World::remove(std::shared_ptr<Sprite> drawable) {
 	}
 }
 
+/**
+ * Checks for collisions and applies movement, also removes sprites if
+ * Sprite::getDelete returns true.
+ *
+ * This method can be improved by only testing each pair of sprites once,
+ * and using the result for both. Applying movement should be done in
+ * testCollision, always applying the part that causes no collision.
+ */
 void
 World::step(int elapsed) {
 	for (auto v = mDrawables.begin(); v != mDrawables.end(); v++) {
-		for (auto spriteA : v->second) {
-			sf::Vector2f speed = spriteA->getSpeed();
-			speed *= elapsed / 1000.0f;
-			bool overlap = false;
-			for (auto w = mDrawables.begin(); w != mDrawables.end(); w++) {
-				for (auto spriteB : w->second) {
-					if (spriteA == spriteB) {
-						continue;
-					}
-					if (!spriteA->collisionEnabled(spriteB->getCategory()) || !spriteB->collisionEnabled(spriteA->getCategory())) {
-						continue;
-					}
-					if (testCollision(spriteA, spriteB, elapsed)) {
-						spriteA->onCollide(spriteB);
-						overlap = true;
+		for (auto it = v->second.begin(); it != v->second.end(); ) {
+			auto spriteA = *it;
+			if (spriteA->getDelete()) {
+				remove(spriteA);
+			}
+			else {
+				sf::Vector2f speed = spriteA->getSpeed();
+				speed *= elapsed / 1000.0f;
+				bool overlap = false;
+				for (auto w = mDrawables.begin(); w != mDrawables.end(); w++) {
+					for (auto spriteB : w->second) {
+						if (spriteA == spriteB) {
+							continue;
+						}
+						// Ignore anything that is filtered by masks.
+						if (!spriteA->collisionEnabled(spriteB->getCategory()) ||
+								!spriteB->collisionEnabled(spriteA->getCategory())) {
+							continue;
+						}
+						if (testCollision(spriteA, spriteB, elapsed)) {
+							spriteA->onCollide(spriteB);
+							overlap = true;
+						}
 					}
 				}
-			}
-			if (!overlap) {
-				spriteA->setPosition(spriteA->getPosition() + speed);
+				if (!overlap) {
+					spriteA->setPosition(spriteA->getPosition() + speed);
+				}
+				it++;
 			}
 		}
 	}
@@ -130,23 +148,6 @@ World::testCollision(std::shared_ptr<Sprite> spriteA,
 	}
 	// Rectangles can't move and thus not collide.
 	return false;
-}
-
-/**
- * Deletes any sprites which return true for getDelete().
- */
-void
-World::checkDelete() {
-	for (auto v = mDrawables.begin(); v != mDrawables.end(); v++) {
-		for (auto item = v->second.begin(); item != v->second.end(); ) {
-			if ((*item)->getDelete()) {
-				item = v->second.erase(item);
-			}
-			else {
-				item++;
-			}
-		}
-	}
 }
 
 /**
