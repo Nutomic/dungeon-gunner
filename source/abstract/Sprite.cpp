@@ -39,18 +39,23 @@ Sprite::Sprite(const Data& data, const Yaml& config) :
 	float radius = config.get(KEY_RADIUS, 0.0f);
 	sf::Vector2f size = config.get(KEY_SIZE, sf::Vector2f());
 	if (radius != 0.0f) {
-		mShape = std::unique_ptr<sf::Shape>(new sf::CircleShape(radius));
+		mShape.type = Shape::Type::CIRCLE;
+		mShape.shape = std::unique_ptr<sf::Shape>(new sf::CircleShape(radius));
+		mShape.shape->setOrigin(radius, radius);
+		mShape.shape->setTextureRect(sf::IntRect(sf::Vector2i(0, 0), sf::Vector2i(radius * 2, radius * 2)));
+
 	}
 	else if (size != sf::Vector2f()) {
-		mShape = std::unique_ptr<sf::Shape>(new sf::RectangleShape(size));
+		mShape.type = Shape::Type::RECTANGLE;
+		mShape.shape = std::unique_ptr<sf::Shape>(new sf::RectangleShape(size));
+		mShape.shape->setOrigin(size / 2.0f);
+		mShape.shape->setTextureRect(sf::IntRect(sf::Vector2i(0, 0), sf::Vector2i(size)));
 	}
 	else {
 		LOG_E("Could not read size or radius from " << config.getFilename());
 	}
 
-	mShape->setOrigin(sf::Vector2f(getSize().x / 2, getSize().y / 2));
-	mShape->setTextureRect(sf::IntRect(sf::Vector2i(0, 0), sf::Vector2i(getSize())));
-	mShape->setTexture(&*mTexture, false);
+	mShape.shape->setTexture(&*mTexture, false);
 
 	setPosition(data.position);
 	setAngle(data.angle);
@@ -66,11 +71,11 @@ Sprite::~Sprite() {
  * Initializes container.
  */
 Sprite::Data::Data(const sf::Vector2f& position, float angle,
-		Category category, unsigned short maskExclude) :
+		Category category, unsigned short mask) :
 		position(position),
 		angle(angle),
 		category(category),
-		mask(maskExclude) {
+		mask(mask) {
 }
 
 /**
@@ -78,7 +83,7 @@ Sprite::Data::Data(const sf::Vector2f& position, float angle,
  */
 sf::Vector2f
 Sprite::getPosition() const {
-	return mShape->getPosition();
+	return mShape.shape->getPosition();
 }
 
 /**
@@ -94,7 +99,7 @@ Sprite::getSpeed() const {
  */
 float
 Sprite::getAngle() const {
-	return mShape->getRotation();
+	return mShape.shape->getRotation();
 }
 
 /**
@@ -119,13 +124,21 @@ Sprite::getCategory() const {
  */
 sf::Vector2f
 Sprite::getSize() const {
-	sf::FloatRect bounds = mShape->getLocalBounds();
+	sf::FloatRect bounds = mShape.shape->getLocalBounds();
 	return sf::Vector2f(bounds.width, bounds.height);
 }
 
 void
 Sprite::draw(sf::RenderTarget& target, sf::RenderStates states) const {
-	target.draw(*mShape, states);
+	target.draw(*mShape.shape, states);
+}
+
+/**
+ * Returns true if collisions with that category are enabled through mask.
+ */
+bool
+Sprite::collisionEnabled(Category category) const {
+	return (category & mMask) != 0;
 }
 
 /**
@@ -135,7 +148,7 @@ Sprite::draw(sf::RenderTarget& target, sf::RenderStates states) const {
  * @param other The other Sprite in the collision.
  */
 void
-Sprite::onCollide(Sprite& other) {
+Sprite::onCollide(std::shared_ptr<Sprite> other) {
 }
 
 /**
@@ -165,7 +178,7 @@ Sprite::setSpeed(sf::Vector2f direction, float speed) {
  */
 void
 Sprite::setAngle(float angle) {
-	mShape->setRotation(angle);
+	mShape.shape->setRotation(angle);
 }
 
 /**
@@ -173,5 +186,5 @@ Sprite::setAngle(float angle) {
  */
 void
 Sprite::setPosition(const sf::Vector2f& position) {
-	mShape->setPosition(position);
+	mShape.shape->setPosition(position);
 }

@@ -37,7 +37,8 @@ public:
 	 */
 	class Data {
 	public:
-		Data(const sf::Vector2f& position, float angle,	Category category, unsigned short maskExclude);
+		Data(const sf::Vector2f& position, float angle,	Category category,
+				unsigned short mask);
 		const sf::Vector2f& position;
 		float angle;
 		Category category;
@@ -48,8 +49,8 @@ public:
 	 * Common collision masking values.
 	 */
 	enum Mask : unsigned short {
-		MASK_NONE = 0xffff, //< Disables any collisions.
-		MASK_ALL = 0 //< Enables all collisions.
+		MASK_ALL = 0xffff, //< Enables all collisions.
+		MASK_NONE = 0 //< Disables any collisions.
 	};
 
 // Public functions.
@@ -64,8 +65,9 @@ public:
 	Category getCategory() const;
 	sf::Vector2f getSize() const;
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+	bool collisionEnabled(Category category) const;
 
-	virtual void onCollide(Sprite& other);
+	virtual void onCollide(std::shared_ptr<Sprite> other);
 
 // Public variables.
 public:
@@ -75,16 +77,29 @@ public:
 
 // Protected functions.
 protected:
-	friend class World;
-
 	void setDelete(bool value);
 	void setSpeed(sf::Vector2f direction, float speed);
 	void setAngle(float angle);
 	void setPosition(const sf::Vector2f& position);
 
+// Private types.
+private:
+	class Shape {
+	public:
+		enum class Type {
+			CIRCLE,
+			RECTANGLE
+		};
+
+		Type type;
+		std::shared_ptr<sf::Shape> shape;
+	};
+
 // Private variables.
 private:
-	std::unique_ptr<sf::Shape> mShape;
+	friend class World;
+
+	Shape mShape;
 	std::shared_ptr<sf::Texture> mTexture;
 	sf::Vector2f mSpeed;
 	Category mCategory;
