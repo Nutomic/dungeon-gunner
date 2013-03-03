@@ -27,7 +27,7 @@ const float Bullet::DEFAULT_SPEED = 500;
  */
 Bullet::Bullet(const sf::Vector2f& position, Sprite& shooter, float direction,
 	const Yaml& config) :
-		Particle(config, Data(position, 0, CATEGORY_PARTICLE, CATEGORY_PARTICLE)),
+		Particle(config, Data(position, 0, CATEGORY_PARTICLE, ~CATEGORY_PARTICLE)),
 		mShooter(shooter),
 		mDamage(config.get(KEY_DAMAGE, DEFAULT_DAMAGE)),
 		mSpeed(config.get(KEY_SPEED, DEFAULT_SPEED)) {
@@ -41,13 +41,13 @@ Bullet::Bullet(const sf::Vector2f& position, Sprite& shooter, float direction,
  * @copydoc Physical::onCollide
  */
 void
-Bullet::onCollide(Sprite& other) {
+Bullet::onCollide(std::shared_ptr<Sprite> other) {
 	// Make sure we do not damage twice.
 	if (!getDelete()) {
 		// Call onShot on other, with damage as param.
-		if (other.getCategory() == CATEGORY_ACTOR) {
-			Character& a = dynamic_cast<Character&>(other);
-			a.onDamage(mDamage);
+		if (other->getCategory() == CATEGORY_ACTOR) {
+			std::shared_ptr<Character> character = std::static_pointer_cast<Character>(other);
+			character->onDamage(mDamage);
 		}
 		setDelete(true);
 	}

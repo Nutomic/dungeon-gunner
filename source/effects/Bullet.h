@@ -25,7 +25,7 @@ public:
 	Bullet(const sf::Vector2f& position, Sprite& shooter, float direction,
 			const Yaml& config);
 
-	void onCollide(Sprite& other);
+	void onCollide(std::shared_ptr<Sprite> other);
 
 // Private variables.
 private:
