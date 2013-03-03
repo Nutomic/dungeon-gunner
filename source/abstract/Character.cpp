@@ -41,14 +41,12 @@ Character::Character(World& world, Pathfinder& pathfinder,
 }
 
 /**
- * Deletes pointer from static variable mCharacterInstances, inserts body into world.
+ * Deletes pointer from static variable mCharacterInstances.
  */
 Character::~Character() {
 	auto it = std::find(mCharacterInstances.begin(), mCharacterInstances.end(), this);
 	assert(it != mCharacterInstances.end());
 	mCharacterInstances.erase(it);
-
-	mWorld.insert(std::shared_ptr<Sprite>(new Corpse(getPosition(), Yaml("body.yaml"))));
 }
 
 /**
@@ -90,10 +88,12 @@ Character::onThink(float elapsedTime) {
 }
 
 /**
- * Called when health reaches zero. Default immplementation does nothing.
+ * Called when health reaches zero. Default implementation drops a corpse at
+ * the current position.
  */
 void
 Character::onDeath() {
+	mWorld.insert(std::shared_ptr<Sprite>(new Corpse(getPosition(), Yaml("body.yaml"))));
 }
 
 /**
