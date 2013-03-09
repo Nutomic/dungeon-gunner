@@ -96,7 +96,8 @@ Player::setDirection(Direction direction, bool unset) {
  * Check if we arrived at destination, turn towards cursor.
  */
 void
-Player::onThink(float elapsedTime) {
+Player::onThink(int elapsed) {
+	Character::onThink(elapsed);
 	if (!mDirection) {
 		// Only use path finding movement if no direct input movement active.
 		Character::move();
@@ -104,15 +105,5 @@ Player::onThink(float elapsedTime) {
 	// Look towards crosshair.
 	if (mCrosshairPosition != sf::Vector2f()) {
 		setAngle(thor::polarAngle(mCrosshairPosition) + 90);
-	}
-}
-
-/**
- * Stop movement if we collide with anything except bullets.
- */
-void
-Player::onCollide(Sprite& other) {
-	if (other.getCategory() != CATEGORY_PARTICLE) {
-		setDestination(getPosition());
 	}
 }

@@ -51,8 +51,7 @@ public:
 
 // Private functions.
 private:
-	void onCollide(Sprite& other);
-	void onThink(float elapsedTime);
+	void onThink(int elapsed);
 
 // Private variables.
 private:

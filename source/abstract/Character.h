@@ -34,13 +34,13 @@ public:
 			const Data& data, const Yaml& config);
 	virtual ~Character() = 0;
 
-	static void think(float elapsedTime);
+	static void think(int elapsed);
 
 	void onDamage(int damage);
 
 // Protected functions.
 protected:
-	virtual void onThink(float elapsedTime);
+	virtual void onThink(int elapsed);
 	virtual void onDeath();
 	float getMovementSpeed() const;
 	void pullTrigger();

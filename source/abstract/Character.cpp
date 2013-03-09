@@ -52,13 +52,12 @@ Character::~Character() {
 /**
  * Calls onThink on all Actor instances.
  *
- * @param elapsedTime Amount of time to simulate.
+ * @param elapsed Amount of time to simulate.
  */
 void
-Character::think(float elapsedTime) {
+Character::think(int elapsed) {
 	for (auto i : mCharacterInstances) {
-		i->mWeapon.think();
-		i->onThink(elapsedTime);
+		i->onThink(elapsed);
 	}
 }
 
@@ -79,12 +78,14 @@ Character::onDamage(int damage) {
 }
 
 /**
- * Implement this function for any (regular) AI computations. Default implementation does nothing.
+ * Implement this function for any (regular) AI computations.
+ * If overwritten, this function should always be called from the overwriting function.
  *
- * @param elapsedTime Amount of time to simulate.
+ * @param elapsed Amount of time to simulate.
  */
 void
-Character::onThink(float elapsedTime) {
+Character::onThink(int elapsed) {
+	mWeapon.onThink(elapsed);
 }
 
 /**

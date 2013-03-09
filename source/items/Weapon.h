@@ -33,7 +33,7 @@ public:
 
 	void pullTrigger();
 	void releaseTrigger();
-	void think();
+	void onThink(int elapsed);
 
 // Protected functions.
 protected:
@@ -52,10 +52,11 @@ private:
 	Sprite& mHolder;
 
 	sf::Vector2f mOffset; //< Offset to the point where bullets are inserted (from holder center).
-	const std::string mBullet;
-	Timer mTimer;
-	bool mFire;
-	bool mAutomatic;
+	const std::string mBullet; //< Bullet config filename.
+	int mLastShotWaitInterval; //< Remaining time left after firing last bullet before firing next one.
+	const int mFireInterval; //< Time between firing bullets.
+	bool mFire; //< True if the trigger is pulled.
+	bool mAutomatic; //< True if the weapon continues firing after pulling the trigger once.
 
 };
 

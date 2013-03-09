@@ -26,7 +26,8 @@ Weapon::Weapon(World& world, Sprite& holder, const Yaml& config) :
 		mWorld(world),
 		mHolder(holder),
 		mBullet(config.get(KEY_BULLET, DEFAULT_BULLET)),
-		mTimer(sf::milliseconds(config.get(KEY_INTERVAL, DEFAULT_INTERVAL))),
+		mLastShotWaitInterval(0),
+		mFireInterval(config.get(KEY_INTERVAL, DEFAULT_INTERVAL)),
 		mFire(false),
 		mAutomatic(config.get(KEY_AUTOMATIC, DEFAULT_AUTOMATIC)) {
 	sf::Vector2f holderSize = mHolder.getSize();
@@ -55,12 +56,23 @@ Weapon::releaseTrigger() {
 
 /**
  * Fire if the trigger has been pulled, time between bullets is over, has ammo etc.
+ *
+ * @param elapsed Amount of time to simulate.
  */
 void
-Weapon::think() {
-	if (mFire && mTimer.isExpired()) {
+Weapon::onThink(int elapsed) {
+	// Waiting for next shot, subtract time since last onThink.
+	if (mLastShotWaitInterval > 0) {
+		mLastShotWaitInterval -= elapsed;
+	}
+	// Only reset to zero if we didn't recently fire (allow catching up for missed bullets).
+	else {
+		mLastShotWaitInterval = 0;
+	}
+	// Loop just in case we miss a bullet to fire.
+	while (mFire && mLastShotWaitInterval <= 0) {
+		mLastShotWaitInterval += mFireInterval;
 		emit();
-		mTimer.start();
 		if (!mAutomatic) {
 			mFire = false;
 		}

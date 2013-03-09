@@ -24,10 +24,6 @@ class Enemy : public Character {
 public:
 	Enemy(World& collection, Pathfinder& pathfinder,
 			const sf::Vector2f& position, const Yaml& config);
-
-// Private functions.
-private:
-	void onThink(float elapsedTime);
 };
 
 #endif /* DG_ENEMY_H_ */

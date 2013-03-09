@@ -15,7 +15,3 @@ Enemy::Enemy(World& collection, Pathfinder& pathfinder,
 				Data(position, 0, CATEGORY_ACTOR, MASK_ALL),
 				config) {
 }
-
-void
-Enemy::onThink(float elapsedTime) {
-}
