@@ -109,12 +109,10 @@ World::testCollision(std::shared_ptr<Sprite> spriteA,
 		}
 		axis = thor::unitVector(axis);
 		float centerA = thor::dotProduct(axis, spriteA->getPosition());
-		float radiusA = std::static_pointer_cast<sf::CircleShape>(
-				spriteA->mShape.shape)->getRadius();
+		float radiusA = spriteA->getRadius();
 		float movementA = thor::dotProduct(axis, spriteA->getSpeed() * (elapsed / 1000.0f));
 		float centerB = thor::dotProduct(axis, spriteB->getPosition());
-		float radiusB = std::static_pointer_cast<sf::CircleShape>(
-				spriteB->mShape.shape)->getRadius();
+		float radiusB = spriteB->getRadius();
 		float movementB = thor::dotProduct(axis, spriteB->getSpeed() * (elapsed / 1000.0f));
 
 		// Allow movement if sprites are moving apart.
@@ -132,8 +130,7 @@ World::testCollision(std::shared_ptr<Sprite> spriteA,
 		if (circle->mShape.type != Sprite::Shape::Type::CIRCLE) {
 			std::swap(circle, rect);
 		}
-		float radius =
-				std::static_pointer_cast<sf::CircleShape>(circle->mShape.shape)->getRadius();
+		float radius = circle->getRadius();
 		sf::Vector2f halfsize = rect->getSize() / 2.0f;
 		sf::Vector2f circlePos = circle->getPosition();
 		sf::Vector2f rectPos = rect->getPosition();

@@ -81,6 +81,7 @@ protected:
 	void setSpeed(sf::Vector2f direction, float speed);
 	void setAngle(float angle);
 	void setPosition(const sf::Vector2f& position);
+	float getRadius() const;
 
 // Private types.
 private:

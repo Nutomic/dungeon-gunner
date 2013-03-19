@@ -188,3 +188,16 @@ void
 Sprite::setPosition(const sf::Vector2f& position) {
 	mShape.shape->setPosition(position);
 }
+
+/**
+ * Returns the radius of this sprite. Will fail if this is not a circle.
+ *
+ * @return The radius of this sprite.
+ */
+float
+Sprite::getRadius() const {
+	std::shared_ptr<sf::CircleShape> circleShape =
+			std::dynamic_pointer_cast<sf::CircleShape>(mShape.shape);
+	assert(circleShape);
+	return circleShape->getRadius();
+}
