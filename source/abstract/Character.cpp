@@ -27,11 +27,9 @@ std::vector<Character*> Character::mCharacterInstances = std::vector<Character*>
 /**
  * Saves pointer to this instance in static var for think().
  */
-Character::Character(World& world, Pathfinder& pathfinder,
-		const Data& data, const Yaml& config) :
+Character::Character(World& world, const Data& data, const Yaml& config) :
 		Sprite(data, config),
 		mWorld(world),
-		mPathfinder(pathfinder),
 		mMaxHealth(config.get(KEY_HEALTH, DEFAULT_HEALTH)),
 		mCurrentHealth(mMaxHealth),
 		mMovementSpeed(config.get(KEY_SPEED, DEFAULT_SPEED)),
@@ -129,7 +127,7 @@ Character::releaseTrigger() {
  */
 bool
 Character::setDestination(const sf::Vector2f& destination) {
-	mPath = mPathfinder.getPath(*this, destination);
+	//mPath = mPathfinder.getPath(*this, destination);
 	// Make sure we found a path.
 	if (mPath.empty()) {
 		LOG_I("No path found to destination.");

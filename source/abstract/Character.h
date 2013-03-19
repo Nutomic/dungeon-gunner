@@ -14,14 +14,12 @@
 #include "Sprite.h"
 #include "../World.h"
 #include "../items/Weapon.h"
-#include "../util/Pathfinder.h"
 #include "../util/Yaml.h"
 
 class World;
 class Weapon;
 class Instances;
 class Sprite;
-class Pathfinder;
 class Yaml;
 
 /**
@@ -30,8 +28,7 @@ class Yaml;
 class Character : public Sprite {
 // Public functions.
 public:
-	Character(World& world, Pathfinder& pathfinder,
-			const Data& data, const Yaml& config);
+	Character(World& world, const Data& data, const Yaml& config);
 	virtual ~Character() = 0;
 
 	static void think(int elapsed);
@@ -62,7 +59,6 @@ private:
 	static std::vector<Character*> mCharacterInstances;
 
 	World& mWorld;
-	Pathfinder& mPathfinder;
 
 	const int mMaxHealth;
 	int mCurrentHealth; //< Current health. Between 0 and mMaxHealth.

@@ -18,7 +18,6 @@
 #include "sprites/TileManager.h"
 #include "sprites/Player.h"
 #include "World.h"
-#include "util/Pathfinder.h"
 
 class Player;
 class World;
@@ -57,7 +56,6 @@ private:
 
 	World mWorld;
 	TileManager mTileManager;
-	Pathfinder mPathfinder;
 	std::shared_ptr<Player> mPlayer;
 
 	bool mQuit;

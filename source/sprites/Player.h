@@ -13,12 +13,10 @@
 
 #include "../abstract/Character.h"
 #include "../items/Weapon.h"
-#include "../util/Pathfinder.h"
 #include "../util/Yaml.h"
 
 class Character;
 class Instances;
-class Pathfinder;
 class Weapon;
 class Yaml;
 
@@ -40,8 +38,7 @@ public:
 
 // Public functions.
 public:
-	Player(World& world, Pathfinder& pathfinder,
-			const sf::Vector2f& position, const Yaml& config);
+	Player(World& world, const sf::Vector2f& position, const Yaml& config);
 
 	void setCrosshairPosition(const sf::Vector2f& position);
 	void pullTrigger();
