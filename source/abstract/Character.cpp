@@ -127,14 +127,14 @@ Character::releaseTrigger() {
  */
 bool
 Character::setDestination(const sf::Vector2f& destination) {
-	//mPath = mPathfinder.getPath(*this, destination);
-	// Make sure we found a path.
-	if (mPath.empty()) {
-		LOG_I("No path found to destination.");
-	} else {
-		mStartPathfinding = true;
+	mPath = mWorld.getPath(getPosition(), destination, getRadius());
+	if (!mPath.empty()) {
+		setSpeed(mPath.back() - getPosition(), mMovementSpeed);
 	}
-	return mStartPathfinding;
+	else {
+		LOG_W("No path found to destination.");
+	}
+	return !mPath.empty();
 }
 
 /**
@@ -144,20 +144,12 @@ Character::setDestination(const sf::Vector2f& destination) {
 void
 Character::move() {
 	if (!mPath.empty()) {
-		if (mStartPathfinding) {
-			setSpeed(*mPath.end() - getPosition(), mMovementSpeed);
-		}
-		if (thor::length(*mPath.end() - getPosition()) < POINT_REACHED_DISTANCE) {
-			// Reached a path node.
+		if (thor::length(mPath.back() - getPosition()) < POINT_REACHED_DISTANCE) {
 			mPath.pop_back();
-			if (!mPath.empty()) {
-				// Move to next path node.
-				setSpeed(*mPath.end() - getPosition(), mMovementSpeed);
-			}
-			else {
-				LOG_I("Reached destination.");
-				setSpeed(sf::Vector2f(), 0);
-			}
+
+			(!mPath.empty())
+				? setSpeed(mPath.back() - getPosition(), mMovementSpeed)
+				: setSpeed(sf::Vector2f(), 0);
 		}
 	}
 }
