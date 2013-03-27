@@ -43,9 +43,9 @@ Game::generate() {
 		mTileManager.insertTile(TileManager::TilePosition(x, 0), TileManager::Type::WALL);
 	for (int x = 0; x < 11; x++)
 		mTileManager.insertTile(TileManager::TilePosition(x, 10), TileManager::Type::WALL);
-	for (int y = 1; y < 9; y++)
+	for (int y = 1; y < 10; y++)
 		mTileManager.insertTile(TileManager::TilePosition(0, y), TileManager::Type::WALL);
-	for (int y = 1; y < 9; y++)
+	for (int y = 1; y < 10; y++)
 		mTileManager.insertTile(TileManager::TilePosition(10, y), TileManager::Type::WALL);
 
 	for (int x = 1; x < 10; x++)
@@ -63,6 +63,8 @@ Game::generate() {
 	mPlayer = std::shared_ptr<Player>(new Player(mWorld,
 			sf::Vector2f(200.0f, 100.0f), Yaml("player.yaml")));
 	mWorld.insert(mPlayer);
+
+	mWorld.generateAreas();
 }
 /**
  * Closes window.
