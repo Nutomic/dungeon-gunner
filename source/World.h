@@ -32,7 +32,7 @@ public:
 	void step(int elapsed);
 	void generateAreas();
 	std::vector<sf::Vector2f> getPath(const sf::Vector2f& start,
-			const sf::Vector2f& end, float diameter) const;
+			const sf::Vector2f& end, float radius) const;
 
 // Private types.
 private:

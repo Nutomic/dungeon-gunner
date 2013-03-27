@@ -156,12 +156,12 @@ World::astarArea(Area* start, Area* end) const {
  *
  * @param start Position to start the path from.
  * @param end Position to move to.
- * @param diameter Diameter of the moving object.
+ * @param radius Radius of the moving object.
  * @return Path from end to start (path from start to end in reverse order).
  */
 std::vector<sf::Vector2f>
 World::getPath(const sf::Vector2f& start, const sf::Vector2f& end,
-		float diameter) const {
+		float radius) const {
 	std::vector<Portal*> portals = astarArea(getArea(start), getArea(end));
 	std::vector<sf::Vector2f> path;
 
@@ -176,11 +176,11 @@ World::getPath(const sf::Vector2f& start, const sf::Vector2f& end,
 		if (percentage < 0 || percentage > 1.0f) {
 			if (thor::squaredLength(p->start - path.back()) <
 					thor::squaredLength(p->end - path.back())) {
-				thor::setLength(startToEnd, 0.5f * diameter);
+				thor::setLength(startToEnd, radius);
 				point = p->start + startToEnd;
 			}
 			else {
-				thor::setLength(startToEnd, 0.5f * diameter);
+				thor::setLength(startToEnd, radius);
 				point = p->end - startToEnd;
 			}
 		}
@@ -189,7 +189,7 @@ World::getPath(const sf::Vector2f& start, const sf::Vector2f& end,
 		}
 
 		// Take two points on a line orthogonal to the portal.
-		thor::setLength(startToEnd, diameter / 2.0f);
+		thor::setLength(startToEnd, radius);
 		startToEnd = thor::perpendicularVector(startToEnd);
 		path.push_back(point + startToEnd);
 		path.push_back(point - startToEnd);
