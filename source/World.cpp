@@ -171,19 +171,32 @@ World::getPath(const sf::Vector2f& start, const sf::Vector2f& end,
 		sf::Vector2f startToEnd = p->end - p->start;
 		float percentage = thor::dotProduct(startToEnd, path.back() - p->start) /
 				thor::squaredLength(startToEnd);
+		sf::Vector2f point;
+
 		if (percentage < 0 || percentage > 1.0f) {
-			if (thor::squaredLength(p->start - path.back()) < thor::squaredLength(p->end - path.back())) {
-				thor::setLength(startToEnd, 1.5f * diameter);
-				path.push_back(p->start + startToEnd);
+			if (thor::squaredLength(p->start - path.back()) <
+					thor::squaredLength(p->end - path.back())) {
+				thor::setLength(startToEnd, 0.5f * diameter);
+				point = p->start + startToEnd;
 			}
 			else {
-				thor::setLength(startToEnd, 1.5f * diameter);
-				path.push_back(p->end - startToEnd);
+				thor::setLength(startToEnd, 0.5f * diameter);
+				point = p->end - startToEnd;
 			}
 		}
 		else {
-			sf::Vector2f point = p->start + startToEnd * percentage;
-			path.push_back(point);
+			point = p->start + startToEnd * percentage;
+		}
+
+		// Take two points on a line orthogonal to the portal.
+		thor::setLength(startToEnd, diameter / 2.0f);
+		startToEnd = thor::perpendicularVector(startToEnd);
+		path.push_back(point + startToEnd);
+		path.push_back(point - startToEnd);
+		// Make sure the points are in the right order.
+		if (thor::squaredLength(*(path.end() - 1) - *(path.end() - 3) ) <
+				thor::squaredLength(*(path.end() - 2) - *(path.end() - 3) )) {
+			std::swap(*(path.end() - 1), *(path.end() - 2));
 		}
 	}
 	return path;
