@@ -30,6 +30,9 @@ public:
 	void insert(std::shared_ptr<Sprite> drawable);
 	void remove(std::shared_ptr<Sprite> drawable);
 	void step(int elapsed);
+	void generateAreas();
+	std::vector<sf::Vector2f> getPath(const sf::Vector2f& start,
+			const sf::Vector2f& end, float diameter) const;
 
 // Private types.
 private:
@@ -43,15 +46,42 @@ private:
 		float getLength();
 	};
 
+// Private types.
+private:
+	struct Area;
+	/**
+	 * Edges
+	 *
+	 * Redundant data as portals are saved twice.
+	 */
+	struct Portal {
+		sf::Vector2f start;
+		sf::Vector2f end;
+		Area* area;
+	};
+
+	/**
+	 * Nodes
+	 */
+	struct Area {
+		sf::FloatRect area;
+		sf::Vector2f center;
+		std::vector<Portal> portals;
+	};
+
 // Private functions.
 private:
     void draw(sf::RenderTarget& target, sf::RenderStates states) const;
     bool testCollision(std::shared_ptr<Sprite> spriteA, std::shared_ptr<Sprite> spriteB,
     		int elapsed) const;
+    Area* getArea(const sf::Vector2f& point) const;
+    float heuristic_cost_estimate(Area* start, Area* end) const;
+    std::vector<Portal*> astarArea(Area* start, Area* end) const;
 
 // Private variables.
 private:
 	std::map<Sprite::Category, std::vector<std::shared_ptr<Sprite> > > mDrawables;
+	std::vector<Area> mAreas; //< This has to be a vector as objects are compared by address.
 };
 
 #endif /* DG_WORLD_H_ */

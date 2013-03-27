@@ -9,10 +9,11 @@
 
 #include <algorithm>
 #include <assert.h>
+#include <set>
+#include <unordered_set>
+#include <unordered_map>
 
 #include <Thor/Vectors.hpp>
-
-#include "util/Log.h"
 
 /**
  * Insert a drawable into the group. Drawables should only be handled with shared_ptr.
@@ -39,6 +40,161 @@ World::remove(std::shared_ptr<Sprite> drawable) {
 			   v->second.erase(item);
 		}
 	}
+}
+
+/**
+ * Generate path finding base data.
+ *
+ * Hardcoded as heuristic may be unnecessary with proper map generation.
+ *
+ * @warning Must not be run while getPath() is running (raw pointers).
+ */
+void
+World::generateAreas() {
+	Area a;
+
+	a.area = sf::FloatRect(50, 50, 900, 300);
+	a.center = sf::Vector2f(500, 200);
+	mAreas.push_back(a);
+	a.area = sf::FloatRect(450, 350, 450, 100);
+	a.center = sf::Vector2f(675, 400);
+	mAreas.push_back(a);
+	a.area = sf::FloatRect(50, 450, 900, 500);
+	a.center = sf::Vector2f(500, 700);
+	mAreas.push_back(a);
+
+	Portal p1;
+	Portal p2;
+	std::vector<Portal> vp;
+
+	p1.start = sf::Vector2f(450, 350);
+	p1.end = sf::Vector2f(950, 350);
+	p1.area = &mAreas[1];
+	vp.push_back(p1);
+	mAreas[0].portals = vp;
+
+	vp.clear();
+	p2.start = sf::Vector2f(450, 450);
+	p2.end = sf::Vector2f(950, 450);
+	p2.area = &mAreas[1];
+	vp.push_back(p2);
+	mAreas[2].portals = vp;
+
+	vp.clear();
+	p1.area = &mAreas[0];
+	vp.push_back(p1);
+	p2.area = &mAreas[2];
+	vp.push_back(p2);
+	mAreas[1].portals = vp;
+}
+
+/**
+ * Runs the A* path finding algorithm with areas as nodes and portals as edges.
+ *
+ * @warning Areas and portals must not be changed while this is running.
+ *
+ * @param start The area to start the path finding from. Must not be null.
+ * @param end The goal to reach. May be null.
+ * @return Path in reverse order (start being the last item and end the first).
+ */
+std::vector<World::Portal*>
+World::astarArea(Area* start, Area* end) const {
+	assert(start);
+	if (!end) {
+		return std::vector<World::Portal*>();
+	}
+
+	std::unordered_set<Area*> closedset; // The set of nodes already evaluated.
+	// Set of nodes to be evaluated, with corresponding estimated cost start -> area -> goal
+	std::unordered_map<Area*, float> openset;
+	// The map of navigated nodes, with previous, lowest cost Area/Portal.
+	std::unordered_map<Area*, std::pair<Area*, Portal*>> came_from;
+	std::unordered_map<Area*, float> g_score; // Cost from start along best known path.
+
+	openset[start] = heuristic_cost_estimate(start, end);
+	g_score[start] = 0;
+
+	while (!openset.empty()) {
+		// the node in openset having the lowest f_score value.
+		Area* current = std::min_element(openset.begin(), openset.end())->first;
+		if (current == end) {
+			std::vector<Portal*> path;
+			auto previous = current;
+			while (previous != start) {
+				path.push_back(came_from[previous].second);
+				previous = came_from[previous].first;
+			}
+			return path;
+		}
+
+		openset.erase(current);
+		closedset.insert(current);
+		for (Portal& portal : current->portals) {
+			Area* neighbor = portal.area;
+			// Use edge weight instead of heuristic cost estimate?
+			float tentative_g_score = g_score[current] + heuristic_cost_estimate(current,neighbor);
+			if (closedset.find(neighbor) != closedset.end()) {
+				if (tentative_g_score >= g_score[neighbor]) {
+					continue;
+				}
+			}
+
+			if ((openset.find(neighbor) == openset.end()) || (tentative_g_score < g_score[neighbor])) {
+				came_from[neighbor] = std::make_pair(current, &portal);
+				g_score[neighbor] = tentative_g_score;
+				openset[neighbor] = g_score[neighbor] + heuristic_cost_estimate(neighbor, end);
+			}
+		}
+	}
+	return std::vector<Portal*>();
+}
+
+/**
+ * Returns path in reverse order.
+ *
+ * @warning Areas and portals must not be changed while this running.
+ *
+ * @param start Position to start the path from.
+ * @param end Position to move to.
+ * @param diameter Diameter of the moving object.
+ * @return Path from end to start (path from start to end in reverse order).
+ */
+std::vector<sf::Vector2f>
+World::getPath(const sf::Vector2f& start, const sf::Vector2f& end,
+		float diameter) const {
+	std::vector<Portal*> portals = astarArea(getArea(start), getArea(end));
+	std::vector<sf::Vector2f> path;
+
+	path.push_back(end);
+	for (auto p : portals) {
+		// Find the point on the line of the portal closest to the previous point.
+		sf::Vector2f startToEnd = p->end - p->start;
+		float percentage = thor::dotProduct(startToEnd, path.back() - p->start) /
+				thor::squaredLength(startToEnd);
+		if (percentage < 0 || percentage > 1.0f) {
+			if (thor::squaredLength(p->start - path.back()) < thor::squaredLength(p->end - path.back())) {
+				thor::setLength(startToEnd, 1.5f * diameter);
+				path.push_back(p->start + startToEnd);
+			}
+			else {
+				thor::setLength(startToEnd, 1.5f * diameter);
+				path.push_back(p->end - startToEnd);
+			}
+		}
+		else {
+			sf::Vector2f point = p->start + startToEnd * percentage;
+			path.push_back(point);
+		}
+	}
+	return path;
+}
+
+/**
+ * Returns the linear distance between two areas (using their center).
+ */
+float
+World::heuristic_cost_estimate(Area* start, Area* end) const {
+	return thor::length(end->center - start->center);
 }
 
 /**
@@ -192,6 +348,21 @@ World::testCollision(std::shared_ptr<Sprite> spriteA,
 	}
 	// Rectangles can't move and thus not collide.
 	return false;
+}
+
+/**
+ * Returns the area where point is in.
+ * Just iterates through all areas and tests each.
+ */
+World::Area*
+World::getArea(const sf::Vector2f& point) const {
+	for (auto area = mAreas.begin(); area != mAreas.end(); area++) {
+		if (area->area.contains(point)) {
+			// Make the return value non-const for convenience.
+			return &const_cast<Area&>(*area);
+		}
+	}
+	return nullptr;
 }
 
 /**

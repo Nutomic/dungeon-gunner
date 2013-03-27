@@ -127,7 +127,7 @@ Character::releaseTrigger() {
  */
 bool
 Character::setDestination(const sf::Vector2f& destination) {
-	mPath = mWorld.getPath(getPosition(), destination, getRadius());
+	mPath = mWorld.getPath(getPosition(), destination, 2 * getRadius());
 	if (!mPath.empty()) {
 		setSpeed(mPath.back() - getPosition(), mMovementSpeed);
 	}
