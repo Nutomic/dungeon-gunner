@@ -54,7 +54,6 @@ private:
 	const float mMovementSpeed;
 	std::unique_ptr<Weapon> mWeapon;
 	std::vector<sf::Vector2f> mPath; //< Contains nodes to reach a set destination.
-	bool mStartPathfinding; //< True if a movement destination was just set.
 };
 
 #endif /* DG_ACTOR_H_ */

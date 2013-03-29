@@ -32,8 +32,7 @@ Character::Character(World& world, const Data& data, const Yaml& config) :
 		mMaxHealth(config.get(KEY_HEALTH, DEFAULT_HEALTH)),
 		mCurrentHealth(mMaxHealth),
 		mMovementSpeed(config.get(KEY_SPEED, DEFAULT_SPEED)),
-		mWeapon(new Weapon(world, *this, Yaml(config.get(KEY_WEAPON, DEFAULT_WEAPON)))),
-		mStartPathfinding(false) {
+		mWeapon(new Weapon(world, *this, Yaml(config.get(KEY_WEAPON, DEFAULT_WEAPON)))) {
 }
 
 Character::~Character() {
