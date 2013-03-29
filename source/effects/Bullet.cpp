@@ -10,8 +10,6 @@
 #include <Thor/Vectors.hpp>
 
 #include "../abstract/Character.h"
-#include "../util/Loader.h"
-#include "../util/ResourceManager.h"
 #include "../util/Yaml.h"
 
 const std::string Bullet::KEY_DAMAGE = "damage";

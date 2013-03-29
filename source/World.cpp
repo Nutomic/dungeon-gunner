@@ -7,9 +7,6 @@
 
 #include "World.h"
 
-#include <algorithm>
-#include <assert.h>
-#include <set>
 #include <unordered_set>
 #include <unordered_map>
 

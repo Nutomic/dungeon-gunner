@@ -7,14 +7,7 @@
 
 #include "TileManager.h"
 
-#include <assert.h>
-#include <string>
-
-#include <Thor/Resources.hpp>
-
-#include "../abstract/Sprite.h"
 #include "../util/Loader.h"
-#include "../util/ResourceManager.h"
 #include "../util/Yaml.h"
 #include "../World.h"
 

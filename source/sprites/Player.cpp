@@ -7,11 +7,7 @@
 
 #include "Player.h"
 
-#include <string>
-
 #include <Thor/Vectors.hpp>
-
-#include "../items/Weapon.h"
 
 /**
  * Initializes Sprite.

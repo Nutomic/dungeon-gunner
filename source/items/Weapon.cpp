@@ -7,8 +7,6 @@
 
 #include "Weapon.h"
 
-#include <algorithm>
-
 #include <thor/Vectors.hpp>
 
 #include "../World.h"

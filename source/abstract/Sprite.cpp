@@ -7,8 +7,6 @@
 
 #include "Sprite.h"
 
-#include <math.h>
-
 #include <Thor/Vectors.hpp>
 
 #include "../util/Loader.h"

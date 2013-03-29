@@ -7,9 +7,6 @@
 
 #include "Character.h"
 
-#include <algorithm>
-#include <assert.h>
-
 #include <Thor/Vectors.hpp>
 
 #include "../items/Weapon.h"
