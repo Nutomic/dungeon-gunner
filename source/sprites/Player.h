@@ -8,13 +8,10 @@
 #ifndef DG_PLAYER_H_
 #define DG_PLAYER_H_
 
-#include <SFML/System.hpp>
-#include <SFML/Graphics.hpp>
-
 #include "../abstract/Character.h"
 
-class Character;
 class Yaml;
+class World;
 
 /**
  * Player object.

@@ -9,9 +9,7 @@
 #define DG_PARTICLE_H_
 
 #include "../abstract/Sprite.h"
-#include "../util/Yaml.h"
 
-class Sprite;
 class Yaml;
 
 /**

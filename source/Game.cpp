@@ -13,6 +13,7 @@
 
 #include "abstract/Character.h"
 #include "sprites/Enemy.h"
+#include "sprites/Player.h"
 #include "util/Loader.h"
 #include "util/ResourceManager.h"
 #include "util/Yaml.h"

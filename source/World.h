@@ -8,8 +8,8 @@
 #ifndef DG_WORLD_H_
 #define DG_WORLD_H_
 
-#include "abstract/Sprite.h"
 #include "abstract/Character.h"
+#include "abstract/Sprite.h"
 
 class Character;
 class Sprite;

@@ -8,8 +8,6 @@
 #ifndef DG_SINGLETON_H_
 #define DG_SINGLETON_H_
 
-#include <SFML/System.hpp>
-
 /**
  * Template class for inheriting singleton behaviour.
  *

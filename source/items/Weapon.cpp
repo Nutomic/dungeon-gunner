@@ -13,6 +13,7 @@
 
 #include "../World.h"
 #include "../effects/Bullet.h"
+#include "../util/Yaml.h"
 
 const std::string Weapon::KEY_BULLET = "bullet";
 const std::string Weapon::DEFAULT_BULLET = "bullet.yaml";
@@ -78,11 +79,11 @@ Weapon::onThink(int elapsed) {
 	}
 }
 
-std::shared_ptr<Particle>
+std::shared_ptr<Sprite>
 Weapon::createParticle() {
 	// Minus to account for positive y-axis going downwards in SFML.
 	sf::Vector2f offset(- mOffset);
 	thor::rotate(offset, mHolder.getAngle());
-	return std::shared_ptr<Particle>(new Bullet(mHolder.getPosition() + offset,
+	return std::shared_ptr<Sprite>(new Bullet(mHolder.getPosition() + offset,
 			mHolder, mHolder.getAngle(), Yaml(mBullet)));
 }

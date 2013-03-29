@@ -8,15 +8,7 @@
 #ifndef DG_GAME_H_
 #define DG_GAME_H_
 
-#include <string>
-
-#include <SFML/System.hpp>
-#include <SFML/Graphics.hpp>
-
-#include <Thor/Resources.hpp>
-
 #include "sprites/TileManager.h"
-#include "sprites/Player.h"
 #include "World.h"
 
 class TileManager;

@@ -8,27 +8,27 @@
 #ifndef DG_EMITTER_H_
 #define DG_EMITTER_H_
 
-#include "../World.h"
-#include "Particle.h"
+#include <memory>
 
 class World;
 class Particle;
+class Sprite;
 
 class Emitter {
 // Public functions.
 public:
-	Emitter(World& collection);
+	Emitter(World& world);
 	virtual ~Emitter();
 
 // Protected functions.
 protected:
 	void emit();
 	/// Creates a particle. Allows to use a user-defined particle class and custom settings.
-	virtual std::shared_ptr<Particle> createParticle() = 0;
+	virtual std::shared_ptr<Sprite> createParticle() = 0;
 
 // Private variables.
 private:
-	World& mCollection;
+	World& mWorld;
 };
 
 #endif /* DG_EMITTER_H_ */

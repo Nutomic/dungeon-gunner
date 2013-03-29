@@ -16,6 +16,7 @@
 #include "../util/Loader.h"
 #include "../util/ResourceManager.h"
 #include "../util/Yaml.h"
+#include "../World.h"
 
 const sf::Vector2i TileManager::TILE_SIZE = sf::Vector2i(100, 100);
 

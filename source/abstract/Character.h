@@ -8,14 +8,10 @@
 #ifndef DG_ACTOR_H_
 #define DG_ACTOR_H_
 
-#include <string>
-#include <vector>
-
 #include "Sprite.h"
 
 class World;
 class Weapon;
-class Sprite;
 class Yaml;
 
 /**

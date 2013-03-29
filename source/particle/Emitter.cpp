@@ -7,8 +7,10 @@
 
 #include "Emitter.h"
 
-Emitter::Emitter(World& collection) :
-		mCollection(collection) {
+#include "../World.h"
+
+Emitter::Emitter(World& world) :
+		mWorld(world) {
 }
 
 Emitter::~Emitter() {
@@ -19,5 +21,5 @@ Emitter::~Emitter() {
  */
 void
 Emitter::emit() {
-	mCollection.insert(createParticle());
+	mWorld.insert(createParticle());
 }

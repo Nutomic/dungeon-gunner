@@ -16,6 +16,7 @@
 #include "../sprites/Corpse.h"
 #include "../util/Log.h"
 #include "../util/Yaml.h"
+#include "../World.h"
 
 const std::string Character::KEY_HEALTH = "health";
 const int Character::DEFAULT_HEALTH = 100;

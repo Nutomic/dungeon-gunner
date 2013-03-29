@@ -8,18 +8,9 @@
 #ifndef DG_LOADER_H_
 #define DG_LOADER_H_
 
-#include <string>
-#include <map>
-#include <memory>
-
-#include <SFML/System.hpp>
-
 #include <Thor/Resources.hpp>
 
 #include "../abstract/Singleton.h"
-
-template <class T>
-class Singleton;
 
 /**
  * This class allows to set default resource folders and subfolders, which means that these

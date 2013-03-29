@@ -8,12 +8,8 @@
 #ifndef DG_BULLET_H_
 #define DG_BULLET_H_
 
-#include <string>
-
 #include "../particle/Particle.h"
-#include "../util/Yaml.h"
 
-class Particle;
 class Yaml;
 
 /**

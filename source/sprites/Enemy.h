@@ -10,7 +10,6 @@
 
 #include "../abstract/Character.h"
 
-class Character;
 class World;
 class Yaml;
 

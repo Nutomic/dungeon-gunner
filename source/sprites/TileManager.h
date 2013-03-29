@@ -8,15 +8,9 @@
 #ifndef DG_TILEMANAGER_H_
 #define DG_TILEMANAGER_H_
 
-#include <map>
-#include <vector>
-
-#include "../World.h"
 #include "../abstract/Sprite.h"
-#include <string>
 
 class World;
-class Sprite;
 
 class TileManager : public sf::Drawable {
 // Public types.

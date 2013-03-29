@@ -8,7 +8,9 @@
 #ifndef DG_WEAPON_H_
 #define DG_WEAPON_H_
 
-#include <Thor/Particles.hpp>
+#include <string>
+
+#include <SFML/System.hpp>
 
 #include "../particle/Emitter.h"
 
@@ -33,7 +35,7 @@ public:
 
 // Protected functions.
 protected:
-	std::shared_ptr<Particle> createParticle();
+	std::shared_ptr<Sprite> createParticle();
 
 // Private variables.
 private:

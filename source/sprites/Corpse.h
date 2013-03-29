@@ -10,7 +10,6 @@
 
 #include "../abstract/Sprite.h"
 
-class Sprite;
 class Yaml;
 
 class Corpse : public Sprite {

@@ -12,6 +12,7 @@
 #include "../abstract/Character.h"
 #include "../util/Loader.h"
 #include "../util/ResourceManager.h"
+#include "../util/Yaml.h"
 
 const std::string Bullet::KEY_DAMAGE = "damage";
 const int Bullet::DEFAULT_DAMAGE = 10;
