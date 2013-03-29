@@ -34,6 +34,7 @@ protected:
 	void releaseTrigger();
 	bool setDestination(const sf::Vector2f& destination);
 	void move();
+	std::vector<std::shared_ptr<Character> > getCharacters(float maxDistance) const;
 
 // Private variables.
 private:

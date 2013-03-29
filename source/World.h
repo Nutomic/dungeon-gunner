@@ -32,6 +32,8 @@ public:
 	void generateAreas();
 	std::vector<sf::Vector2f> getPath(const sf::Vector2f& start,
 			const sf::Vector2f& end, float radius) const;
+	std::vector<std::shared_ptr<Character> >
+			getCharacters(const sf::Vector2f& position, float maxDistance) const;
 
 // Private types.
 private:

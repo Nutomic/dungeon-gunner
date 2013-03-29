@@ -132,3 +132,11 @@ Character::move() {
 		}
 	}
 }
+
+/**
+ * Calls World::getCharacters with current position.
+ */
+std::vector<std::shared_ptr<Character> >
+Character::getCharacters(float maxDistance) const {
+	return mWorld.getCharacters(getPosition(), maxDistance);
+}

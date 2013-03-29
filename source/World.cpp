@@ -227,6 +227,20 @@ World::getPath(const sf::Vector2f& start, const sf::Vector2f& end,
 }
 
 /**
+ * Returns all characters that are within maxDistance from position.
+ */
+std::vector<std::shared_ptr<Character> >
+		World::getCharacters(const sf::Vector2f& position, float maxDistance) const {
+	std::vector<std::shared_ptr<Character> > visible;
+	for (auto it : mCharacters) {
+		if (thor::squaredLength(position - it->getPosition()) <=
+				maxDistance * maxDistance) {
+			visible.push_back(it);
+		}
+	}
+	return visible;
+}
+/**
  * Returns the linear distance between two areas (using their center).
  */
 float
