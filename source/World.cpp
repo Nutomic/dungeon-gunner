@@ -43,6 +43,33 @@ World::remove(std::shared_ptr<Sprite> drawable) {
 }
 
 /**
+ * Inserts a character into the world. A character can only be inserted once.
+ * Also calls insert(character);
+ */
+void
+World::insertCharacter(std::shared_ptr<Character> character) {
+#ifndef NDEBUG
+	auto item = std::find(mCharacters.begin(), mCharacters.end(), character);
+	assert(item == mCharacters.end());
+#endif
+		mCharacters.push_back(character);
+		insert(character);
+}
+
+/**
+ * Removes a character from the world.
+ * Also calls remove(character);
+ */
+void
+World::removeCharacter(std::shared_ptr<Character> character) {
+	auto item = std::find(mCharacters.begin(), mCharacters.end(), character);
+	if (item != mCharacters.end()) {
+		   mCharacters.erase(item);
+	}
+	remove(character);
+}
+
+/**
  * Generate path finding base data.
  *
  * Hardcoded as heuristic may be unnecessary with proper map generation.
@@ -252,6 +279,18 @@ World::step(int elapsed) {
 				it++;
 			}
 		}
+	}
+}
+
+/**
+ * Calls Character::onThink for each character.
+ *
+ * @param elapsed Time since last call.
+ */
+void
+World::think(int elapsed) {
+	for (auto it : mCharacters) {
+		it->onThink(elapsed);
 	}
 }
 

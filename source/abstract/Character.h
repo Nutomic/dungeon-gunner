@@ -12,13 +12,9 @@
 #include <vector>
 
 #include "Sprite.h"
-#include "../World.h"
-#include "../items/Weapon.h"
-#include "../util/Yaml.h"
 
 class World;
 class Weapon;
-class Instances;
 class Sprite;
 class Yaml;
 
@@ -30,8 +26,6 @@ class Character : public Sprite {
 public:
 	Character(World& world, const Data& data, const Yaml& config);
 	virtual ~Character() = 0;
-
-	static void think(int elapsed);
 
 	void onDamage(int damage);
 
@@ -56,14 +50,13 @@ private:
 	/// The distance to a point where it is considered reached (in pixels).
 	static const float POINT_REACHED_DISTANCE;
 
-	static std::vector<Character*> mCharacterInstances;
-
+	friend class World;
 	World& mWorld;
 
 	const int mMaxHealth;
 	int mCurrentHealth; //< Current health. Between 0 and mMaxHealth.
 	const float mMovementSpeed;
-	Weapon mWeapon;
+	std::unique_ptr<Weapon> mWeapon;
 	std::vector<sf::Vector2f> mPath; //< Contains nodes to reach a set destination.
 	bool mStartPathfinding; //< True if a movement destination was just set.
 };

@@ -14,6 +14,7 @@
 #include "../util/Loader.h"
 #include "../util/Log.h"
 #include "../util/ResourceManager.h"
+#include "../util/Yaml.h"
 
 const std::string Sprite::KEY_SIZE = "size";
 const std::string Sprite::KEY_RADIUS = "radius";

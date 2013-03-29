@@ -10,16 +10,12 @@
 
 #include <Thor/Particles.hpp>
 
-#include "../abstract/Sprite.h"
 #include "../particle/Emitter.h"
-#include "../util/Timer.h"
-#include "../util/Yaml.h"
 
-class Emitter;
-class Instances;
 class Sprite;
-class Timer;
 class Yaml;
+class World;
+class Particle;
 
 /**
  * Loading mechanism:
@@ -48,7 +44,6 @@ private:
 	static const std::string KEY_AUTOMATIC;
 	static const bool DEFAULT_AUTOMATIC;
 
-	World& mWorld;
 	Sprite& mHolder;
 
 	sf::Vector2f mOffset; //< Offset to the point where bullets are inserted (from holder center).

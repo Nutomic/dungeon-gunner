@@ -12,12 +12,8 @@
 #include <SFML/Graphics.hpp>
 
 #include "../abstract/Character.h"
-#include "../items/Weapon.h"
-#include "../util/Yaml.h"
 
 class Character;
-class Instances;
-class Weapon;
 class Yaml;
 
 /**

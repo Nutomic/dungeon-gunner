@@ -15,6 +15,7 @@
 #include "sprites/Enemy.h"
 #include "util/Loader.h"
 #include "util/ResourceManager.h"
+#include "util/Yaml.h"
 
 /// Goal amount of frames per second.
 const int Game::FPS_GOAL = 60;
@@ -57,12 +58,12 @@ Game::generate() {
 		mTileManager.insertTile(TileManager::TilePosition(x, 4), TileManager::Type::WALL);
 	}
 
-	mWorld.insert(std::shared_ptr<Sprite>(new Enemy(mWorld,
+	mWorld.insertCharacter(std::shared_ptr<Character>(new Enemy(mWorld,
 			sf::Vector2f(400.0f, 200.0f), Yaml("enemy.yaml"))));
 
 	mPlayer = std::shared_ptr<Player>(new Player(mWorld,
 			sf::Vector2f(200.0f, 100.0f), Yaml("player.yaml")));
-	mWorld.insert(mPlayer);
+	mWorld.insertCharacter(mPlayer);
 
 	mWorld.generateAreas();
 }
@@ -87,7 +88,7 @@ Game::loop() {
 			elapsed = 0;
 		}
 
-		Character::think(elapsed);
+		mWorld.think(elapsed);
 
 		mWorld.step(elapsed);
 

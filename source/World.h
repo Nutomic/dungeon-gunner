@@ -8,14 +8,10 @@
 #ifndef DG_WORLD_H_
 #define DG_WORLD_H_
 
-#include <map>
-#include <vector>
-
-#include <SFML/Graphics.hpp>
-
 #include "abstract/Sprite.h"
+#include "abstract/Character.h"
 
-class Sprite;
+class Character;
 class Sprite;
 
 /**
@@ -29,7 +25,10 @@ class World : public sf::Drawable {
 public:
 	void insert(std::shared_ptr<Sprite> drawable);
 	void remove(std::shared_ptr<Sprite> drawable);
+	void insertCharacter(std::shared_ptr<Character> character);
+	void removeCharacter(std::shared_ptr<Character> character);
 	void step(int elapsed);
+	void think(int elapsed);
 	void generateAreas();
 	std::vector<sf::Vector2f> getPath(const sf::Vector2f& start,
 			const sf::Vector2f& end, float radius) const;
@@ -82,6 +81,7 @@ private:
 private:
 	std::map<Sprite::Category, std::vector<std::shared_ptr<Sprite> > > mDrawables;
 	std::vector<Area> mAreas; //< This has to be a vector as objects are compared by address.
+	std::vector<std::shared_ptr<Character> > mCharacters;
 };
 
 #endif /* DG_WORLD_H_ */

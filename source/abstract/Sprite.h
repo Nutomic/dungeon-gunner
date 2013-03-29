@@ -8,10 +8,9 @@
 #ifndef DG_SPRITE_H_
 #define DG_SPRITE_H_
 
-#include <SFML/System.hpp>
-#include <SFML/Graphics.hpp>
+#include <memory>
 
-#include "../util/Yaml.h"
+#include <SFML/Graphics.hpp>
 
 class Yaml;
 

@@ -9,7 +9,6 @@
 #define DG_CORPSE_H_
 
 #include "../abstract/Sprite.h"
-#include "../util/Yaml.h"
 
 class Sprite;
 class Yaml;

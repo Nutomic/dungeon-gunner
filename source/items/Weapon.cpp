@@ -23,7 +23,6 @@ const bool Weapon::DEFAULT_AUTOMATIC = false;
 
 Weapon::Weapon(World& world, Sprite& holder, const Yaml& config) :
 		Emitter(world),
-		mWorld(world),
 		mHolder(holder),
 		mBullet(config.get(KEY_BULLET, DEFAULT_BULLET)),
 		mLastShotWaitInterval(0),

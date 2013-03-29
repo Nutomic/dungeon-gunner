@@ -19,6 +19,7 @@
 #include "sprites/Player.h"
 #include "World.h"
 
+class TileManager;
 class Player;
 class World;
 

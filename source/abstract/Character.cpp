@@ -12,8 +12,10 @@
 
 #include <Thor/Vectors.hpp>
 
+#include "../items/Weapon.h"
 #include "../sprites/Corpse.h"
 #include "../util/Log.h"
+#include "../util/Yaml.h"
 
 const std::string Character::KEY_HEALTH = "health";
 const int Character::DEFAULT_HEALTH = 100;
@@ -22,7 +24,6 @@ const float Character::DEFAULT_SPEED = 100;
 const float Character::POINT_REACHED_DISTANCE = 1.0f;
 const std::string Character::KEY_WEAPON = "weapon";
 const std::string Character::DEFAULT_WEAPON = "weapon.yaml";
-std::vector<Character*> Character::mCharacterInstances = std::vector<Character*>();
 
 /**
  * Saves pointer to this instance in static var for think().
@@ -33,30 +34,11 @@ Character::Character(World& world, const Data& data, const Yaml& config) :
 		mMaxHealth(config.get(KEY_HEALTH, DEFAULT_HEALTH)),
 		mCurrentHealth(mMaxHealth),
 		mMovementSpeed(config.get(KEY_SPEED, DEFAULT_SPEED)),
-		mWeapon(world, *this, Yaml(config.get(KEY_WEAPON, DEFAULT_WEAPON))),
+		mWeapon(new Weapon(world, *this, Yaml(config.get(KEY_WEAPON, DEFAULT_WEAPON)))),
 		mStartPathfinding(false) {
-		mCharacterInstances.push_back(this);
 }
 
-/**
- * Deletes pointer from static variable mCharacterInstances.
- */
 Character::~Character() {
-	auto it = std::find(mCharacterInstances.begin(), mCharacterInstances.end(), this);
-	assert(it != mCharacterInstances.end());
-	mCharacterInstances.erase(it);
-}
-
-/**
- * Calls onThink on all Actor instances.
- *
- * @param elapsed Amount of time to simulate.
- */
-void
-Character::think(int elapsed) {
-	for (auto i : mCharacterInstances) {
-		i->onThink(elapsed);
-	}
 }
 
 /**
@@ -83,7 +65,7 @@ Character::onDamage(int damage) {
  */
 void
 Character::onThink(int elapsed) {
-	mWeapon.onThink(elapsed);
+	mWeapon->onThink(elapsed);
 }
 
 /**
@@ -108,7 +90,7 @@ Character::getMovementSpeed() const {
  */
 void
 Character::pullTrigger() {
-	mWeapon.pullTrigger();
+	mWeapon->pullTrigger();
 }
 
 /**
@@ -116,7 +98,7 @@ Character::pullTrigger() {
  */
 void
 Character::releaseTrigger() {
-	mWeapon.releaseTrigger();
+	mWeapon->releaseTrigger();
 }
 
 /**
