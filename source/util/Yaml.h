@@ -15,6 +15,8 @@
 
 #include <SFML/System.hpp>
 
+#include "Log.h"
+
 /**
  * Interface to a YAML file.
  */
@@ -42,6 +44,7 @@ private:
 
 /**
  * Stream output operators to specialize Yaml::get for other types.
+ * Error handling is done in Yaml::get.
  */
 namespace {
 	void operator>>(const YAML::Node& node, sf::Vector2i& vector) {
@@ -56,7 +59,7 @@ namespace {
 };
 
 /**
- * Gets a value of a specified type by key. Throws exception if key not found.
+ * Gets a value of a specified type by key. Returns default value on error.
  *
  * @param key The string by which to select the return value.
  * @tparam T The type of the return value.
@@ -64,12 +67,14 @@ namespace {
  */
 template <typename T>
 T Yaml::get(const std::string& key, const T& defaultValue) const {
-	if (const YAML::Node* node = mNode.FindValue(key)) {
+	try {
+		const YAML::Node* node = mNode.FindValue(key);
 		T value;
 		*node >> value;
 		return value;
 	}
-	else {
+	catch (YAML::InvalidScalar&) {
+		LOG_W("Failed to get key " << key << " from " << mFolder << mFilename);
 		return defaultValue;
 	}
 };

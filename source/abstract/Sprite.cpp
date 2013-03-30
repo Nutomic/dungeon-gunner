@@ -29,11 +29,22 @@ Sprite::Sprite(const Data& data, const Yaml& config) :
 		mMask(data.mask),
 		mDelete(false) {
 	std::string texture = config.get<std::string>(KEY_TEXTURE, "");
-	if (texture == "") {
-		LOG_E("Failed to read texture from YAML file " << config.getFilename());
+	if (texture != "") {
+		try {
+			mTexture = ResourceManager::i().acquire(Loader::i()
+					.fromFile<sf::Texture>(texture));
+			mShape.shape->setTexture(&*mTexture, false);
+		}
+		catch (thor::ResourceLoadingException&) {
+			LOG_W("Failed to load texture " << texture << ", coloring red.");
+			mShape.shape->setFillColor(sf::Color(255, 0, 0));
+		}
 	}
-	mTexture = ResourceManager::i().acquire(Loader::i()
-			.fromFile<sf::Texture>(texture));
+	else {
+		LOG_W("Failed to read texture file name from YAML file " <<
+				config.getFilename() << ", coloring red.");
+		mShape.shape->setFillColor(sf::Color(255, 0, 0));
+	}
 
 	float radius = config.get(KEY_RADIUS, 0.0f);
 	sf::Vector2f size = config.get(KEY_SIZE, sf::Vector2f());
@@ -41,8 +52,13 @@ Sprite::Sprite(const Data& data, const Yaml& config) :
 		mShape.type = Shape::Type::CIRCLE;
 		mShape.shape = std::unique_ptr<sf::Shape>(new sf::CircleShape(radius));
 		mShape.shape->setOrigin(radius, radius);
-		mShape.shape->setTextureRect(sf::IntRect(sf::Vector2i(0, 0), sf::Vector2i(radius * 2, radius * 2)));
-
+		mShape.shape->setTextureRect(sf::IntRect(sf::Vector2i(0, 0),
+				sf::Vector2i(radius * 2, radius * 2)));
+	}
+	else if (size == sf::Vector2f()) {
+		LOG_E("Failed to read size or radius from " << config.getFilename() <<
+				", using texture size.");
+		size = sf::Vector2f(mTexture->getSize());
 	}
 	else if (size != sf::Vector2f()) {
 		mShape.type = Shape::Type::RECTANGLE;
@@ -50,11 +66,6 @@ Sprite::Sprite(const Data& data, const Yaml& config) :
 		mShape.shape->setOrigin(size / 2.0f);
 		mShape.shape->setTextureRect(sf::IntRect(sf::Vector2i(0, 0), sf::Vector2i(size)));
 	}
-	else {
-		LOG_E("Could not read size or radius from " << config.getFilename());
-	}
-
-	mShape.shape->setTexture(&*mTexture, false);
 
 	setPosition(data.position);
 	setDirection(data.direction);

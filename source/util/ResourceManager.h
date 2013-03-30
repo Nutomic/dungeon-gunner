@@ -11,13 +11,18 @@
 #include "../abstract/Singleton.h"
 
 /**
- * Loads and manages all resources by providing Singleton access to Thor ResourceManager.
+ * Loads and manages all resources by providing Singleton access to
+ * Thor ResourceManager.
  */
-class ResourceManager : public thor::MultiResourceCache, public Singleton<ResourceManager> {
+class ResourceManager : public thor::MultiResourceCache,
+		public Singleton<ResourceManager> {
 // Private functions.
 private:
 	friend class Singleton<ResourceManager>;
-	ResourceManager() = default;
+	ResourceManager() {
+		setLoadingFailureStrategy(thor::Resources::ThrowException);
+		setReleaseStrategy(thor::Resources::AutoRelease);
+	};
 };
 
 #endif /* DG_RESOURCEMANAGER_H_ */
