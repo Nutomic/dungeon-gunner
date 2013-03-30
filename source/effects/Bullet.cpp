@@ -26,7 +26,7 @@ const float Bullet::DEFAULT_SPEED = 500;
  */
 Bullet::Bullet(const sf::Vector2f& position, Sprite& shooter,
 		sf::Vector2f direction, const Yaml& config) :
-		Particle(config, Data(position, sf::Vector2f(0, 0), CATEGORY_PARTICLE,
+		Particle(config, Data(position, CATEGORY_PARTICLE,
 				~CATEGORY_PARTICLE)),
 		mShooter(shooter),
 		mDamage(config.get(KEY_DAMAGE, DEFAULT_DAMAGE)),

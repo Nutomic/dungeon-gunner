@@ -31,7 +31,7 @@ TileManager::TileManager(World& world) :
  */
 TileManager::Tile::Tile(Type type, const TilePosition& position) :
 		Sprite(Data(sf::Vector2f(position.x * TILE_SIZE.x, position.y * TILE_SIZE.y),
-				sf::Vector2f(0, 0), CATEGORY_WORLD, (type == Type::FLOOR) ? MASK_NONE : MASK_ALL),
+				CATEGORY_WORLD, (type == Type::FLOOR) ? MASK_NONE : MASK_ALL),
 				Yaml(getConfig(type))),
 		mType(type) {
 }

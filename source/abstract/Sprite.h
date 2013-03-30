@@ -32,12 +32,14 @@ public:
 	};
 
 	/**
-	 * Container that carries all data required to construct an object of this class.
+	 * Container that carries all data required to construct an object of
+	 * this class.
 	 */
 	class Data {
 	public:
-		Data(const sf::Vector2f& position, const sf::Vector2f& direction,
-				Category category, unsigned short mask);
+		Data(const sf::Vector2f& position,
+				Category category, unsigned short mask,
+				const sf::Vector2f& direction = sf::Vector2f(0, 0));
 		const sf::Vector2f& position;
 		const sf::Vector2f& direction;
 		Category category;

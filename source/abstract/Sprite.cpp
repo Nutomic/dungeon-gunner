@@ -69,8 +69,8 @@ Sprite::~Sprite() {
 /**
  * Initializes container.
  */
-Sprite::Data::Data(const sf::Vector2f& position, const sf::Vector2f& direction,
-		Category category, unsigned short mask) :
+Sprite::Data::Data(const sf::Vector2f& position, Category category,
+		unsigned short mask, const sf::Vector2f& direction) :
 		position(position),
 		direction(direction),
 		category(category),
