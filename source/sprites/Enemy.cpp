@@ -7,7 +7,8 @@
 
 #include "Enemy.h"
 
-Enemy::Enemy(World& collection, const sf::Vector2f& position, const Yaml& config) :
-		Character(collection, Data(position, 0, CATEGORY_ACTOR, MASK_ALL),
-				config) {
+Enemy::Enemy(World& world, const sf::Vector2f& position,
+		const Yaml& config) :
+		Character(world, Data(position, sf::Vector2f(0, 0),
+				CATEGORY_ACTOR, MASK_ALL), config) {
 }

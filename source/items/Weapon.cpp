@@ -81,7 +81,7 @@ std::shared_ptr<Sprite>
 Weapon::createParticle() {
 	// Minus to account for positive y-axis going downwards in SFML.
 	sf::Vector2f offset(- mOffset);
-	thor::rotate(offset, mHolder.getAngle());
+	thor::rotate(offset, thor::polarAngle(mHolder.getDirection()));
 	return std::shared_ptr<Sprite>(new Bullet(mHolder.getPosition() + offset,
-			mHolder, mHolder.getAngle(), Yaml(mBullet)));
+			mHolder, mHolder.getDirection(), Yaml(mBullet)));
 }

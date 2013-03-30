@@ -24,16 +24,16 @@ const float Bullet::DEFAULT_SPEED = 500;
  * @param world Box2d world.
  * @param texture Texture to display for bullet.
  */
-Bullet::Bullet(const sf::Vector2f& position, Sprite& shooter, float direction,
-	const Yaml& config) :
-		Particle(config, Data(position, 0, CATEGORY_PARTICLE, ~CATEGORY_PARTICLE)),
+Bullet::Bullet(const sf::Vector2f& position, Sprite& shooter,
+		sf::Vector2f direction, const Yaml& config) :
+		Particle(config, Data(position, sf::Vector2f(0, 0), CATEGORY_PARTICLE,
+				~CATEGORY_PARTICLE)),
 		mShooter(shooter),
 		mDamage(config.get(KEY_DAMAGE, DEFAULT_DAMAGE)),
 		mSpeed(config.get(KEY_SPEED, DEFAULT_SPEED)) {
-	sf::Vector2f dir(1.0f, 0);
-	thor::setPolarAngle(dir, direction - 90);
-	setSpeed(dir, mSpeed);
-	setAngle(direction);
+	thor::rotate(direction, - 90.0f);
+	setSpeed(direction, mSpeed);
+	setDirection(direction);
 }
 
 /**

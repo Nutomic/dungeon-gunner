@@ -57,7 +57,7 @@ Sprite::Sprite(const Data& data, const Yaml& config) :
 	mShape.shape->setTexture(&*mTexture, false);
 
 	setPosition(data.position);
-	setAngle(data.angle);
+	setDirection(data.direction);
 }
 
 /**
@@ -69,10 +69,10 @@ Sprite::~Sprite() {
 /**
  * Initializes container.
  */
-Sprite::Data::Data(const sf::Vector2f& position, float angle,
+Sprite::Data::Data(const sf::Vector2f& position, const sf::Vector2f& direction,
 		Category category, unsigned short mask) :
 		position(position),
-		angle(angle),
+		direction(direction),
 		category(category),
 		mask(mask) {
 }
@@ -96,9 +96,9 @@ Sprite::getSpeed() const {
 /**
  * Returns the angle of the sprite.
  */
-float
-Sprite::getAngle() const {
-	return mShape.shape->getRotation();
+sf::Vector2f
+Sprite::getDirection() const {
+	return thor::rotatedVector(sf::Vector2f(1, 0), mShape.shape->getRotation());
 }
 
 /**
@@ -172,12 +172,11 @@ Sprite::setSpeed(sf::Vector2f direction, float speed) {
 	mSpeed = direction;
 }
 
-/**
- * Sets the angle of the Sprite.
- */
 void
-Sprite::setAngle(float angle) {
-	mShape.shape->setRotation(angle);
+Sprite::setDirection(const sf::Vector2f& direction) {
+	if (direction != sf::Vector2f()) {
+		mShape.shape->setRotation(thor::polarAngle(direction) + 90);
+	}
 }
 
 /**

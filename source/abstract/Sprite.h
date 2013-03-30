@@ -36,10 +36,10 @@ public:
 	 */
 	class Data {
 	public:
-		Data(const sf::Vector2f& position, float angle,	Category category,
-				unsigned short mask);
+		Data(const sf::Vector2f& position, const sf::Vector2f& direction,
+				Category category, unsigned short mask);
 		const sf::Vector2f& position;
-		float angle;
+		const sf::Vector2f& direction;
 		Category category;
 		unsigned short mask;
 	};
@@ -59,7 +59,7 @@ public:
 
 	sf::Vector2f getPosition() const;
 	sf::Vector2f getSpeed() const;
-	float getAngle() const;
+	sf::Vector2f getDirection() const;
 	bool getDelete() const;
 	Category getCategory() const;
 	sf::Vector2f getSize() const;
@@ -78,7 +78,7 @@ public:
 protected:
 	void setDelete(bool value);
 	void setSpeed(sf::Vector2f direction, float speed);
-	void setAngle(float angle);
+	void setDirection(const sf::Vector2f& direction);
 	void setPosition(const sf::Vector2f& position);
 	float getRadius() const;
 
