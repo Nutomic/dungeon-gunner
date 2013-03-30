@@ -36,7 +36,6 @@ public:
 	void setCrosshairPosition(const sf::Vector2f& position);
 	void pullTrigger();
 	void releaseTrigger();
-	void move(const sf::Vector2f& destination);
 	void setDirection(Direction direction, bool unset);
 
 // Private functions.

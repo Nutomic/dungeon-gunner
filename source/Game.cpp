@@ -201,9 +201,6 @@ Game::mouseUp(const sf::Event& event) {
 	case sf::Mouse::Left:
 		mPlayer->releaseTrigger();
 		break;
-	case sf::Mouse::Right:
-		mPlayer->move(convertCoordinates(event.mouseButton.x, event.mouseButton.y));
-		break;
 	default:
 		break;
 	}

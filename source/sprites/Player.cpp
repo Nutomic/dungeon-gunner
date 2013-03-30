@@ -45,17 +45,6 @@ Player::releaseTrigger() {
 }
 
 /**
- * Moves the player to a destination point.
- * Disables any previous calls to Player::setDirection().
- *
- * @param destination Absolute world coordinate of the destination point.
- */
-void
-Player::move(const sf::Vector2f& destination) {
-	setDestination(destination);
-}
-
-/**
  * Sets the movement direction. This is destined for input via keys (eg. WASD).
  * Disables any previous commands via Player::move().
  *
