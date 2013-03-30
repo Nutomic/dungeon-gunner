@@ -32,7 +32,7 @@ public:
 
 // Public functions.
 public:
-	TileManager(World& world);
+	explicit TileManager(World& world);
 
 	void insertTile(const TilePosition& position, Type type);
 	void removeTile(const TilePosition& position);
@@ -57,7 +57,7 @@ private:
 class TileManager::Tile : public Sprite {
 // Public functions.
 public:
-	Tile(Type type, const TilePosition& position);
+	explicit Tile(Type type, const TilePosition& position);
 
 	Type getType() const;
 	TilePosition getTilePosition() const;

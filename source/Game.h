@@ -21,7 +21,7 @@ class World;
 class Game : private sf::NonCopyable {
 // Public functions.
 public:
-	Game(sf::RenderWindow& window);
+	explicit Game(sf::RenderWindow& window);
 	~Game();
 
 	void loop();

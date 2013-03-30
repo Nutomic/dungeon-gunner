@@ -21,7 +21,7 @@
 class Yaml {
 // Public functions.
 public:
-	Yaml(const std::string& filename);
+	explicit Yaml(const std::string& filename);
 	~Yaml();
 
 	std::string getFilename() const;

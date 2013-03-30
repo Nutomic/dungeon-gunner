@@ -27,7 +27,7 @@ class Particle;
 class Weapon : public Emitter {
 // Public functions.
 public:
-	Weapon(World& world, Sprite& holder, const Yaml& config);
+	explicit Weapon(World& world, Sprite& holder, const Yaml& config);
 
 	void pullTrigger();
 	void releaseTrigger();

@@ -37,7 +37,7 @@ public:
 	 */
 	class Data {
 	public:
-		Data(const sf::Vector2f& position,
+		explicit Data(const sf::Vector2f& position,
 				Category category, unsigned short mask,
 				const sf::Vector2f& direction = sf::Vector2f(0, 0));
 		const sf::Vector2f& position;
@@ -56,7 +56,7 @@ public:
 
 // Public functions.
 public:
-	Sprite(const Data& data, const Yaml& config);
+	explicit Sprite(const Data& data, const Yaml& config);
 	virtual ~Sprite() = 0;
 
 	sf::Vector2f getPosition() const;
