@@ -17,7 +17,7 @@ class Sprite;
 class Emitter {
 // Public functions.
 public:
-	Emitter(World& world);
+	explicit Emitter(World& world);
 	virtual ~Emitter();
 
 // Protected functions.

@@ -16,7 +16,7 @@ class Yaml;
 class Enemy : public Character {
 // Public functions.
 public:
-	Enemy(World& world, const sf::Vector2f& position, const Yaml& config);
+	explicit Enemy(World& world, const sf::Vector2f& position, const Yaml& config);
 };
 
 #endif /* DG_ENEMY_H_ */

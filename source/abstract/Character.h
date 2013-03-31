@@ -20,7 +20,7 @@ class Yaml;
 class Character : public Sprite {
 // Public functions.
 public:
-	Character(World& world, const Data& data, const Yaml& config);
+	explicit Character(World& world, const Data& data, const Yaml& config);
 	virtual ~Character() = 0;
 
 	void onDamage(int damage);
