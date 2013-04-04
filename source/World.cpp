@@ -12,6 +12,8 @@
 
 #include <Thor/Vectors.hpp>
 
+#include "util/Interval.h"
+
 /**
  * Insert a drawable into the group. Drawables should only be handled with shared_ptr.
  * An object can't be inserted more than once at the same level.
@@ -335,9 +337,10 @@ World::testCollision(std::shared_ptr<Sprite> spriteA,
 		float movementB = thor::dotProduct(axis, spriteB->getSpeed() * (elapsed / 1000.0f));
 
 		// Allow movement if sprites are moving apart.
-		return Interval(centerA, radiusA).getOverlap(Interval(centerB, radiusB)).getLength() <
-				Interval(centerA + movementA, radiusA).getOverlap(
-						Interval(centerB + movementB, radiusB)).getLength();
+		return Interval::IntervalFromRadius(centerA, radiusA).getOverlap(
+				Interval::IntervalFromRadius(centerB, radiusB)).getLength() <
+				Interval::IntervalFromRadius(centerA + movementA, radiusA).getOverlap(
+						Interval::IntervalFromRadius(centerB + movementB, radiusB)).getLength();
 	}
 	// circle-rect collision
 	if (((spriteA->mShape.type == Sprite::Shape::Type::CIRCLE) &&
@@ -357,21 +360,21 @@ World::testCollision(std::shared_ptr<Sprite> spriteA,
 		sf::Vector2f circleMovement = circle->getSpeed() * (elapsed / 1000.0f);
 
 		// We assume that rectangles are always axis aligned.
-		float overlapNoMovementX = Interval(circlePos.x, radius)
-								.getOverlap(Interval (rectPos.x, halfsize.x)).getLength();
-		float overlapMovementX = Interval(circlePos.x + circleMovement.x, radius)
-								.getOverlap(Interval (rectPos.x, halfsize.x)).getLength();
-		float overlapNoMovementY = Interval(circlePos.y, radius)
-								.getOverlap(Interval (rectPos.y, halfsize.y)).getLength();
-		float overlapMovementY = Interval(circlePos.y + circleMovement.y, radius)
-								.getOverlap(Interval (rectPos.y, halfsize.y)).getLength();
+		float overlapNoMovementX = Interval::IntervalFromRadius(circlePos.x, radius)
+								.getOverlap(Interval::IntervalFromRadius(rectPos.x, halfsize.x)).getLength();
+		float overlapMovementX = Interval::IntervalFromRadius(circlePos.x + circleMovement.x, radius)
+								.getOverlap(Interval::IntervalFromRadius(rectPos.x, halfsize.x)).getLength();
+		float overlapNoMovementY = Interval::IntervalFromRadius(circlePos.y, radius)
+								.getOverlap(Interval::IntervalFromRadius(rectPos.y, halfsize.y)).getLength();
+		float overlapMovementY = Interval::IntervalFromRadius(circlePos.y + circleMovement.y, radius)
+								.getOverlap(Interval::IntervalFromRadius(rectPos.y, halfsize.y)).getLength();
 
 		bool xyCollisionResult = (((overlapNoMovementX < overlapMovementX) &&
 				(overlapNoMovementY > 0)) ||
 				((overlapNoMovementY < overlapMovementY) && (overlapNoMovementX > 0)));
 		// If circle center is overlapping rectangle on x or y axis, we can take xyCollisionResult.
-		if (Interval(rectPos.x, halfsize.x).isInside(circlePos.x) ||
-				Interval(rectPos.y, halfsize.y).isInside(circlePos.y)) {
+		if (Interval::IntervalFromRadius(rectPos.x, halfsize.x).isInside(circlePos.x) ||
+				Interval::IntervalFromRadius(rectPos.y, halfsize.y).isInside(circlePos.y)) {
 			return xyCollisionResult;
 		}
 		// Test if the circle is colliding with a corner of the rectangle.
@@ -397,11 +400,13 @@ World::testCollision(std::shared_ptr<Sprite> spriteA,
 							sf::Vector2f(halfsize.x, -halfsize.y))));
 
 			// Allow movement if sprites are moving apart.
-			return Interval(circlePosProjected, radius)
-							.getOverlap(Interval(rectPosProjected, rectHalfWidthProjected))
+			return Interval::IntervalFromRadius(circlePosProjected, radius)
+							.getOverlap(Interval::IntervalFromRadius(rectPosProjected,
+									rectHalfWidthProjected))
 							.getLength() <
-					Interval(circlePosProjected + movementProjected, radius)
-							.getOverlap(Interval(rectPosProjected, rectHalfWidthProjected))
+					Interval::IntervalFromRadius(circlePosProjected + movementProjected, radius)
+							.getOverlap(Interval::IntervalFromRadius(rectPosProjected,
+									rectHalfWidthProjected))
 							.getLength();
 		}
 		// If there is no collision on x and y axis, there can't be one at all.
@@ -438,53 +443,4 @@ World::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 			target.draw(static_cast<sf::Drawable&>(*item), states);
 		}
 	}
-}
-
-/**
- * Creates an interval from a center point and a radius. The interval
- * ranges from center - radius to center + radius.
- */
-World::Interval::Interval(float center, float radius) :
-		start(center - radius),
-		end(center + radius) {
-}
-
-/**
- * Returns the overlap between two intervals, e.g. the overlap between
- * intervals (1,3) and (2,4) is (2,3).
- */
-World::Interval
-World::Interval::getOverlap(Interval other) const {
-	if ((start == other.start) && (end == other.end)) {
-		return *this;
-	}
-	Interval smaller = *this;
-	Interval bigger = other;
-	if (smaller.start > bigger.start) {
-		std::swap(smaller, bigger);
-	}
-	Interval iv(0, 0);
-	if (bigger.start < smaller.end) {
-		iv.start = bigger.start;
-		iv.end = smaller.end;
-	}
-	else {
-		iv.start = iv.end = 0.0f;
-	}
-	return iv;
-}
-
-/**
- * Returns true if the point is inside the interval.
- */
-bool
-World::Interval::isInside(float point) const {
-	return start < point && point < end;
-}
-/**
- * Returns the length of the interval (distance between start and end).
- */
-float
-World::Interval::getLength() {
-	return end - start;
 }

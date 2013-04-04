@@ -7,6 +7,9 @@
 
 #include "TileManager.h"
 
+#include <Thor/Vectors.hpp>
+
+#include "../util/Interval.h"
 #include "../util/Loader.h"
 #include "../util/Yaml.h"
 #include "../World.h"
@@ -104,7 +107,50 @@ TileManager::removeTile(const TilePosition& position) {
 			mTiles.erase(it);
 		}
 	}
+}
 
+/*
+ * Performs a raycast between two points to check if the path between them is
+ * clear of walls.
+ *
+ * @param lineStart First point of the line to test.
+ * @param lineEnd Second point of the line to test.
+ * @return True if the ray was not blocked.
+ */
+bool
+TileManager::raycast(const sf::Vector2f& lineStart,
+		const sf::Vector2f& lineEnd) const {
+	assert(lineStart != lineEnd);
+	sf::Vector2f lineCenter = lineStart + 0.5f * (lineEnd - lineStart);
+	for (auto it : mTiles) {
+		if (it->getType() == Type::FLOOR) {
+			continue;
+		}
+		sf::Vector2f axis = it->getPosition() - lineCenter;
+		if (axis == sf::Vector2f()) {
+			return false;
+		}
+
+		axis = thor::unitVector(axis);
+		sf::Vector2f halfsize = it->getSize() / 2.0f;
+		float rectPosProjected = thor::dotProduct(axis, it->getPosition());
+		float lineStartProjected = thor::dotProduct(axis, lineStart);
+		float lineEndProjected = thor::dotProduct(axis, lineEnd);
+		// For corner projections, those on the same line with the rect
+		// center are equal by value, so we only need one on each axis
+		// and take the maximum.
+		float rectHalfWidthProjected = std::max(
+				abs(thor::dotProduct(axis, halfsize)),
+				abs(thor::dotProduct(axis,
+						sf::Vector2f(halfsize.x, -halfsize.y))));
+		Interval line = Interval::IntervalFromPoints(lineStartProjected, lineEndProjected);
+		Interval rect = Interval::IntervalFromRadius(rectPosProjected, rectHalfWidthProjected);
+		// Allow movement if sprites are moving apart.
+		if (line.getOverlap(rect).getLength() > 0.0f) {
+			return false;
+		}
+	}
+	return true;
 }
 
 /**

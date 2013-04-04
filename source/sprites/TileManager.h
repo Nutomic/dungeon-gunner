@@ -36,6 +36,8 @@ public:
 
 	void insertTile(const TilePosition& position, Type type);
 	void removeTile(const TilePosition& position);
+	bool raycast(const sf::Vector2f& lineStart,
+			const sf::Vector2f& lineEnd) const;
 
 // Private types.
 private:

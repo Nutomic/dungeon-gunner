@@ -37,18 +37,6 @@ public:
 
 // Private types.
 private:
-	class Interval {
-	public:
-		float start;
-		float end;
-		Interval(float center, float radius);
-		Interval getOverlap(Interval other) const;
-		bool isInside(float point) const;
-		float getLength();
-	};
-
-// Private types.
-private:
 	struct Area;
 	/**
 	 * Edges
