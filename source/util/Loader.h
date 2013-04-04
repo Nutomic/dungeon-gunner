@@ -37,7 +37,6 @@
  * @endcode
  */
 class Loader : public Singleton<Loader> {
-// Public functions.
 public:
 	/**
 	 * Sets the general resource folder path.
@@ -60,7 +59,6 @@ public:
 		return static_cast<SpecificLoader<T>* >(getLoader<T>().get())->fromFile(mFolder, file);
 	}
 
-// Private types.
 private:
 	/**
 	 * We need this to save templates of different types in the same container.
@@ -99,7 +97,6 @@ private:
 		std::string mSubfolder;
 	};
 
-// Private functions.
 private:
 	/**
 	 * For Singleton behaviour.
@@ -122,7 +119,6 @@ private:
 		}
 	};
 
-// Private variables.
 private:
 	std::string mFolder;
 	std::map<std::type_index, std::unique_ptr<LoaderBase> > mLoaders;

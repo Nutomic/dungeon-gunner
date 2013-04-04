@@ -16,7 +16,6 @@ class Yaml;
  * Prototype for a particle.
  */
 class Particle : public Sprite {
-// Public functions.
 public:
 	explicit Particle(const Yaml& config, const Data& data);
 	virtual ~Particle();

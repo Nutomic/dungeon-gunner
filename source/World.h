@@ -21,7 +21,6 @@ class Sprite;
  * Render order is determined by Physical::Category (higher number on top).
  */
 class World : public sf::Drawable {
-// Public functions.
 public:
 	void insert(std::shared_ptr<Sprite> drawable);
 	void remove(std::shared_ptr<Sprite> drawable);
@@ -35,7 +34,6 @@ public:
 	std::vector<std::shared_ptr<Character> >
 			getCharacters(const sf::Vector2f& position, float maxDistance) const;
 
-// Private types.
 private:
 	struct Area;
 	/**
@@ -58,7 +56,6 @@ private:
 		std::vector<Portal> portals;
 	};
 
-// Private functions.
 private:
     void draw(sf::RenderTarget& target, sf::RenderStates states) const;
     bool testCollision(std::shared_ptr<Sprite> spriteA, std::shared_ptr<Sprite> spriteB,
@@ -67,7 +64,6 @@ private:
     float heuristic_cost_estimate(Area* start, Area* end) const;
     std::vector<Portal*> astarArea(Area* start, Area* end) const;
 
-// Private variables.
 private:
 	std::map<Sprite::Category, std::vector<std::shared_ptr<Sprite> > > mDrawables;
 	std::vector<Area> mAreas; //< This has to be a vector as objects are compared by address.

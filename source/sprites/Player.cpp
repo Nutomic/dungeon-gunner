@@ -81,10 +81,5 @@ Player::setDirection(Direction direction, bool unset) {
 void
 Player::onThink(int elapsed) {
 	Character::onThink(elapsed);
-	if (!mDirection) {
-		// Only use path finding movement if no direct input movement active.
-		Character::move();
-	}
-	// Look towards crosshair.
 	Sprite::setDirection(mCrosshairPosition);
 }

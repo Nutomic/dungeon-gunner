@@ -14,7 +14,6 @@ class World;
 class Yaml;
 
 class Enemy : public Character {
-// Public functions.
 public:
 	explicit Enemy(World& world, const sf::Vector2f& position, const Yaml& config);
 };

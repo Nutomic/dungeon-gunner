@@ -16,7 +16,6 @@
  */
 class ResourceManager : public thor::MultiResourceCache,
 		public Singleton<ResourceManager> {
-// Private functions.
 private:
 	friend class Singleton<ResourceManager>;
 	ResourceManager() {

@@ -25,7 +25,6 @@ class Particle;
  * 	- pass xml filename
  */
 class Weapon : public Emitter {
-// Public functions.
 public:
 	explicit Weapon(World& world, Sprite& holder, const Yaml& config);
 
@@ -33,11 +32,9 @@ public:
 	void releaseTrigger();
 	void onThink(int elapsed);
 
-// Protected functions.
 protected:
 	std::shared_ptr<Sprite> createParticle();
 
-// Private variables.
 private:
 	static const std::string KEY_BULLET;
 	static const std::string DEFAULT_BULLET;

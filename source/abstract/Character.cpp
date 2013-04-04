@@ -118,7 +118,7 @@ Character::setDestination(const sf::Vector2f& destination) {
 
 /**
  * Move towards a destination. Call setDestination() for setting the destination.
- * This should be called from think().
+ * This should be called from think() if path finding is to be used.
  */
 void
 Character::move() {

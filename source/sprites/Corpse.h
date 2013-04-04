@@ -13,7 +13,6 @@
 class Yaml;
 
 class Corpse : public Sprite {
-// Public functions.
 public:
 	explicit Corpse(const sf::Vector2f& position, const Yaml& config);
 };

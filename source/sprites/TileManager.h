@@ -13,7 +13,6 @@
 class World;
 
 class TileManager : public sf::Drawable {
-// Public types.
 public:
 	enum class Type {
 		FLOOR,
@@ -25,12 +24,9 @@ public:
 	 */
 	typedef sf::Vector2i TilePosition;
 
-// Public variables.
 public:
-	/// The size of a single tile (pixels).
-	static const sf::Vector2i TILE_SIZE;
+	static const sf::Vector2i TILE_SIZE; //< Tile size in pixels.
 
-// Public functions.
 public:
 	explicit TileManager(World& world);
 
@@ -39,15 +35,12 @@ public:
 	bool raycast(const sf::Vector2f& lineStart,
 			const sf::Vector2f& lineEnd) const;
 
-// Private types.
 private:
 	class Tile;
 
-// Private functions.
 private:
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
-// Private variables.
 private:
 	World& mWorld;
 	std::vector<std::shared_ptr<Tile> > mTiles;
@@ -57,7 +50,6 @@ private:
  * Holds information about a single tile.
  */
 class TileManager::Tile : public Sprite {
-// Public functions.
 public:
 	explicit Tile(Type type, const TilePosition& position);
 
@@ -66,7 +58,6 @@ public:
 
 	static std::string getConfig(Type type);
 
-// Private variables.
 private:
 	Type mType;
 };

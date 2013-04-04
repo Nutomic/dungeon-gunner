@@ -21,7 +21,6 @@
  * Interface to a YAML file.
  */
 class Yaml {
-// Public functions.
 public:
 	explicit Yaml(const std::string& filename);
 	~Yaml();
@@ -33,7 +32,6 @@ public:
 	template <typename T>
 	T get(const std::string& key, const T& defaultValue) const;
 
-// Private variables.
 private:
 	static std::string mFolder;
 

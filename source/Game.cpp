@@ -11,7 +11,6 @@
 #include "sprites/Player.h"
 #include "util/Yaml.h"
 
-/// Goal amount of frames per second.
 const int Game::FPS_GOAL = 60;
 
 /**

@@ -15,18 +15,15 @@ class Particle;
 class Sprite;
 
 class Emitter {
-// Public functions.
 public:
 	explicit Emitter(World& world);
 	virtual ~Emitter();
 
-// Protected functions.
 protected:
 	void emit();
 	/// Creates a particle. Allows to use a user-defined particle class and custom settings.
 	virtual std::shared_ptr<Sprite> createParticle() = 0;
 
-// Private variables.
 private:
 	World& mWorld;
 };

@@ -19,14 +19,12 @@ class World;
  * Use vertex for tiles.
  */
 class Game : private sf::NonCopyable {
-// Public functions.
 public:
 	explicit Game(sf::RenderWindow& window);
 	~Game();
 
 	void loop();
 
-// Private functions.
 private:
 	void input();
 	void render();
@@ -39,7 +37,6 @@ private:
 	void generate();
 	sf::Vector2<float> convertCoordinates(int x, int y);
 
-// Private variables.
 private:
 	static const int FPS_GOAL;
 
@@ -54,6 +51,5 @@ private:
 	bool mQuit;
 	bool mPaused;
 };
-
 
 #endif /* DG_GAME_H_ */

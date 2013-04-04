@@ -17,7 +17,6 @@ class World;
  * Player object.
  */
 class Player : public Character {
-// Public types.
 public:
 	/**
 	 * Movement directions that can be set via Player::setDirection().
@@ -29,7 +28,6 @@ public:
 		DOWN = 1 << 3
 	};
 
-// Public functions.
 public:
 	explicit Player(World& world, const sf::Vector2f& position, const Yaml& config);
 
@@ -38,11 +36,9 @@ public:
 	void releaseTrigger();
 	void setDirection(Direction direction, bool unset);
 
-// Private functions.
 private:
 	void onThink(int elapsed);
 
-// Private variables.
 private:
 	sf::Vector2f mCrosshairPosition; //< Relative position of the point to fire at (mouse cursor).
 	unsigned char mDirection; //< Current movement direction for direct control.

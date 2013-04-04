@@ -18,14 +18,12 @@ class Yaml;
  * Provides think function for AI, manages health, drops body on death.
  */
 class Character : public Sprite {
-// Public functions.
 public:
 	explicit Character(World& world, const Data& data, const Yaml& config);
 	virtual ~Character() = 0;
 
 	void onDamage(int damage);
 
-// Protected functions.
 protected:
 	virtual void onThink(int elapsed);
 	virtual void onDeath();
@@ -36,7 +34,6 @@ protected:
 	void move();
 	std::vector<std::shared_ptr<Character> > getCharacters(float maxDistance) const;
 
-// Private variables.
 private:
 	static const std::string KEY_HEALTH;
 	static const int DEFAULT_HEALTH;

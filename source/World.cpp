@@ -130,45 +130,48 @@ World::astarArea(Area* start, Area* end) const {
 		return std::vector<World::Portal*>();
 	}
 
-	std::unordered_set<Area*> closedset; // The set of nodes already evaluated.
-	// Set of nodes to be evaluated, with corresponding estimated cost start -> area -> goal
-	std::unordered_map<Area*, float> openset;
-	// The map of navigated nodes, with previous, lowest cost Area/Portal.
-	std::unordered_map<Area*, std::pair<Area*, Portal*>> came_from;
-	std::unordered_map<Area*, float> g_score; // Cost from start along best known path.
+	std::unordered_set<Area*> closed; 
+	std::unordered_map<Area*, float> openAreasEstimatedCost; 
+	// Navigated areas with previous area/portal.
+	std::unordered_map<Area*, std::pair<Area*, Portal*>> previousAreaAndPortal;
+	std::unordered_map<Area*, float> bestPathCost;
 
-	openset[start] = heuristic_cost_estimate(start, end);
-	g_score[start] = 0;
+	openAreasEstimatedCost[start] = heuristic_cost_estimate(start, end);
+	bestPathCost[start] = 0;
 
-	while (!openset.empty()) {
-		// the node in openset having the lowest f_score value.
-		Area* current = std::min_element(openset.begin(), openset.end())->first;
+	while (!openAreasEstimatedCost.empty()) {
+		Area* current = std::min_element(openAreasEstimatedCost.begin(),
+				openAreasEstimatedCost.end())->first;
 		if (current == end) {
 			std::vector<Portal*> path;
 			auto previous = current;
 			while (previous != start) {
-				path.push_back(came_from[previous].second);
-				previous = came_from[previous].first;
+				path.push_back(previousAreaAndPortal[previous].second);
+				previous = previousAreaAndPortal[previous].first;
 			}
 			return path;
 		}
 
-		openset.erase(current);
-		closedset.insert(current);
+		openAreasEstimatedCost.erase(current);
+		closed.insert(current);
 		for (Portal& portal : current->portals) {
 			Area* neighbor = portal.area;
-			// Use edge weight instead of heuristic cost estimate?
-			float tentative_g_score = g_score[current] + heuristic_cost_estimate(current,neighbor);
-			if (closedset.find(neighbor) != closedset.end()) {
-				if (tentative_g_score >= g_score[neighbor]) {
+			float tentative_g_score = bestPathCost[current] +
+					heuristic_cost_estimate(current,neighbor);
+			if (closed.find(neighbor) != closed.end()) {
+				if (tentative_g_score >= bestPathCost[neighbor]) {
 					continue;
 				}
 			}
 
-			if ((openset.find(neighbor) == openset.end()) || (tentative_g_score < g_score[neighbor])) {
-				came_from[neighbor] = std::make_pair(current, &portal);
-				g_score[neighbor] = tentative_g_score;
-				openset[neighbor] = g_score[neighbor] + heuristic_cost_estimate(neighbor, end);
+			if ((openAreasEstimatedCost.find(neighbor) ==
+					openAreasEstimatedCost.end()) ||
+					(tentative_g_score < bestPathCost[neighbor])) {
+				previousAreaAndPortal[neighbor] = std::make_pair(current,
+						&portal);
+				bestPathCost[neighbor] = tentative_g_score;
+				openAreasEstimatedCost[neighbor] = bestPathCost[neighbor] +
+						heuristic_cost_estimate(neighbor, end);
 			}
 		}
 	}
