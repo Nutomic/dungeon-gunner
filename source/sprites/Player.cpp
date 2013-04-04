@@ -53,25 +53,21 @@ Player::releaseTrigger() {
  */
 void
 Player::setDirection(Direction direction, bool unset) {
-	if (unset) {
+	if (unset)
 		mDirection = mDirection & ~direction;
-	} else {
+	else
 		mDirection = mDirection | direction;
-	}
+		
 	// Convert directions into a vector.
 	sf::Vector2f dirVec(0, 0);
 	if (mDirection & Direction::RIGHT) {
 		dirVec.x += 1.0f;
-	}
-	if (mDirection & Direction::LEFT) {
+	if (mDirection & Direction::LEFT)
 		dirVec.x += - 1.0f;
-	}
-	if (mDirection & Direction::DOWN) {
+	if (mDirection & Direction::DOWN)
 		dirVec.y += 1.0f;
-	}
-	if (mDirection & Direction::UP) {
+	if (mDirection & Direction::UP)
 		dirVec.y += - 1.0f;
-	}
 	setSpeed(dirVec, getMovementSpeed());
 }
 

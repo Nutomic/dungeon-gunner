@@ -60,20 +60,17 @@ Weapon::releaseTrigger() {
 void
 Weapon::onThink(int elapsed) {
 	// Waiting for next shot, subtract time since last onThink.
-	if (mLastShotWaitInterval > 0) {
+	if (mLastShotWaitInterval > 0)
 		mLastShotWaitInterval -= elapsed;
-	}
 	// Only reset to zero if we didn't recently fire (allow catching up for missed bullets).
-	else {
+	else
 		mLastShotWaitInterval = 0;
-	}
 	// Loop just in case we miss a bullet to fire.
 	while (mFire && mLastShotWaitInterval <= 0) {
 		mLastShotWaitInterval += mFireInterval;
 		emit();
-		if (!mAutomatic) {
+		if (!mAutomatic)
 			mFire = false;
-		}
 	}
 }
 

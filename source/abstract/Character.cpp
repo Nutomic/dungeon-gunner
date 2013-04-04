@@ -107,12 +107,10 @@ Character::releaseTrigger() {
 bool
 Character::setDestination(const sf::Vector2f& destination) {
 	mPath = mWorld.getPath(getPosition(), destination, getRadius());
-	if (!mPath.empty()) {
+	if (!mPath.empty())	
 		setSpeed(mPath.back() - getPosition(), mMovementSpeed);
-	}
-	else {
+	else 
 		LOG_W("No path found to destination.");
-	}
 	return !mPath.empty();
 }
 
@@ -125,7 +123,6 @@ Character::move() {
 	if (!mPath.empty()) {
 		if (thor::length(mPath.back() - getPosition()) < POINT_REACHED_DISTANCE) {
 			mPath.pop_back();
-
 			(!mPath.empty())
 				? setSpeed(mPath.back() - getPosition(), mMovementSpeed)
 				: setSpeed(sf::Vector2f(), 0);

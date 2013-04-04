@@ -179,17 +179,15 @@ Sprite::setDelete(bool value) {
  */
 void
 Sprite::setSpeed(sf::Vector2f direction, float speed) {
-	if (direction != sf::Vector2f()) {
+	if (direction != sf::Vector2f()) 
 		thor::setLength(direction, speed);
-	}
 	mSpeed = direction;
 }
 
 void
 Sprite::setDirection(const sf::Vector2f& direction) {
-	if (direction != sf::Vector2f()) {
+	if (direction != sf::Vector2f())
 		mShape.shape->setRotation(thor::polarAngle(direction) + 90);
-	}
 }
 
 /**

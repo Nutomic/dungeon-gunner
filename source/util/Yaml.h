@@ -71,9 +71,8 @@ T Yaml::get(const std::string& key, const T& defaultValue) const {
 			*node >> value;
 			return value;
 		}
-		else {
+		else
 			return defaultValue;
-		}
 	}
 	catch(YAML::Exception&) {
 		return defaultValue;

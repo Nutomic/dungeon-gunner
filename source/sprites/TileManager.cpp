@@ -87,10 +87,9 @@ void
 TileManager::insertTile(const TilePosition& position, Type type) {
 	#ifndef NDEBUG
 	for (auto it = mTiles.begin(); it != mTiles.end(); it++) {
-		if ((*it)->getTilePosition() == position) {
+		if ((*it)->getTilePosition() == position)
 			// Inserted multiple tiles at the same position.
 			assert(false);
-		}
 	}
 	#endif
 	std::shared_ptr<Tile> tile = std::shared_ptr<Tile>(new Tile(type, position));
@@ -123,13 +122,11 @@ TileManager::raycast(const sf::Vector2f& lineStart,
 	assert(lineStart != lineEnd);
 	sf::Vector2f lineCenter = lineStart + 0.5f * (lineEnd - lineStart);
 	for (auto it : mTiles) {
-		if (it->getType() == Type::FLOOR) {
+		if (it->getType() == Type::FLOOR)
 			continue;
-		}
 		sf::Vector2f axis = it->getPosition() - lineCenter;
-		if (axis == sf::Vector2f()) {
+		if (axis == sf::Vector2f())
 			return false;
-		}
 
 		axis = thor::unitVector(axis);
 		sf::Vector2f halfsize = it->getSize() / 2.0f;
@@ -146,9 +143,8 @@ TileManager::raycast(const sf::Vector2f& lineStart,
 		Interval line = Interval::IntervalFromPoints(lineStartProjected, lineEndProjected);
 		Interval rect = Interval::IntervalFromRadius(rectPosProjected, rectHalfWidthProjected);
 		// Allow movement if sprites are moving apart.
-		if (line.getOverlap(rect).getLength() > 0.0f) {
+		if (line.getOverlap(rect).getLength() > 0.0f)
 			return false;
-		}
 	}
 	return true;
 }

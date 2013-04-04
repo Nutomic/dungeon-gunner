@@ -110,13 +110,11 @@ private:
 	template <typename T> std::unique_ptr<LoaderBase>&
 	getLoader() {
 		auto loader = mLoaders.find(typeid(T));
-		if (loader != mLoaders.end()) {
+		if (loader != mLoaders.end())
 			return static_cast<std::unique_ptr<LoaderBase>&>(loader->second);
-		}
-		else {
+		else
 			return (*mLoaders.insert(std::pair<std::type_index, std::unique_ptr<LoaderBase> >
 					(typeid(T), std::unique_ptr<LoaderBase>(new SpecificLoader<T>))).first).second;
-		}
 	};
 
 private:

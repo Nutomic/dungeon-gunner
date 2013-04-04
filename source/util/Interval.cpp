@@ -12,9 +12,8 @@
 Interval::Interval(float start, float end) :
 		start(start),
 		end(end) {
-	if (this->start > this->end) {
+	if (this->start > this->end)
 		std::swap(this->start, this->end);
-	}
 };
 /**
  * Creates an interval from a center point and a radius. The interval
@@ -39,22 +38,19 @@ Interval::IntervalFromPoints(float start, float end) {
  */
 Interval
 Interval::getOverlap(Interval other) const {
-	if ((start == other.start) && (end == other.end)) {
+	if ((start == other.start) && (end == other.end))
 		return *this;
-	}
 	Interval smaller = *this;
 	Interval bigger = other;
-	if (smaller.start > bigger.start) {
+	if (smaller.start > bigger.start)
 		std::swap(smaller, bigger);
-	}
 	Interval iv(0, 0);
 	if (bigger.start < smaller.end) {
 		iv.start = bigger.start;
 		iv.end = smaller.end;
 	}
-	else {
+	else
 		iv.start = iv.end = 0.0f;
-	}
 	return iv;
 }
 

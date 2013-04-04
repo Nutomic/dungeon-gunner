@@ -35,9 +35,8 @@ void
 World::remove(std::shared_ptr<Sprite> drawable) {
 	for (auto v = mDrawables.begin(); v != mDrawables.end(); v++) {
 		auto item = std::find(v->second.begin(), v->second.end(), drawable);
-		if (item != v->second.end()) {
+		if (item != v->second.end())
 			   v->second.erase(item);
-		}
 	}
 }
 
@@ -62,9 +61,8 @@ World::insertCharacter(std::shared_ptr<Character> character) {
 void
 World::removeCharacter(std::shared_ptr<Character> character) {
 	auto item = std::find(mCharacters.begin(), mCharacters.end(), character);
-	if (item != mCharacters.end()) {
+	if (item != mCharacters.end())
 		   mCharacters.erase(item);
-	}
 	remove(character);
 }
 
@@ -126,10 +124,9 @@ World::generateAreas() {
 std::vector<World::Portal*>
 World::astarArea(Area* start, Area* end) const {
 	assert(start);
-	if (!end) {
+	if (!end)
 		return std::vector<World::Portal*>();
-	}
-
+		
 	std::unordered_set<Area*> closed; 
 	std::unordered_map<Area*, float> openAreasEstimatedCost; 
 	// Navigated areas with previous area/portal.
@@ -159,9 +156,8 @@ World::astarArea(Area* start, Area* end) const {
 			float tentative_g_score = bestPathCost[current] +
 					heuristic_cost_estimate(current,neighbor);
 			if (closed.find(neighbor) != closed.end()) {
-				if (tentative_g_score >= bestPathCost[neighbor]) {
+				if (tentative_g_score >= bestPathCost[neighbor])
 					continue;
-				}
 			}
 
 			if ((openAreasEstimatedCost.find(neighbor) ==
@@ -213,9 +209,8 @@ World::getPath(const sf::Vector2f& start, const sf::Vector2f& end,
 				point = p->end - startToEnd;
 			}
 		}
-		else {
+		else
 			point = p->start + startToEnd * percentage;
-		}
 
 		// Take two points on a line orthogonal to the portal.
 		thor::setLength(startToEnd, radius);
@@ -224,9 +219,8 @@ World::getPath(const sf::Vector2f& start, const sf::Vector2f& end,
 		path.push_back(point - startToEnd);
 		// Make sure the points are in the right order.
 		if (thor::squaredLength(*(path.end() - 1) - *(path.end() - 3) ) <
-				thor::squaredLength(*(path.end() - 2) - *(path.end() - 3) )) {
+				thor::squaredLength(*(path.end() - 2) - *(path.end() - 3) ))
 			std::swap(*(path.end() - 1), *(path.end() - 2));
-		}
 	}
 	return path;
 }
@@ -239,9 +233,8 @@ std::vector<std::shared_ptr<Character> >
 	std::vector<std::shared_ptr<Character> > visible;
 	for (auto it : mCharacters) {
 		if (thor::squaredLength(position - it->getPosition()) <=
-				maxDistance * maxDistance) {
+				maxDistance * maxDistance)
 			visible.push_back(it);
-		}
 	}
 	return visible;
 }
@@ -266,32 +259,28 @@ World::step(int elapsed) {
 	for (auto v = mDrawables.begin(); v != mDrawables.end(); v++) {
 		for (auto it = v->second.begin(); it != v->second.end(); ) {
 			auto spriteA = *it;
-			if (spriteA->getDelete()) {
+			if (spriteA->getDelete())
 				remove(spriteA);
-			}
 			else {
 				sf::Vector2f speed = spriteA->getSpeed();
 				speed *= elapsed / 1000.0f;
 				bool overlap = false;
 				for (auto w = mDrawables.begin(); w != mDrawables.end(); w++) {
 					for (auto spriteB : w->second) {
-						if (spriteA == spriteB) {
+						if (spriteA == spriteB)
 							continue;
-						}
 						// Ignore anything that is filtered by masks.
 						if (!spriteA->collisionEnabled(spriteB->getCategory()) ||
-								!spriteB->collisionEnabled(spriteA->getCategory())) {
+								!spriteB->collisionEnabled(spriteA->getCategory()))
 							continue;
-						}
 						if (testCollision(spriteA, spriteB, elapsed)) {
 							spriteA->onCollide(spriteB);
 							overlap = true;
 						}
 					}
 				}
-				if (!overlap) {
+				if (!overlap)
 					spriteA->setPosition(spriteA->getPosition() + speed);
-				}
 				it++;
 			}
 		}
@@ -328,9 +317,8 @@ World::testCollision(std::shared_ptr<Sprite> spriteA,
 
 		sf::Vector2f axis = spriteA->getPosition() - spriteB->getPosition();
 		// If both objects are at the exact same position, allow any movement for unstucking.
-		if (axis == sf::Vector2f()) {
+		if (axis == sf::Vector2f())
 			return true;
-		}
 		axis = thor::unitVector(axis);
 		float centerA = thor::dotProduct(axis, spriteA->getPosition());
 		float radiusA = spriteA->getRadius();
@@ -352,9 +340,8 @@ World::testCollision(std::shared_ptr<Sprite> spriteA,
 			(spriteB->mShape.type == Sprite::Shape::Type::CIRCLE)))	{
 		std::shared_ptr<Sprite> circle = spriteA;
 		std::shared_ptr<Sprite> rect = spriteB;
-		if (circle->mShape.type != Sprite::Shape::Type::CIRCLE) {
+		if (circle->mShape.type != Sprite::Shape::Type::CIRCLE)
 			std::swap(circle, rect);
-		}
 		float radius = circle->getRadius();
 		sf::Vector2f halfsize = rect->getSize() / 2.0f;
 		sf::Vector2f circlePos = circle->getPosition();
@@ -377,18 +364,16 @@ World::testCollision(std::shared_ptr<Sprite> spriteA,
 				((overlapNoMovementY < overlapMovementY) && (overlapNoMovementX > 0)));
 		// If circle center is overlapping rectangle on x or y axis, we can take xyCollisionResult.
 		if (Interval::IntervalFromRadius(rectPos.x, halfsize.x).isInside(circlePos.x) ||
-				Interval::IntervalFromRadius(rectPos.y, halfsize.y).isInside(circlePos.y)) {
+				Interval::IntervalFromRadius(rectPos.y, halfsize.y).isInside(circlePos.y))
 			return xyCollisionResult;
-		}
 		// Test if the circle is colliding with a corner of the rectangle.
 		else if (xyCollisionResult) {
 			// This is the same as circle-circle collision.
 			sf::Vector2f axis = circle->getPosition() - rect->getPosition();
 			// If both objects are at the exact same position, allow any
 			// movement for unstucking.
-			if (axis == sf::Vector2f()) {
+			if (axis == sf::Vector2f())
 				return true;
-			}
 			axis = thor::unitVector(axis);
 
 			float circlePosProjected = thor::dotProduct(axis, circlePos);
@@ -428,10 +413,9 @@ World::testCollision(std::shared_ptr<Sprite> spriteA,
 World::Area*
 World::getArea(const sf::Vector2f& point) const {
 	for (auto area = mAreas.begin(); area != mAreas.end(); area++) {
-		if (area->area.contains(point)) {
+		if (area->area.contains(point))
 			// Make the return value non-const for convenience.
 			return &const_cast<Area&>(*area);
-		}
 	}
 	return nullptr;
 }

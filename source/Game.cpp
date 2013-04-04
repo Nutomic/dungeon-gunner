@@ -77,9 +77,8 @@ Game::loop() {
 		input();
 
 		int elapsed = mClock.restart().asMilliseconds();
-		if (mPaused) {
+		if (mPaused)
 			elapsed = 0;
-		}
 
 		mWorld.think(elapsed);
 

@@ -18,9 +18,8 @@ std::string Yaml::mFolder = "";
 Yaml::Yaml(const std::string& filename) :
 		mFilename(mFolder+filename),
 		mFile(mFilename) {
-	if (mFile.fail()) {
+	if (mFile.fail())
 		LOG_W("Failed to open YAML file: " << mFolder << filename);
-	}
 	YAML::Parser parser(mFile);
 	parser.GetNextDocument(mNode);
 }
