@@ -28,24 +28,7 @@ Sprite::Sprite(const Data& data, const Yaml& config) :
 		mCategory(data.category),
 		mMask(data.mask),
 		mDelete(false) {
-	std::string texture = config.get<std::string>(KEY_TEXTURE, "");
-	if (texture != "") {
-		try {
-			mTexture = ResourceManager::i().acquire(Loader::i()
-					.fromFile<sf::Texture>(texture));
-			mShape.shape->setTexture(&*mTexture, false);
-		}
-		catch (thor::ResourceLoadingException&) {
-			LOG_W("Failed to load texture " << texture << ", coloring red.");
-			mShape.shape->setFillColor(sf::Color(255, 0, 0));
-		}
-	}
-	else {
-		LOG_W("Failed to read texture file name from YAML file " <<
-				config.getFilename() << ", coloring red.");
-		mShape.shape->setFillColor(sf::Color(255, 0, 0));
-	}
-
+	// Init shape
 	float radius = config.get(KEY_RADIUS, 0.0f);
 	sf::Vector2f size = config.get(KEY_SIZE, sf::Vector2f());
 	if (radius != 0.0f) {
@@ -65,6 +48,25 @@ Sprite::Sprite(const Data& data, const Yaml& config) :
 		mShape.shape = std::unique_ptr<sf::Shape>(new sf::RectangleShape(size));
 		mShape.shape->setOrigin(size / 2.0f);
 		mShape.shape->setTextureRect(sf::IntRect(sf::Vector2i(0, 0), sf::Vector2i(size)));
+	}
+
+	// Init texture
+	std::string texture = config.get<std::string>(KEY_TEXTURE, "");
+	if (texture != "") {
+		try {
+			mTexture = ResourceManager::i().acquire(Loader::i()
+					.fromFile<sf::Texture>(texture));
+			mShape.shape->setTexture(&*mTexture, false);
+		}
+		catch (thor::ResourceLoadingException&) {
+			LOG_W("Failed to load texture " << texture << ", coloring red.");
+			mShape.shape->setFillColor(sf::Color(255, 0, 0));
+		}
+	}
+	else {
+		LOG_W("Failed to read texture file name from YAML file " <<
+				config.getFilename() << ", coloring red.");
+		mShape.shape->setFillColor(sf::Color(255, 0, 0));
 	}
 
 	setPosition(data.position);
