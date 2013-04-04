@@ -68,13 +68,16 @@ namespace {
 template <typename T>
 T Yaml::get(const std::string& key, const T& defaultValue) const {
 	try {
-		const YAML::Node* node = mNode.FindValue(key);
-		T value;
-		*node >> value;
-		return value;
+		if (const YAML::Node* node = mNode.FindValue(key)) {
+			T value;
+			*node >> value;
+			return value;
+		}
+		else {
+			return defaultValue;
+		}
 	}
-	catch (YAML::InvalidScalar&) {
-		LOG_W("Failed to get key " << key << " from " << mFolder << mFilename);
+	catch(YAML::Exception&) {
 		return defaultValue;
 	}
 };
