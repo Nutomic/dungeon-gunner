@@ -60,7 +60,7 @@ Player::setDirection(Direction direction, bool unset) {
 		
 	// Convert directions into a vector.
 	sf::Vector2f dirVec(0, 0);
-	if (mDirection & Direction::RIGHT) {
+	if (mDirection & Direction::RIGHT)
 		dirVec.x += 1.0f;
 	if (mDirection & Direction::LEFT)
 		dirVec.x += - 1.0f;

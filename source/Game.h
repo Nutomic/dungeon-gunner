@@ -16,7 +16,8 @@ class Player;
 class World;
 
 /*
- * Use vertex for tiles.
+ * High level game managing, including game loop, input, high
+ * level rendering, and general class handling
  */
 class Game : private sf::NonCopyable {
 public:
