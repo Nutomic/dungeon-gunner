@@ -14,6 +14,7 @@
 
 #include "util/Interval.h"
 
+const float World::WALL_DISTANCE_MULTIPLIER = 1.5f;
 /**
  * Insert a drawable into the group. Drawables should only be handled with shared_ptr.
  * An object can't be inserted more than once at the same level.
@@ -203,11 +204,11 @@ World::getPath(const sf::Vector2f& start, const sf::Vector2f& end,
 		if (percentage < 0 || percentage > 1.0f) {
 			if (thor::squaredLength(p->start - path.back()) <
 					thor::squaredLength(p->end - path.back())) {
-				thor::setLength(startToEnd, radius);
+				thor::setLength(startToEnd, WALL_DISTANCE_MULTIPLIER * radius);
 				point = p->start + startToEnd;
 			}
 			else {
-				thor::setLength(startToEnd, radius);
+				thor::setLength(startToEnd, WALL_DISTANCE_MULTIPLIER * radius);
 				point = p->end - startToEnd;
 			}
 		}

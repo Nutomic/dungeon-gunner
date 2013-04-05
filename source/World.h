@@ -65,6 +65,7 @@ private:
     std::vector<Portal*> astarArea(Area* start, Area* end) const;
 
 private:
+    static const float WALL_DISTANCE_MULTIPLIER;
 	std::map<Sprite::Category, std::vector<std::shared_ptr<Sprite> > > mDrawables;
 	std::vector<Area> mAreas; //< This has to be a vector as objects are compared by address.
 	std::vector<std::shared_ptr<Character> > mCharacters;
