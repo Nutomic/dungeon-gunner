@@ -11,6 +11,7 @@
 
 #include "../items/Weapon.h"
 #include "../sprites/Corpse.h"
+#include "../sprites/TileManager.h"
 #include "../util/Log.h"
 #include "../util/Yaml.h"
 #include "../World.h"
@@ -22,17 +23,21 @@ const float Character::DEFAULT_SPEED = 100;
 const float Character::POINT_REACHED_DISTANCE = 1.0f;
 const std::string Character::KEY_WEAPON = "weapon";
 const std::string Character::DEFAULT_WEAPON = "weapon.yaml";
+const float Character::VISION_DISTANCE = 500.0f;
 
 /**
  * Saves pointer to this instance in static var for think().
  */
-Character::Character(World& world, const Data& data, const Yaml& config) :
+Character::Character(World& world, TileManager& tileManager, const Data& data,
+	const Yaml& config) :
 		Sprite(data, config),
 		mWorld(world),
+		mTileManager(tileManager),
 		mMaxHealth(config.get(KEY_HEALTH, DEFAULT_HEALTH)),
 		mCurrentHealth(mMaxHealth),
 		mMovementSpeed(config.get(KEY_SPEED, DEFAULT_SPEED)),
-		mWeapon(new Weapon(world, *this, Yaml(config.get(KEY_WEAPON, DEFAULT_WEAPON)))) {
+		mWeapon(new Weapon(world, *this,
+				Yaml(config.get(KEY_WEAPON, DEFAULT_WEAPON)))) {
 }
 
 Character::~Character() {
@@ -131,9 +136,25 @@ Character::move() {
 }
 
 /**
+ * Returns true if the character is currently moving.
+ */
+bool
+Character::isMoving() const {
+	return !mPath.empty();
+}
+
+/**
+ * Tests if a target is visible from the current position.
+ */
+bool
+Character::isVisible(const sf::Vector2f& target) const {
+	return mTileManager.raycast(getPosition(), target);
+}
+
+/**
  * Calls World::getCharacters with current position.
  */
 std::vector<std::shared_ptr<Character> >
-Character::getCharacters(float maxDistance) const {
-	return mWorld.getCharacters(getPosition(), maxDistance);
+Character::getCharacters() const {
+	return mWorld.getCharacters(getPosition(), VISION_DISTANCE);
 }

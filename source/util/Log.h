@@ -8,6 +8,8 @@
 #ifndef DG_LOG_H_
 #define DG_LOG_H_
 
+#include <iostream>
+
 /**
  * Logging functions for different levels.
  *

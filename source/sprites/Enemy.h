@@ -15,7 +15,11 @@ class Yaml;
 
 class Enemy : public Character {
 public:
-	explicit Enemy(World& world, const sf::Vector2f& position, const Yaml& config);
+	explicit Enemy(World& world, TileManager& tileManager,
+			const sf::Vector2f& position, const Yaml& config);
+
+protected:
+	virtual void onThink(int elapsed);
 };
 
 #endif /* DG_ENEMY_H_ */

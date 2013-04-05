@@ -35,8 +35,10 @@ void
 World::remove(std::shared_ptr<Sprite> drawable) {
 	for (auto v = mDrawables.begin(); v != mDrawables.end(); v++) {
 		auto item = std::find(v->second.begin(), v->second.end(), drawable);
-		if (item != v->second.end())
+		if (item != v->second.end()) {
 			   v->second.erase(item);
+			   break;
+		}
 	}
 }
 
@@ -297,11 +299,13 @@ World::step(int elapsed) {
  */
 void
 World::think(int elapsed) {
-	for (auto it : mCharacters) {
-		if (it->getDelete())
-			removeCharacter(it);
-		else
-			it->onThink(elapsed);
+	for (auto it = mCharacters.begin(); it != mCharacters.end(); ) {
+		if ((*it)->getDelete())
+			removeCharacter(*it);
+		else {
+			(*it)->onThink(elapsed);
+			it++;
+		}
 	}
 }
 

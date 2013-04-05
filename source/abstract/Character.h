@@ -10,6 +10,7 @@
 
 #include "Sprite.h"
 
+class TileManager;
 class World;
 class Weapon;
 class Yaml;
@@ -19,7 +20,8 @@ class Yaml;
  */
 class Character : public Sprite {
 public:
-	explicit Character(World& world, const Data& data, const Yaml& config);
+	explicit Character(World& world, TileManager& tileManager,
+			const Data& data, const Yaml& config);
 	virtual ~Character() = 0;
 
 	void onDamage(int damage);
@@ -32,7 +34,9 @@ protected:
 	void releaseTrigger();
 	bool setDestination(const sf::Vector2f& destination);
 	void move();
-	std::vector<std::shared_ptr<Character> > getCharacters(float maxDistance) const;
+	bool isMoving() const;
+	bool isVisible(const sf::Vector2f& target) const;
+	std::vector<std::shared_ptr<Character> > getCharacters() const;
 
 private:
 	static const std::string KEY_HEALTH;
@@ -43,9 +47,12 @@ private:
 	static const std::string DEFAULT_WEAPON;
 	/// The distance to a point where it is considered reached (in pixels).
 	static const float POINT_REACHED_DISTANCE;
+	/// Maximum distance where an enemy will be detected.
+	static const float VISION_DISTANCE;
 
 	friend class World;
 	World& mWorld;
+	TileManager& mTileManager;
 
 	const int mMaxHealth;
 	int mCurrentHealth; //< Current health. Between 0 and mMaxHealth.

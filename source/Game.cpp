@@ -51,10 +51,10 @@ Game::generate() {
 		mTileManager.insertTile(TileManager::TilePosition(x, 4), TileManager::Type::WALL);
 	}
 
-	mWorld.insertCharacter(std::shared_ptr<Character>(new Enemy(mWorld,
-			sf::Vector2f(400.0f, 200.0f), Yaml("enemy.yaml"))));
+	mWorld.insertCharacter(std::shared_ptr<Character>(new Enemy(mWorld, mTileManager,
+			sf::Vector2f(200.0f, 600.0f), Yaml("enemy.yaml"))));
 
-	mPlayer = std::shared_ptr<Player>(new Player(mWorld,
+	mPlayer = std::shared_ptr<Player>(new Player(mWorld, mTileManager,
 			sf::Vector2f(200.0f, 100.0f), Yaml("player.yaml")));
 	mWorld.insertCharacter(mPlayer);
 

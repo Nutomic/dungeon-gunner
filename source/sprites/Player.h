@@ -29,7 +29,8 @@ public:
 	};
 
 public:
-	explicit Player(World& world, const sf::Vector2f& position, const Yaml& config);
+	explicit Player(World& world, TileManager& tileManager,
+			const sf::Vector2f& position, const Yaml& config);
 
 	void setCrosshairPosition(const sf::Vector2f& position);
 	void pullTrigger();
