@@ -232,6 +232,8 @@ std::vector<std::shared_ptr<Character> >
 		World::getCharacters(const sf::Vector2f& position, float maxDistance) const {
 	std::vector<std::shared_ptr<Character> > visible;
 	for (auto it : mCharacters) {
+		if (position == it->getPosition())
+			continue;
 		if (thor::squaredLength(position - it->getPosition()) <=
 				maxDistance * maxDistance)
 			visible.push_back(it);
@@ -288,14 +290,18 @@ World::step(int elapsed) {
 }
 
 /**
- * Calls Character::onThink for each character.
+ * Calls Character::onThink for each character. Must be called
+ * before step (due to character removal).
  *
  * @param elapsed Time since last call.
  */
 void
 World::think(int elapsed) {
 	for (auto it : mCharacters) {
-		it->onThink(elapsed);
+		if (it->getDelete())
+			removeCharacter(it);
+		else
+			it->onThink(elapsed);
 	}
 }
 
