@@ -7,6 +7,7 @@
 
 #include "Game.h"
 
+#include "Generator.h"
 #include "sprites/Enemy.h"
 #include "sprites/Player.h"
 #include "util/Yaml.h"
@@ -25,41 +26,13 @@ Game::Game(sf::RenderWindow& window) :
 	mWindow.setFramerateLimit(FPS_GOAL);
 	mWindow.setKeyRepeatEnabled(true);
 
-	generate();
-}
-
-/**
- * Generates a predefined map.
- */
-void
-Game::generate() {
-	for (int x = 0; x < 11; x++)
-		mTileManager.insertTile(TileManager::TilePosition(x, 0), TileManager::Type::WALL);
-	for (int x = 0; x < 11; x++)
-		mTileManager.insertTile(TileManager::TilePosition(x, 10), TileManager::Type::WALL);
-	for (int y = 1; y < 10; y++)
-		mTileManager.insertTile(TileManager::TilePosition(0, y), TileManager::Type::WALL);
-	for (int y = 1; y < 10; y++)
-		mTileManager.insertTile(TileManager::TilePosition(10, y), TileManager::Type::WALL);
-
-	for (int x = 1; x < 10; x++)
-		for (int y = 1; y < 10; y++)
-			mTileManager.insertTile(TileManager::TilePosition(x, y), TileManager::Type::FLOOR);
-
-	for (int x = 1; x < 5; x++) {
-		mTileManager.removeTile(TileManager::TilePosition(x, 4));
-		mTileManager.insertTile(TileManager::TilePosition(x, 4), TileManager::Type::WALL);
-	}
-
-	mWorld.insertCharacter(std::shared_ptr<Character>(new Enemy(mWorld, mTileManager,
-			sf::Vector2f(200.0f, 600.0f), Yaml("enemy.yaml"))));
-
+	Generator generator;
+	generator.generateTiles(mTileManager, sf::IntRect(-10, -10, 20, 20));
 	mPlayer = std::shared_ptr<Player>(new Player(mWorld, mTileManager,
-			sf::Vector2f(200.0f, 100.0f), Yaml("player.yaml")));
+			sf::Vector2f(0.0f, 0.0f), Yaml("player.yaml")));
 	mWorld.insertCharacter(mPlayer);
-
-	mWorld.generateAreas();
 }
+
 /**
  * Closes window.
  */
@@ -73,7 +46,6 @@ Game::~Game() {
 void
 Game::loop() {
 	while (!mQuit) {
-
 		input();
 
 		int elapsed = mClock.restart().asMilliseconds();
@@ -83,7 +55,6 @@ Game::loop() {
 		mWorld.think(elapsed);
 
 		mWorld.step(elapsed);
-
 		render();
 	}
 }
