@@ -7,7 +7,7 @@
 
 #include "Game.h"
 
-#include "Generator.h"
+#include "generator/Generator.h"
 #include "sprites/Enemy.h"
 #include "sprites/Player.h"
 #include "util/Yaml.h"

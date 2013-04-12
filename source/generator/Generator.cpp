@@ -10,7 +10,7 @@
 #include <bitset>
 
 #include "simplexnoise.h"
-#include "sprites/TileManager.h"
+#include "../sprites/TileManager.h"
 
 /// For usage with simplexnoise.h
 uint8_t perm[512];
