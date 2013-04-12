@@ -67,6 +67,7 @@ public:
 	sf::Vector2f getSize() const;
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 	bool collisionEnabled(Category category) const;
+	bool isMovable() const;
 
 	virtual void onCollide(std::shared_ptr<Sprite> other);
 

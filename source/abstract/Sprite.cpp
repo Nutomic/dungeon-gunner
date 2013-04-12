@@ -154,6 +154,15 @@ Sprite::collisionEnabled(Category category) const {
 }
 
 /**
+ * Returns true if this sprite is able to move, currently decided by shape
+ * (circle can move, rectangle can not).
+ */
+bool
+Sprite::isMovable() const {
+	return mShape.type == Shape::Type::CIRCLE;
+}
+
+/**
  * Called when a collision with another Sprite occured. Override this method
  * to manage collision events.
  *

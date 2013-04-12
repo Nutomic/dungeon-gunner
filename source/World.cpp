@@ -262,11 +262,14 @@ World::heuristic_cost_estimate(Area* start, Area* end) const {
 void
 World::step(int elapsed) {
 	for (auto v = mDrawables.begin(); v != mDrawables.end(); v++) {
-		for (auto it = v->second.begin(); it != v->second.end(); ) {
+		for (auto it = v->second.begin(); it != v->second.end(); it++) {
 			auto spriteA = *it;
-			if (spriteA->getDelete())
+			if (spriteA->getDelete()) {
 				remove(spriteA);
-			else {
+				it--;
+			}
+			// Apply movement for movable sprites.
+			else if ((*it)->isMovable()) {
 				sf::Vector2f speed = spriteA->getSpeed();
 				speed *= elapsed / 1000.0f;
 				bool overlap = false;
@@ -286,7 +289,6 @@ World::step(int elapsed) {
 				}
 				if (!overlap)
 					spriteA->setPosition(spriteA->getPosition() + speed);
-				it++;
 			}
 		}
 	}
