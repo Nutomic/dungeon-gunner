@@ -25,6 +25,8 @@ private:
 	static void filterWalls(std::vector<std::vector<bool> >& in,
 			std::vector<std::vector<bool> >& out,
 			int x, int y, int longside, int shortside, int subtract);
+	static int countWalls(const sf::IntRect& area,
+			std::vector<std::vector<bool> >& tiles);
 };
 
 #endif /* DG_GENERATOR_H_ */

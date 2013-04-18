@@ -7,10 +7,12 @@
 
 #include "Generator.h"
 
+#include <assert.h>
 #include <bitset>
 
 #include "simplexnoise.h"
 #include "../sprites/TileManager.h"
+#include "../util/Log.h"
 
 /// For usage with simplexnoise.h
 uint8_t perm[512];
@@ -33,23 +35,27 @@ Generator::Generator() {
  * True means wall, false means floor.
  *
  * @param tm TileManager instance to set tiles in.
- * @param area Size and position of area to generate tiles for.
+ * @param area Size and position of area to generate tiles for. Must be
+ * 				power of two.
  */
 void
 Generator::generateTiles(TileManager& tm, const sf::IntRect& area) const {
+	// Check if width and height are power of two.
+	assert(area.width && !(area.width & (area.width - 1)));
+	assert(area.height && !(area.height & (area.height - 1)));
+
 	std::vector<std::vector<bool> >
 			noise(area.width, std::vector<bool>(area.height));
 	std::vector<std::vector<bool> >
 			filtered(area.width, std::vector<bool>(area.height, false));
 
-	for (int x = area.left; x < area.left+area.width; x++) {
-		for (int y = area.top; y < area.top+area.height; y++) {
+	for (int x = area.left; x < area.left + area.width; x++) {
+		for (int y = area.top; y < area.top + area.height; y++) {
 			noise[x-area.left][y-area.top] =
 					(scaled_octave_noise_2d(2, 2, 0.0015f, 0.5f, -0.5f, x, y) +
 					scaled_octave_noise_2d(3, 3, 0.01f, -1, 1, x, y)) < 0.05f;
 		}
 	}
-
 	for (int x = 0; x < (int) noise.size(); x+=5) {
 		for (int y = 0; y < (int) noise[x].size(); y+=5) {
 			filterWalls(noise, filtered, x, y, 10, 5, 0);
@@ -57,12 +63,11 @@ Generator::generateTiles(TileManager& tm, const sf::IntRect& area) const {
 			filterWalls(noise, filtered, x, y, 50, 5, 20);
 		}
 	}
-
-	for (int x = area.left; x < area.left+area.width; x++) {
-		for (int y = area.top; y < area.top+area.height; y++) {
-				tm.insertTile(TileManager::TilePosition(x, y),
-						(filtered[x-area.left][y-area.top])
-						? TileManager::Type::WALL : TileManager::Type::FLOOR);
+	for (int x = area.left; x < area.left + area.width; x++) {
+		for (int y = area.top; y < area.top + area.height; y++) {
+			(filtered[x-area.left][y-area.top])
+				? tm.insertTile(TileManager::TilePosition(x, y), TileManager::Type::WALL)
+				: tm.insertTile(TileManager::TilePosition(x, y), TileManager::Type::FLOOR);
 		}
 	}
 }
@@ -87,12 +92,27 @@ Generator::fill(std::vector<std::vector<bool> >& image,
 }
 
 /**
- * Finds rectangles of specific size in in and puts them into out.
+ * Returns the number of walls (fields with value true) in the area in tiles.
  *
- * True means wall, false means floor.
+ * @param area The area to count in.
+ * @param tiles Array of tile values (walls).
+ */
+int Generator::countWalls(const sf::IntRect& area,
+		std::vector<std::vector<bool> >& tiles) {
+	int count = 0;
+	for (int x = area.left; x < area.left + area.width; x++) {
+		for (int y = area.top; y < area.top + area.height; y++)
+			count += (int) tiles[x][y];
+	}
+	return count;
+}
+
+/**
+ * Finds rectangles of specific size inside vector in and
+ * puts them into vector out.
  *
- * @param[in] in Rectangular map of walls.
- * @param[out] out Rectangular map of walls.
+ * @param[in] in Rectangular map of tiles.
+ * @param[out] out Rectangular map of tiles.
  * @param x Position to check from (top left corner for rectangle).
  * @param y Position to check from (top left corner for rectangle).
  * @param longside Length of the longer side of the rectangle.
@@ -110,26 +130,11 @@ Generator::filterWalls(std::vector<std::vector<bool> >& in,
 		return;
 
 	// Filter in horizontal direction.
-	if (x % longside == 0 && y % shortside == 0) {
-		int count = 0;
-		for (int x2 = x; x2 < x + longside; x2++) {
-			for (int y2 = y; y2 < y + shortside; y2++) {
-				count += (int) in[x2][y2];
-			}
-		}
-		if (count >= shortside * longside - subtract)
-			fill(out, sf::IntRect(x, y, longside, shortside), true);
-	}
-
+	if (countWalls(sf::IntRect(x, y, longside, shortside), in) >=
+			shortside * longside - subtract)
+		fill(out, sf::IntRect(x, y, longside, shortside), true);
 	// Filter in vertical direction.
-	if (x % shortside == 0 && y % longside == 0) {
-		int count = 0;
-		for (int x2 = x; x2 < x + shortside; x2++) {
-			for (int y2 = y; y2 < y + longside; y2++)
-				count += (int) in[x2][y2];
-		}
-		if (count >= shortside * longside - subtract)
-			fill(out, sf::IntRect(x, y, shortside, longside), true);
-	}
+	if (countWalls(sf::IntRect(x, y, shortside, longside), in) >=
+			shortside * longside - subtract)
+		fill(out, sf::IntRect(x, y, shortside, longside), true);
 }
-
