@@ -12,6 +12,8 @@
 #include "sprites/Player.h"
 #include "util/Yaml.h"
 
+#include "util/Log.h"
+
 const int Game::FPS_GOAL = 60;
 
 /**
@@ -83,7 +85,8 @@ Game::input() {
 			mouseUp(event);
 			break;
 		case sf::Event::MouseMoved:
-			mPlayer->setCrosshairPosition(convertCoordinates(event.mouseMove.x, event.mouseMove.y));
+			mPlayer->setCrosshairPosition(convertCoordinates(event.mouseMove.x,
+					event.mouseMove.y));
 			break;
 		default:
 			break;
@@ -157,6 +160,9 @@ Game::mouseDown(const sf::Event& event) {
 	case sf::Mouse::Left:
 		mPlayer->pullTrigger();
 		break;
+	case sf::Mouse::Right:
+		mPlayer->setDestination(convertCoordinates(event.mouseMove.x,
+				event.mouseMove.y));
 	default:
 		break;
 	}

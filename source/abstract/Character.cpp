@@ -104,13 +104,19 @@ Character::releaseTrigger() {
 }
 
 /**
- * Set a destination to be walked to. Call move() for the actual movement.
+ * Set a destination to be walked to. Call move() to actually
+ * perform the movement.
  *
- * @param destination An absolute point to move towards.
+ * @param destination An absolute point to move towards. Set to current
+ * 						position to stop movement.
  * @return True if a path was found.
  */
 bool
 Character::setDestination(const sf::Vector2f& destination) {
+	if (destination == getPosition()) {
+		mPath.clear();
+		return true;
+	}
 	mPath = mWorld.getPath(getPosition(), destination, getRadius());
 	if (!mPath.empty())	
 		setSpeed(mPath.back() - getPosition(), mMovementSpeed);

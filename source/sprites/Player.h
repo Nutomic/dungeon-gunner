@@ -36,6 +36,7 @@ public:
 	void pullTrigger();
 	void releaseTrigger();
 	void setDirection(Direction direction, bool unset);
+	void setDestination(const sf::Vector2f& destination);
 
 private:
 	void onThink(int elapsed);
