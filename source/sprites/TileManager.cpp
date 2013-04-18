@@ -97,17 +97,6 @@ TileManager::insertTile(const TilePosition& position, Type type) {
 	mWorld.insert(tile);
 }
 
-
-void
-TileManager::removeTile(const TilePosition& position) {
-	for (auto it = mTiles.begin(); it != mTiles.end(); it++) {
-		if ((*it)->getTilePosition() == position) {
-			mWorld.remove(*it);
-			mTiles.erase(it);
-		}
-	}
-}
-
 /*
  * Performs a raycast between two points to check if the path between them is
  * clear of walls.
