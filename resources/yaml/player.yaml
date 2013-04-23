@@ -1,0 +1,8 @@
+name: Player
+texture: player.png
+size: [50, 50]
+
+health: 100
+speed: 100.0
+radius: 25.0
+weapon: weapon.yaml

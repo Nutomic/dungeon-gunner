@@ -1,0 +1,36 @@
+# This file lists all existing YAML keys and their corresponding default values, along with a description.
+## Sprite keys ##
+# name to be displayed, currently unused
+name: ""
+# filename of texture resource, relative to resources/textures/
+# no default value, has to be a valid texture file name (e.g. player.png)
+texture: ""
+# the object's size in pixels, in x and y direction, these should be equal for a character
+size: [50, 50]
+# radius from character center to border, used for collisions, generally half size
+radius: 25.0
+
+## Character keys ##
+# filename of the weapon wielded
+weapon: weapon.yaml
+# starting/maximum health points
+health: 100
+# walking speed
+speed: 100.0
+# default weapon equipped
+weapon: weapon.yaml
+
+## Weapon keys ##
+# yaml file where the bullet is defined
+bullet: bullet.yaml
+# milliseconds to wait before firing the next bullet, zero for no limit
+interval: 250
+# is the weapon automatic or not?
+automatic: false
+
+## Bullet keys ##
+# damage per bullet
+damage: 10
+# movement speed of bullets
+speed: 500.0
+radius: 10.0

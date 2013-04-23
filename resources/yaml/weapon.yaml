@@ -1,0 +1,6 @@
+name: Pistol
+texture: pistol.png
+
+bullet: bullet.yaml
+interval: 250
+automatic: true
