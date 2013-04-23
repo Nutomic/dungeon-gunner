@@ -1,0 +1,14 @@
+- update checker: runs before every start (from main()), compares local files with xml file including hashes
+- seeded number generator?: returns pseudorandom numbers based on seed?!
+- level generation: based on seed, no strict rooms
+- walls, cover
+- items
+- actors (player/enemies): use python files for ai
+- enemies: soldiers (different guns), monsters
+- lighting for stealth
+- scripting (lua probably) with http://www.swig.org/ or https://bitbucket.org/alexames/luawrapper/src
+- projectiles (sprites): use pooling of objects because of memory
+- menu: load/save/new
+- keybinds via xml and custom events
+- class Persistant { load(xml) {xml.getInt("a");}; save(xml) {xml.putInt("a");}; }; (xml node for each object by name string)
+- menu: game tiles making up title (from distance), some AI walking

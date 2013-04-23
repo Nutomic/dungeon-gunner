@@ -1,0 +1,3 @@
+- don't need graphics for each orientation
+- easily turn into fps/rpg (much decided randomly so not much sense) (rpg much like fallout 3)
+- no better visuals with drawing

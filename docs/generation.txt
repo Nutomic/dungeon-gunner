@@ -1,0 +1,4 @@
+http://gamedeveloper.texterity.com/gamedeveloper/201002?pg=42#pg42
+http://pcg.wikidot.com/pcg-algorithm:dungeon-generation
+http://roguebasin.roguelikedevelopment.org/index.php/Roguelike_Dev_FAQ
+http://gamedev.stackexchange.com/questions/2663/what-are-some-ideal-algorithms-for-rogue-like-2d-dungeon-generation

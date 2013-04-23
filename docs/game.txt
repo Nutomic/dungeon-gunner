@@ -1,0 +1,41 @@
+Frozen Synapse + Roguelike aka Roguelike Shooter
+
+- Singleplayer
+- modern guns (CoD4, TF2, BF3)
+- pause/resume at any time
+- permadeath? based on difficulty?
+- commands like walk, shoot
+- script defined ai, users can copy to user folder and edit
+- define behaviour if no commands:
+	- like in Dragon Age: Origins
+	- events: 	onDetectEnemy: attack/flee/cover
+				onIdle: walk/stand
+				onLowHp: flee/potion
+	- saved in AI script file (in user folder)
+- special abilities (Diablo, DA:O)
+- play as: stealth, shooter, tactical, engineer
+
+- useable items (ammo, health, see RPGs, food, stuff for engineering)
+- tactical items: grenades, mines, sentries
+- spider bot for flanking (automatic)
+
+- can build items from other items/scrap items
+- civilians/shops etc?
+- scoreboard on end (death) + ingame
+- difficulty modifiers: permadeath, indirect control (only via behaviour scripts (for fun)) + normal difficulties (easy/med/hard)
+	-> all shown on scoreboard + enemies killed etc
+
+- graphics style: hand drawn, between binding of isaac and braid, super meat boy?, no pixel art style!?
+
+- story:
+	player is experiment gone wrong, flees from facility
+	better gameplay if going in somewhere, but better story if going out?!
+	different areas/levels: labs, offices, production, testing, outside, "behind the scenes" (servers, maintenance rooms)
+	
+- name:	fantasy + modern
+		legend of gunfire
+		legendary guns
+		dungeon gunner
+		
+- controls:	space to pause
+			direct and indirect (wasd/right click), one cancels other
