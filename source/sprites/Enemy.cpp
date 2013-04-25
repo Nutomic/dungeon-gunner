@@ -34,9 +34,7 @@ Enemy::onThink(int elapsed) {
 			setDirection(target->getPosition() - getPosition());
 			pullTrigger();
 		}
-		else if (isMoving())
-			move();
-		else
+		else if (!isMoving())
 			setDestination(target->getPosition());
 	}
 	else

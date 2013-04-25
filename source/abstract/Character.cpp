@@ -60,7 +60,7 @@ Character::onDamage(int damage) {
 }
 
 /**
- * Implement this function for any (regular) AI computations.
+ * Implement this function for any (periodical) AI computations.
  * If overwritten, this function should always be called from the overwriting function.
  *
  * @param elapsed Amount of time to simulate.
@@ -68,6 +68,7 @@ Character::onDamage(int damage) {
 void
 Character::onThink(int elapsed) {
 	mWeapon->onThink(elapsed);
+	move();
 }
 
 /**
@@ -118,16 +119,16 @@ Character::setDestination(const sf::Vector2f& destination) {
 		return true;
 	}
 	mPath = mWorld.getPath(getPosition(), destination, getRadius());
-	if (!mPath.empty())	
+	if (!mPath.empty())
 		setSpeed(mPath.back() - getPosition(), mMovementSpeed);
-	else 
+	else
 		LOG_W("No path found to destination.");
 	return !mPath.empty();
 }
 
 /**
  * Move towards a destination. Call setDestination() for setting the destination.
- * This should be called from think() if path finding is to be used.
+ * This is automatically called from onThink().
  */
 void
 Character::move() {

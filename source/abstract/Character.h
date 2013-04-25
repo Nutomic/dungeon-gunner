@@ -33,10 +33,12 @@ protected:
 	void pullTrigger();
 	void releaseTrigger();
 	bool setDestination(const sf::Vector2f& destination);
-	void move();
 	bool isMoving() const;
 	bool isVisible(const sf::Vector2f& target) const;
 	std::vector<std::shared_ptr<Character> > getCharacters() const;
+
+private:
+	void move();
 
 private:
 	static const std::string KEY_HEALTH;
