@@ -149,6 +149,10 @@ Sprite::collisionEnabled(Category category) const {
 	return (category & mMask) != 0;
 }
 
+bool
+Sprite::isInside(const sf::FloatRect& rect) const {
+	return rect.intersects(mShape.shape->getGlobalBounds());
+}
 /**
  * Called when a collision with another Sprite occured. Override this method
  * to manage collision events.

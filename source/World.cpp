@@ -232,18 +232,17 @@ void
 World::step(int elapsed) {
 	for (auto v = mDrawables.begin(); v != mDrawables.end(); v++) {
 		for (auto it = v->second.begin(); it != v->second.end(); it++) {
-			auto spriteA = *it;
+			auto& spriteA = *it;
+			sf::Vector2f speed = spriteA->getSpeed() * (elapsed / 1000.0f);
 			if (spriteA->getDelete()) {
 				remove(spriteA);
 				it--;
 			}
 			// Apply movement for movable sprites.
 			else if ((*it)->getSpeed() != sf::Vector2f()) {
-				sf::Vector2f speed = spriteA->getSpeed();
-				speed *= elapsed / 1000.0f;
 				bool overlap = false;
 				for (auto w = mDrawables.begin(); w != mDrawables.end(); w++) {
-					for (auto spriteB : w->second) {
+					for (auto& spriteB : w->second) {
 						if (spriteA == spriteB)
 							continue;
 						// Ignore anything that is filtered by masks.
@@ -491,9 +490,13 @@ World::getArea(const sf::Vector2f& point) const {
  */
 void
 World::draw(sf::RenderTarget& target, sf::RenderStates states) const {
+	sf::FloatRect screen(target.getViewport(target.getView()));
+	screen.left += target.getView().getCenter().x - target.getView().getSize().x / 2;
+	screen.top += target.getView().getCenter().y - target.getView().getSize().y / 2;
 	for (auto v = mDrawables.begin(); v != mDrawables.end(); v++) {
 		for (auto item : v->second) {
-			target.draw(static_cast<sf::Drawable&>(*item), states);
+			if (item->isInside(screen))
+				target.draw(static_cast<sf::Drawable&>(*item), states);
 		}
 	}
 }
