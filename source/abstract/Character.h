@@ -47,8 +47,6 @@ private:
 	static const float DEFAULT_SPEED;
 	static const std::string KEY_WEAPON;
 	static const std::string DEFAULT_WEAPON;
-	/// The distance to a point where it is considered reached (in pixels).
-	static const float POINT_REACHED_DISTANCE;
 	/// Maximum distance where an enemy will be detected.
 	static const float VISION_DISTANCE;
 
@@ -61,6 +59,7 @@ private:
 	const float mMovementSpeed;
 	std::unique_ptr<Weapon> mWeapon;
 	std::vector<sf::Vector2f> mPath; //< Contains nodes to reach a set destination.
+	sf::Vector2f mLastPosition;
 };
 
 #endif /* DG_ACTOR_H_ */

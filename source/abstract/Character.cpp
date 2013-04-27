@@ -20,7 +20,6 @@ const std::string Character::KEY_HEALTH = "health";
 const int Character::DEFAULT_HEALTH = 100;
 const std::string Character::KEY_SPEED = "speed";
 const float Character::DEFAULT_SPEED = 100;
-const float Character::POINT_REACHED_DISTANCE = 1.0f;
 const std::string Character::KEY_WEAPON = "weapon";
 const std::string Character::DEFAULT_WEAPON = "weapon.yaml";
 const float Character::VISION_DISTANCE = 500.0f;
@@ -37,7 +36,8 @@ Character::Character(World& world, TileManager& tileManager, const Data& data,
 		mCurrentHealth(mMaxHealth),
 		mMovementSpeed(config.get(KEY_SPEED, DEFAULT_SPEED)),
 		mWeapon(new Weapon(world, *this,
-				Yaml(config.get(KEY_WEAPON, DEFAULT_WEAPON)))) {
+				Yaml(config.get(KEY_WEAPON, DEFAULT_WEAPON)))),
+		mLastPosition(getPosition()){
 }
 
 Character::~Character() {
@@ -121,8 +121,10 @@ Character::setDestination(const sf::Vector2f& destination) {
 	mPath = mWorld.getPath(getPosition(), destination, getRadius());
 	if (!mPath.empty())
 		setSpeed(mPath.back() - getPosition(), mMovementSpeed);
-	else
+	else {
+		setSpeed(sf::Vector2f(), 0);
 		LOG_W("No path found to destination.");
+	}
 	return !mPath.empty();
 }
 
@@ -132,8 +134,11 @@ Character::setDestination(const sf::Vector2f& destination) {
  */
 void
 Character::move() {
+	sf::Vector2f distanceTraveled = mLastPosition - getPosition();
+	mLastPosition = getPosition();
 	if (!mPath.empty()) {
-		if (thor::length(mPath.back() - getPosition()) < POINT_REACHED_DISTANCE) {
+		// Point reached (during next time step).
+		if (thor::length(mPath.back() - getPosition()) < thor::length(distanceTraveled)) {
 			mPath.pop_back();
 			(!mPath.empty())
 				? setSpeed(mPath.back() - getPosition(), mMovementSpeed)
