@@ -148,6 +148,8 @@ World::getPath(const sf::Vector2f& start, const sf::Vector2f& end,
 	if (!getArea(end))
 		return std::vector<sf::Vector2f>();
 	std::vector<Portal*> portals = astarArea(getArea(start), getArea(end));
+	if (portals.empty())
+		return std::vector<sf::Vector2f>();
 	std::vector<sf::Vector2f> path;
 
 	path.push_back(end);
