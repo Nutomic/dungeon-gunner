@@ -12,7 +12,7 @@
 
 class World;
 
-class TileManager : public sf::Drawable {
+class TileManager {
 public:
 	enum class Type {
 		FLOOR,
@@ -36,9 +36,6 @@ public:
 
 private:
 	class Tile;
-
-private:
-	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
 private:
 	World& mWorld;

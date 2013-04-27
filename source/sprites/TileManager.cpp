@@ -137,13 +137,3 @@ TileManager::raycast(const sf::Vector2f& lineStart,
 	}
 	return true;
 }
-
-/**
- * \copydoc sf::Drawable::draw
- */
-void
-TileManager::draw(sf::RenderTarget& target, sf::RenderStates states) const {
-	for (auto it = mTiles.begin(); it != mTiles.end(); it++) {
-		target.draw((**it), states);
-	}
-}
