@@ -236,7 +236,7 @@ World::step(int elapsed) {
 				it--;
 			}
 			// Apply movement for movable sprites.
-			else if ((*it)->isMovable()) {
+			else if ((*it)->getSpeed() != sf::Vector2f()) {
 				sf::Vector2f speed = spriteA->getSpeed();
 				speed *= elapsed / 1000.0f;
 				bool overlap = false;
