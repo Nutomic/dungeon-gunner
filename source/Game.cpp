@@ -28,7 +28,7 @@ Game::Game(sf::RenderWindow& window) :
 
 	Generator generator;
 	generator.generateTiles(mTileManager, mWorld,
-			sf::IntRect(-16, -16, 32, 32));
+			sf::IntRect(-32, -32, 64, 64));
 	mPlayer = std::shared_ptr<Player>(new Player(mWorld, mTileManager,
 			sf::Vector2f(0.0f, 0.0f), Yaml("player.yaml")));
 	mWorld.insertCharacter(mPlayer);

@@ -54,15 +54,15 @@ Generator::generateTiles(TileManager& tm, World& world,
 	for (int x = area.left; x < area.left + area.width; x++) {
 		for (int y = area.top; y < area.top + area.height; y++) {
 			noise[x-area.left][y-area.top] =
-					(scaled_octave_noise_2d(2, 2, 0.0015f, 0.5f, -0.5f, x, y) +
-					scaled_octave_noise_2d(3, 3, 0.01f, -1, 1, x, y)) < 0.05f;
+					scaled_octave_noise_2d(2, 2, 0.05f, 0.5f, -0.5f, x, y) + scaled_octave_noise_2d(2, 2, 0.5f, 0.15f, -0.15f, x, y)
+					< -0.1f;
 		}
 	}
-	for (int x = 0; x < (int) noise.size(); x+=5) {
-		for (int y = 0; y < (int) noise[x].size(); y+=5) {
-			filterWalls(noise, filtered, x, y, 10, 5, 0);
-			filterWalls(noise, filtered, x, y, 30, 5, 10);
-			filterWalls(noise, filtered, x, y, 50, 5, 20);
+	for (int x = 0; x < (int) noise.size(); x++) {
+		for (int y = 0; y < (int) noise[x].size(); y++) {
+			filterWalls(noise, filtered, x, y, 2, 1, 0);
+			filterWalls(noise, filtered, x, y, 6, 1, 2);
+			filterWalls(noise, filtered, x, y, 10, 1, 4);
 		}
 	}
 	for (int x = area.left; x < area.left + area.width; x++) {

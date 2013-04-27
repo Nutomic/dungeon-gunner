@@ -14,7 +14,7 @@
 #include "../util/Yaml.h"
 #include "../World.h"
 
-const sf::Vector2i TileManager::TILE_SIZE = sf::Vector2i(100, 100);
+const sf::Vector2i TileManager::TILE_SIZE = sf::Vector2i(75, 75);
 
 /**
  * Loads tile resources.
