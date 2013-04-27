@@ -16,12 +16,12 @@ public:
 	bool isInside(float point) const;
 	float getLength();
 
-private:
-	Interval(float start, float end);
-
-private:
+public:
 	float start;
 	float end;
+
+private:
+	Interval(float start, float end);
 };
 
 #endif /* DG_INTERVAL_H_ */

@@ -28,7 +28,8 @@ public:
 	void removeCharacter(std::shared_ptr<Character> character);
 	void step(int elapsed);
 	void think(int elapsed);
-	void generateAreas();
+	void insertArea(const sf::IntRect& rect);
+	void generatePortals();
 	std::vector<sf::Vector2f> getPath(const sf::Vector2f& start,
 			const sf::Vector2f& end, float radius) const;
 	std::vector<std::shared_ptr<Character> >
@@ -42,8 +43,13 @@ private:
 	 * Redundant data as portals are saved twice.
 	 */
 	struct Portal {
-		sf::Vector2f start;
-		sf::Vector2f end;
+		Portal() = default;
+		Portal(const sf::Vector2i& start, const sf::Vector2i& end);
+		bool operator==(const Portal& p) {
+		    return start == p.start && end == p.end && area == p.area;
+		}
+		sf::Vector2i start;
+		sf::Vector2i end;
 		Area* area;
 	};
 
@@ -51,8 +57,8 @@ private:
 	 * Nodes
 	 */
 	struct Area {
-		sf::FloatRect area;
-		sf::Vector2f center;
+		sf::IntRect area;
+		sf::Vector2i center;
 		std::vector<Portal> portals;
 	};
 

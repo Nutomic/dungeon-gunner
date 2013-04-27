@@ -12,8 +12,6 @@
 #include "sprites/Player.h"
 #include "util/Yaml.h"
 
-#include "util/Log.h"
-
 const int Game::FPS_GOAL = 60;
 
 /**
@@ -29,7 +27,8 @@ Game::Game(sf::RenderWindow& window) :
 	mWindow.setKeyRepeatEnabled(true);
 
 	Generator generator;
-	generator.generateTiles(mTileManager, sf::IntRect(-16, -16, 32, 32));
+	generator.generateTiles(mTileManager, mWorld,
+			sf::IntRect(-16, -16, 32, 32));
 	mPlayer = std::shared_ptr<Player>(new Player(mWorld, mTileManager,
 			sf::Vector2f(0.0f, 0.0f), Yaml("player.yaml")));
 	mWorld.insertCharacter(mPlayer);
@@ -161,8 +160,8 @@ Game::mouseDown(const sf::Event& event) {
 		mPlayer->pullTrigger();
 		break;
 	case sf::Mouse::Right:
-		mPlayer->setDestination(convertCoordinates(event.mouseMove.x,
-				event.mouseMove.y));
+		mPlayer->setDestination(convertCoordinates(event.mouseButton.x,
+				event.mouseButton.y));
 	default:
 		break;
 	}

@@ -13,6 +13,7 @@
 #include "simplexnoise.h"
 #include "../sprites/TileManager.h"
 #include "../util/Log.h"
+#include "../World.h"
 
 /// For usage with simplexnoise.h
 uint8_t perm[512];
@@ -39,7 +40,8 @@ Generator::Generator() {
  * 				power of two.
  */
 void
-Generator::generateTiles(TileManager& tm, const sf::IntRect& area) const {
+Generator::generateTiles(TileManager& tm, World& world,
+		const sf::IntRect& area) const {
 	// Check if width and height are power of two.
 	assert(area.width && !(area.width & (area.width - 1)));
 	assert(area.height && !(area.height & (area.height - 1)));
@@ -66,10 +68,14 @@ Generator::generateTiles(TileManager& tm, const sf::IntRect& area) const {
 	for (int x = area.left; x < area.left + area.width; x++) {
 		for (int y = area.top; y < area.top + area.height; y++) {
 			(filtered[x-area.left][y-area.top])
-				? tm.insertTile(TileManager::TilePosition(x, y), TileManager::Type::WALL)
-				: tm.insertTile(TileManager::TilePosition(x, y), TileManager::Type::FLOOR);
+				? tm.insertTile(TileManager::TilePosition(x, y),
+						TileManager::Type::WALL)
+				: tm.insertTile(TileManager::TilePosition(x, y),
+						TileManager::Type::FLOOR);
 		}
 	}
+	generateAreas(world, filtered, area, sf::Vector2f(area.left, area.top));
+	world.generatePortals();
 }
 
 /**
@@ -137,4 +143,39 @@ Generator::filterWalls(std::vector<std::vector<bool> >& in,
 	if (countWalls(sf::IntRect(x, y, shortside, longside), in) >=
 			shortside * longside - subtract)
 		fill(out, sf::IntRect(x, y, shortside, longside), true);
+}
+
+/**
+ * Inserts tile if all values within area are the same, otherwise divides area
+ * into four and continues recursively.
+ *
+ * @param tm World to insert areas into.
+ * @param tiles Array of tile values (walls).
+ * @param area The area to generate areas for.
+ * @param offset Offset of tiles[0][0] from World coordinate (0, 0).
+ */
+void
+Generator::generateAreas(World& world, std::vector<std::vector<bool> >& tiles,
+		const sf::IntRect& area, const sf::Vector2f& offset) {
+	assert(area.width > 0 && area.height > 0);
+	int count = countWalls(sf::IntRect(area.left - offset.y, area.top - offset.x,
+			area.width, area.height), tiles);
+	if (count == 0) {
+		world.insertArea(sf::IntRect(area));
+	}
+	else if (count == area.width * area.height) {
+		return;
+	}
+	else {
+		int halfWidth = area.width / 2.0f;
+		int halfHeight = area.height / 2.0f;
+		generateAreas(world, tiles, sf::IntRect(area.left,
+				area.top,             halfWidth, halfHeight), offset);
+		generateAreas(world, tiles, sf::IntRect(area.left + halfWidth,
+				area.top,             halfWidth, halfHeight), offset);
+		generateAreas(world, tiles, sf::IntRect(area.left,
+				area.top + halfHeight, halfWidth, halfHeight), offset);
+		generateAreas(world, tiles, sf::IntRect(area.left + halfWidth,
+				area.top + halfHeight, halfWidth, halfHeight), offset);
+	}
 }
