@@ -16,12 +16,6 @@
 #include "../util/Yaml.h"
 #include "../World.h"
 
-const std::string Character::KEY_HEALTH = "health";
-const int Character::DEFAULT_HEALTH = 100;
-const std::string Character::KEY_SPEED = "speed";
-const float Character::DEFAULT_SPEED = 100;
-const std::string Character::KEY_WEAPON = "weapon";
-const std::string Character::DEFAULT_WEAPON = "weapon.yaml";
 const float Character::VISION_DISTANCE = 500.0f;
 
 /**
@@ -32,11 +26,11 @@ Character::Character(World& world, TileManager& tileManager, const Data& data,
 		Sprite(data, config),
 		mWorld(world),
 		mTileManager(tileManager),
-		mMaxHealth(config.get(KEY_HEALTH, DEFAULT_HEALTH)),
+		mMaxHealth(config.get(YAML_KEY::HEALTH, YAML_DEFAULT::HEALTH)),
 		mCurrentHealth(mMaxHealth),
-		mMovementSpeed(config.get(KEY_SPEED, DEFAULT_SPEED)),
+		mMovementSpeed(config.get(YAML_KEY::SPEED, YAML_DEFAULT::SPEED)),
 		mWeapon(new Weapon(world, *this,
-				Yaml(config.get(KEY_WEAPON, DEFAULT_WEAPON)))),
+				Yaml(config.get(YAML_KEY::WEAPON, YAML_DEFAULT::WEAPON)))),
 		mLastPosition(getPosition()){
 }
 

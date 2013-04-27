@@ -41,12 +41,6 @@ private:
 	void move();
 
 private:
-	static const std::string KEY_HEALTH;
-	static const int DEFAULT_HEALTH;
-	static const std::string KEY_SPEED;
-	static const float DEFAULT_SPEED;
-	static const std::string KEY_WEAPON;
-	static const std::string DEFAULT_WEAPON;
 	/// Maximum distance where an enemy will be detected.
 	static const float VISION_DISTANCE;
 

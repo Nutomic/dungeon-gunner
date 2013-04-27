@@ -14,10 +14,6 @@
 #include "../util/ResourceManager.h"
 #include "../util/Yaml.h"
 
-const std::string Sprite::KEY_SIZE = "size";
-const std::string Sprite::KEY_RADIUS = "radius";
-const std::string Sprite::KEY_TEXTURE = "texture";
-
 /**
  * Initializes sprite data.
  *
@@ -29,8 +25,8 @@ Sprite::Sprite(const Data& data, const Yaml& config) :
 		mMask(data.mask),
 		mDelete(false) {
 	// Init shape
-	float radius = config.get(KEY_RADIUS, 0.0f);
-	sf::Vector2f size = config.get(KEY_SIZE, sf::Vector2f());
+	float radius = config.get(YAML_KEY::RADIUS, 0.0f);
+	sf::Vector2f size = config.get(YAML_KEY::SIZE, sf::Vector2f());
 	if (radius != 0.0f) {
 		mShape.type = Shape::Type::CIRCLE;
 		mShape.shape = std::unique_ptr<sf::Shape>(new sf::CircleShape(radius));
@@ -51,7 +47,7 @@ Sprite::Sprite(const Data& data, const Yaml& config) :
 	}
 
 	// Init texture
-	std::string texture = config.get<std::string>(KEY_TEXTURE, "");
+	std::string texture = config.get<std::string>(YAML_KEY::TEXTURE, "");
 	if (texture != "") {
 		try {
 			mTexture = ResourceManager::i().acquire(Loader::i()

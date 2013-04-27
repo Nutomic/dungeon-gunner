@@ -13,24 +13,17 @@
 #include "../effects/Bullet.h"
 #include "../util/Yaml.h"
 
-const std::string Weapon::KEY_BULLET = "bullet";
-const std::string Weapon::DEFAULT_BULLET = "bullet.yaml";
-const std::string Weapon::KEY_INTERVAL = "interval";
-const int Weapon::DEFAULT_INTERVAL = 250;
-const std::string Weapon::KEY_AUTOMATIC = "automatic";
-const bool Weapon::DEFAULT_AUTOMATIC = false;
-
 Weapon::Weapon(World& world, Sprite& holder, const Yaml& config) :
 		Emitter(world),
 		mHolder(holder),
-		mBullet(config.get(KEY_BULLET, DEFAULT_BULLET)),
+		mBullet(config.get(YAML_KEY::BULLET, YAML_DEFAULT::BULLET)),
 		mLastShotWaitInterval(0),
-		mFireInterval(config.get(KEY_INTERVAL, DEFAULT_INTERVAL)),
+		mFireInterval(config.get(YAML_KEY::INTERVAL, YAML_DEFAULT::INTERVAL)),
 		mFire(false),
-		mAutomatic(config.get(KEY_AUTOMATIC, DEFAULT_AUTOMATIC)) {
+		mAutomatic(config.get(YAML_KEY::AUTOMATIC, YAML_DEFAULT::AUTOMATIC)) {
 	sf::Vector2f holderSize = mHolder.getSize();
 	Yaml bullet(mBullet);
-	sf::Vector2f bulletSize = bullet.get(Sprite::KEY_SIZE, sf::Vector2f());
+	sf::Vector2f bulletSize = bullet.get(YAML_KEY::SIZE, sf::Vector2f());
 	mOffset = sf::Vector2f(0,
 			std::max(holderSize.x, holderSize.y) / 2 +
 			std::max(bulletSize.x, bulletSize.y) / 2);

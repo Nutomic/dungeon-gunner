@@ -12,10 +12,6 @@
 #include "../abstract/Character.h"
 #include "../util/Yaml.h"
 
-const std::string Bullet::KEY_DAMAGE = "damage";
-const int Bullet::DEFAULT_DAMAGE = 10;
-const std::string Bullet::KEY_SPEED = "speed";
-const float Bullet::DEFAULT_SPEED = 500;
 
 /**
  * Places a bullet in the world.
@@ -29,8 +25,8 @@ Bullet::Bullet(const sf::Vector2f& position, Sprite& shooter,
 		Particle(config, Data(position, CATEGORY_PARTICLE,
 				~CATEGORY_PARTICLE)),
 		mShooter(shooter),
-		mDamage(config.get(KEY_DAMAGE, DEFAULT_DAMAGE)),
-		mSpeed(config.get(KEY_SPEED, DEFAULT_SPEED)) {
+		mDamage(config.get(YAML_KEY::DAMAGE, YAML_DEFAULT::DAMAGE)),
+		mSpeed(config.get(YAML_KEY::SPEED, YAML_DEFAULT::SPEED)) {
 	thor::rotate(direction, - 90.0f);
 	setSpeed(direction, mSpeed);
 	setDirection(direction);

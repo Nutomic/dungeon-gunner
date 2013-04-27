@@ -18,7 +18,6 @@ class Yaml;
  * An sprite that is rendered in the world.
  */
 class Sprite : public sf::Drawable {
-// Public types.
 public:
 	/**
 	 * Categories of objects for filtering.
@@ -71,13 +70,6 @@ public:
 
 	virtual void onCollide(std::shared_ptr<Sprite> other);
 
-// Public variables.
-public:
-	static const std::string KEY_SIZE;
-	static const std::string KEY_RADIUS;
-	static const std::string KEY_TEXTURE;
-
-// Protected functions.
 protected:
 	void setDelete(bool value);
 	void setSpeed(sf::Vector2f direction, float speed);
@@ -85,7 +77,6 @@ protected:
 	void setPosition(const sf::Vector2f& position);
 	float getRadius() const;
 
-// Private types.
 private:
 	class Shape {
 	public:
@@ -98,7 +89,6 @@ private:
 		std::shared_ptr<sf::Shape> shape;
 	};
 
-// Private variables.
 private:
 	friend class World;
 

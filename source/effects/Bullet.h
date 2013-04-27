@@ -23,11 +23,6 @@ public:
 	void onCollide(std::shared_ptr<Sprite> other);
 
 private:
-	static const std::string KEY_DAMAGE;
-	static const int DEFAULT_DAMAGE;
-	static const std::string KEY_SPEED;
-	static const float DEFAULT_SPEED;
-
 	Sprite& mShooter;
 	const int mDamage;
 	const float mSpeed;

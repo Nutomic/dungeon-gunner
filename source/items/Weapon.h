@@ -36,13 +36,6 @@ protected:
 	std::shared_ptr<Sprite> createParticle();
 
 private:
-	static const std::string KEY_BULLET;
-	static const std::string DEFAULT_BULLET;
-	static const std::string KEY_INTERVAL;
-	static const int DEFAULT_INTERVAL;
-	static const std::string KEY_AUTOMATIC;
-	static const bool DEFAULT_AUTOMATIC;
-
 	Sprite& mHolder;
 
 	sf::Vector2f mOffset; //< Offset to the point where bullets are inserted (from holder center).
