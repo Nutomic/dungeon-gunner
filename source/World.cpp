@@ -32,20 +32,6 @@ World::insert(std::shared_ptr<Sprite> drawable) {
 }
 
 /**
- * Removes a drawable from the group.
- */
-void
-World::remove(std::shared_ptr<Sprite> drawable) {
-	for (auto v = mDrawables.begin(); v != mDrawables.end(); v++) {
-		auto item = std::find(v->second.begin(), v->second.end(), drawable);
-		if (item != v->second.end()) {
-			   v->second.erase(item);
-			   break;
-		}
-	}
-}
-
-/**
  * Inserts a character into the world. A character can only be inserted once.
  * Also calls insert(character);
  */
@@ -57,18 +43,6 @@ World::insertCharacter(std::shared_ptr<Character> character) {
 #endif
 		mCharacters.push_back(character);
 		insert(character);
-}
-
-/**
- * Removes a character from the world.
- * Also calls remove(character);
- */
-void
-World::removeCharacter(std::shared_ptr<Character> character) {
-	auto item = std::find(mCharacters.begin(), mCharacters.end(), character);
-	if (item != mCharacters.end())
-		   mCharacters.erase(item);
-	remove(character);
 }
 
 /**
@@ -235,11 +209,11 @@ World::step(int elapsed) {
 			auto& spriteA = *it;
 			sf::Vector2f speed = spriteA->getSpeed() * (elapsed / 1000.0f);
 			if (spriteA->getDelete()) {
-				remove(spriteA);
+				v->second.erase(it);
 				it--;
 			}
 			// Apply movement for movable sprites.
-			else if ((*it)->getSpeed() != sf::Vector2f()) {
+			else if (spriteA->getSpeed() != sf::Vector2f()) {
 				bool overlap = false;
 				for (auto w = mDrawables.begin(); w != mDrawables.end(); w++) {
 					for (auto& spriteB : w->second) {
@@ -264,15 +238,18 @@ World::step(int elapsed) {
 
 /**
  * Calls Character::onThink for each character. Must be called
- * before step (so Characters get removed asap).
+ * before step so Characters get removed correctly.
  *
  * @param elapsed Time since last call.
  */
 void
 World::think(int elapsed) {
 	for (auto it = mCharacters.begin(); it != mCharacters.end(); ) {
-		if ((*it)->getDelete())
-			removeCharacter(*it);
+		if ((*it)->getDelete()) {
+			mCharacters.erase(it);
+			auto& d = mDrawables[Sprite::CATEGORY_ACTOR];
+			d.erase(std::find(d.begin(), d.end(), *it));
+		}
 		else {
 			(*it)->onThink(elapsed);
 			it++;

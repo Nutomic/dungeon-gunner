@@ -23,9 +23,7 @@ class Sprite;
 class World : public sf::Drawable {
 public:
 	void insert(std::shared_ptr<Sprite> drawable);
-	void remove(std::shared_ptr<Sprite> drawable);
 	void insertCharacter(std::shared_ptr<Character> character);
-	void removeCharacter(std::shared_ptr<Character> character);
 	void step(int elapsed);
 	void think(int elapsed);
 	void insertArea(const sf::IntRect& rect);
