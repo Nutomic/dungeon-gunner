@@ -9,9 +9,9 @@
 
 #include <Thor/Vectors.hpp>
 
-Enemy::Enemy(World& world, TileManager& tileManager,
+Enemy::Enemy(World& world, TileManager& tileManager, Pathfinder& pathfinder,
 		const sf::Vector2f& position, const Yaml& config) :
-		Character(world, tileManager, Data(position, CATEGORY_ACTOR, MASK_ALL),
+		Character(world, tileManager, pathfinder, Data(position, CATEGORY_ACTOR, MASK_ALL),
 				config) {
 }
 

@@ -12,10 +12,10 @@
 /**
  * Initializes Sprite.
  */
-Player::Player(World& world, TileManager& tileManager,
+Player::Player(World& world, TileManager& tileManager, Pathfinder& pathfinder,
 		const sf::Vector2f& position, const Yaml& config) :
-	Character(world, tileManager, Data(position, CATEGORY_ACTOR, MASK_ALL),
-			config),
+	Character(world, tileManager, pathfinder,
+			Data(position, CATEGORY_ACTOR, MASK_ALL), config),
 	mDirection(0) {
 }
 

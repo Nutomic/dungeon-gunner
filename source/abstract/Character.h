@@ -10,6 +10,7 @@
 
 #include "Sprite.h"
 
+class Pathfinder;
 class TileManager;
 class World;
 class Weapon;
@@ -21,7 +22,7 @@ class Yaml;
 class Character : public Sprite {
 public:
 	explicit Character(World& world, TileManager& tileManager,
-			const Data& data, const Yaml& config);
+			Pathfinder& pathfinder,	const Data& data, const Yaml& config);
 	virtual ~Character() = 0;
 
 	void onDamage(int damage);
@@ -47,6 +48,7 @@ private:
 	friend class World;
 	World& mWorld;
 	TileManager& mTileManager;
+	Pathfinder& mPathfinder;
 
 	const int mMaxHealth;
 	int mCurrentHealth; //< Current health. Between 0 and mMaxHealth.

@@ -9,9 +9,11 @@
 #define DG_GAME_H_
 
 #include "sprites/TileManager.h"
+#include "Pathfinder.h"
 #include "World.h"
 
 class TileManager;
+class Pathfinder;
 class Player;
 class World;
 
@@ -46,6 +48,7 @@ private:
 
 	World mWorld;
 	TileManager mTileManager;
+	Pathfinder mPathfinder;
 	std::shared_ptr<Player> mPlayer;
 
 	bool mQuit;

@@ -27,9 +27,9 @@ Game::Game(sf::RenderWindow& window) :
 	mWindow.setKeyRepeatEnabled(true);
 
 	Generator generator;
-	generator.generateTiles(mTileManager, mWorld,
+	generator.generateTiles(mTileManager, mPathfinder,
 			sf::IntRect(-32, -32, 64, 64));
-	mPlayer = std::shared_ptr<Player>(new Player(mWorld, mTileManager,
+	mPlayer = std::shared_ptr<Player>(new Player(mWorld, mTileManager, mPathfinder,
 			sf::Vector2f(0.0f, 0.0f), Yaml("player.yaml")));
 	mWorld.insertCharacter(mPlayer);
 }

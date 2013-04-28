@@ -10,13 +10,13 @@
 
 #include <SFML/Graphics.hpp>
 
+class Pathfinder;
 class TileManager;
-class World;
 
 class Generator {
 public:
 	explicit Generator();
-	void generateTiles(TileManager& tm, World& world,
+	void generateTiles(TileManager& tm, Pathfinder& pathfinder,
 			const sf::IntRect& area) const;
 	//void generateCharacters(World& world, const sf::IntRect& area) const;
 	sf::Vector2f getPlayerSpawn() const;
@@ -29,7 +29,7 @@ private:
 			int x, int y, int longside, int shortside, int subtract);
 	static int countWalls(const sf::IntRect& area,
 			std::vector<std::vector<bool> >& tiles);
-	static void generateAreas(World& world,
+	static void generateAreas(Pathfinder& pathfinder,
 			std::vector<std::vector<bool> >& tiles,
 			const sf::IntRect& area, const sf::Vector2f& offset);
 };

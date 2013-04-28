@@ -15,23 +15,25 @@
 #include "../util/Log.h"
 #include "../util/Yaml.h"
 #include "../World.h"
+#include "../Pathfinder.h"
 
 const float Character::VISION_DISTANCE = 500.0f;
 
 /**
  * Saves pointer to this instance in static var for think().
  */
-Character::Character(World& world, TileManager& tileManager, const Data& data,
-	const Yaml& config) :
+Character::Character(World& world, TileManager& tileManager, Pathfinder& pathfinder,
+		const Data& data, const Yaml& config) :
 		Sprite(data, config),
 		mWorld(world),
 		mTileManager(tileManager),
+		mPathfinder(pathfinder),
 		mMaxHealth(config.get(YAML_KEY::HEALTH, YAML_DEFAULT::HEALTH)),
 		mCurrentHealth(mMaxHealth),
 		mMovementSpeed(config.get(YAML_KEY::SPEED, YAML_DEFAULT::SPEED)),
 		mWeapon(new Weapon(world, *this,
 				Yaml(config.get(YAML_KEY::WEAPON, YAML_DEFAULT::WEAPON)))),
-		mLastPosition(getPosition()){
+		mLastPosition(getPosition()) {
 }
 
 Character::~Character() {
@@ -112,7 +114,7 @@ Character::setDestination(const sf::Vector2f& destination) {
 		mPath.clear();
 		return true;
 	}
-	mPath = mWorld.getPath(getPosition(), destination, getRadius());
+	mPath = mPathfinder.getPath(getPosition(), destination, getRadius());
 	if (!mPath.empty())
 		setSpeed(mPath.back() - getPosition(), mMovementSpeed);
 	else {

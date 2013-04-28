@@ -13,7 +13,7 @@
 #include "simplexnoise.h"
 #include "../sprites/TileManager.h"
 #include "../util/Log.h"
-#include "../World.h"
+#include "../Pathfinder.h"
 
 /// For usage with simplexnoise.h
 uint8_t perm[512];
@@ -40,7 +40,7 @@ Generator::Generator() {
  * 				power of two.
  */
 void
-Generator::generateTiles(TileManager& tm, World& world,
+Generator::generateTiles(TileManager& tm, Pathfinder& pathfinder,
 		const sf::IntRect& area) const {
 	// Check if width and height are power of two.
 	assert(area.width && !(area.width & (area.width - 1)));
@@ -74,8 +74,9 @@ Generator::generateTiles(TileManager& tm, World& world,
 						TileManager::Type::FLOOR);
 		}
 	}
-	generateAreas(world, filtered, area, sf::Vector2f(area.left, area.top));
-	world.generatePortals();
+	generateAreas(pathfinder, filtered, area,
+			sf::Vector2f(area.left, area.top));
+	pathfinder.generatePortals();
 }
 
 /**
@@ -155,13 +156,13 @@ Generator::filterWalls(std::vector<std::vector<bool> >& in,
  * @param offset Offset of tiles[0][0] from World coordinate (0, 0).
  */
 void
-Generator::generateAreas(World& world, std::vector<std::vector<bool> >& tiles,
+Generator::generateAreas(Pathfinder& pathfinder, std::vector<std::vector<bool> >& tiles,
 		const sf::IntRect& area, const sf::Vector2f& offset) {
 	assert(area.width > 0 && area.height > 0);
 	int count = countWalls(sf::IntRect(area.left - offset.y, area.top - offset.x,
 			area.width, area.height), tiles);
 	if (count == 0) {
-		world.insertArea(sf::IntRect(area));
+		pathfinder.insertArea(sf::IntRect(area));
 	}
 	else if (count == area.width * area.height) {
 		return;
@@ -169,13 +170,13 @@ Generator::generateAreas(World& world, std::vector<std::vector<bool> >& tiles,
 	else {
 		int halfWidth = area.width / 2.0f;
 		int halfHeight = area.height / 2.0f;
-		generateAreas(world, tiles, sf::IntRect(area.left,
+		generateAreas(pathfinder, tiles, sf::IntRect(area.left,
 				area.top,             halfWidth, halfHeight), offset);
-		generateAreas(world, tiles, sf::IntRect(area.left + halfWidth,
+		generateAreas(pathfinder, tiles, sf::IntRect(area.left + halfWidth,
 				area.top,             halfWidth, halfHeight), offset);
-		generateAreas(world, tiles, sf::IntRect(area.left,
+		generateAreas(pathfinder, tiles, sf::IntRect(area.left,
 				area.top + halfHeight, halfWidth, halfHeight), offset);
-		generateAreas(world, tiles, sf::IntRect(area.left + halfWidth,
+		generateAreas(pathfinder, tiles, sf::IntRect(area.left + halfWidth,
 				area.top + halfHeight, halfWidth, halfHeight), offset);
 	}
 }

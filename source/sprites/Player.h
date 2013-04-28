@@ -30,7 +30,8 @@ public:
 
 public:
 	explicit Player(World& world, TileManager& tileManager,
-			const sf::Vector2f& position, const Yaml& config);
+			Pathfinder& pathfinder,	const sf::Vector2f& position,
+			const Yaml& config);
 
 	void setCrosshairPosition(const sf::Vector2f& position);
 	void pullTrigger();
