@@ -14,7 +14,7 @@ class World;
 
 class TileManager {
 public:
-	enum class Type {
+	enum class Type : char {
 		FLOOR,
 		WALL
 	};

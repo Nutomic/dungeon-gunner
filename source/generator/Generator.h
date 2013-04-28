@@ -10,8 +10,9 @@
 
 #include <SFML/Graphics.hpp>
 
+#include "../sprites/TileManager.h"
+
 class Pathfinder;
-class TileManager;
 
 class Generator {
 public:
@@ -22,15 +23,15 @@ public:
 	sf::Vector2f getPlayerSpawn() const;
 
 private:
-	static void fill(std::vector<std::vector<bool> >& image,
-			const sf::IntRect& area, bool value);
-	static void filterWalls(std::vector<std::vector<bool> >& in,
-			std::vector<std::vector<bool> >& out,
+	static void fill(std::vector<std::vector<TileManager::Type> >& image,
+			const sf::IntRect& area, TileManager::Type value);
+	static void filterWalls(std::vector<std::vector<TileManager::Type> >& in,
+			std::vector<std::vector<TileManager::Type> >& out,
 			int x, int y, int longside, int shortside, int subtract);
 	static int countWalls(const sf::IntRect& area,
-			std::vector<std::vector<bool> >& tiles);
+			std::vector<std::vector<TileManager::Type> >& tiles);
 	static void generateAreas(Pathfinder& pathfinder,
-			std::vector<std::vector<bool> >& tiles,
+			std::vector<std::vector<TileManager::Type> >& tiles,
 			const sf::IntRect& area, const sf::Vector2f& offset);
 };
 
