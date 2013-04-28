@@ -9,10 +9,15 @@
 
 #include <assert.h>
 #include <bitset>
+#include <map>
+#include <set>
+
+#include <SFML/System.hpp>
+
+#include <Thor/Vectors.hpp>
 
 #include "simplexnoise.h"
 #include "../sprites/TileManager.h"
-#include "../util/Log.h"
 #include "../Pathfinder.h"
 
 /// For usage with simplexnoise.h
@@ -39,7 +44,7 @@ Generator::Generator() {
  */
 void
 Generator::generateTiles(TileManager& tm, Pathfinder& pathfinder,
-		const sf::IntRect& area) const {
+		const sf::IntRect& area) {
 	// Check if width and height are power of two.
 	assert(area.width && !(area.width & (area.width - 1)));
 	assert(area.height && !(area.height & (area.height - 1)));
@@ -76,6 +81,7 @@ Generator::generateTiles(TileManager& tm, Pathfinder& pathfinder,
 	generateAreas(pathfinder, filtered, area,
 			sf::Vector2f(area.left, area.top));
 	pathfinder.generatePortals();
+	mGenerated = filtered;
 }
 
 /**
@@ -179,4 +185,53 @@ Generator::generateAreas(Pathfinder& pathfinder,
 		generateAreas(pathfinder, tiles, sf::IntRect(area.left + halfWidth,
 				area.top + halfHeight, halfWidth, halfHeight), offset);
 	}
+}
+
+/**
+ * Returns a valid position (floor) for the player to spawn at.
+ */
+sf::Vector2f
+Generator::getPlayerSpawn() const {
+	sf::Vector2i spawn = findClosestFloor(sf::Vector2i(mGenerated.size() / 2,
+			mGenerated[0].size() / 2));
+	return sf::Vector2f(
+			(spawn.x - mGenerated.size() / 2.0f) * TileManager::TILE_SIZE.x,
+			(spawn.y - mGenerated[0].size() / 2.0f) * TileManager::TILE_SIZE.y);
+}
+
+/**
+ * Finds the point array index closest to position which has a floor tile.
+ */
+sf::Vector2i
+Generator::findClosestFloor(const sf::Vector2i& position) const {
+	auto compare = [](const sf::Vector2i& a, const sf::Vector2i& b) {
+		return a.x < b.x || (a.x == b.x && a.y < b.y);
+	};
+	std::map<sf::Vector2i, float, decltype(compare)> open(compare);
+	std::set<sf::Vector2i, decltype(compare)> closed(compare);
+	sf::Vector2i start = position;
+	auto makePair = [&start](const sf::Vector2i& point) {
+		return std::make_pair(point, thor::length(sf::Vector2f(point - start)));
+	};
+
+	open.insert(makePair(start));
+	while (!open.empty()) {
+		const sf::Vector2i& current = open.begin()->first;
+		open.erase(current);
+		closed.insert(current);
+		if (mGenerated[current.x][current.y] == TileManager::Type::FLOOR)
+			return current;
+		else {
+			if (closed.find(sf::Vector2i(current.x + 1, current.y)) == closed.end())
+				open.insert(makePair(sf::Vector2i(current.x + 1, current.y)));
+			if (closed.find(sf::Vector2i(current.x, current.y + 1)) == closed.end())
+				open.insert(makePair(sf::Vector2i(current.x, current.y + 1)));
+			if (closed.find(sf::Vector2i(current.x - 1, current.y)) == closed.end())
+				open.insert(makePair(sf::Vector2i(current.x - 1, current.y)));
+			if (closed.find(sf::Vector2i(current.x, current.y - 1)) == closed.end())
+				open.insert(makePair(sf::Vector2i(current.x, current.y - 1)));
+		}
+	}
+	assert(false);
+	return sf::Vector2i();
 }

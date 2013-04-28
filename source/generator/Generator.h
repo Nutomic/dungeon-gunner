@@ -18,11 +18,11 @@ class Generator {
 public:
 	explicit Generator();
 	void generateTiles(TileManager& tm, Pathfinder& pathfinder,
-			const sf::IntRect& area) const;
-	//void generateCharacters(World& world, const sf::IntRect& area) const;
+			const sf::IntRect& area);
 	sf::Vector2f getPlayerSpawn() const;
 
 private:
+	sf::Vector2i findClosestFloor(const sf::Vector2i& position) const;
 	static void fill(std::vector<std::vector<TileManager::Type> >& image,
 			const sf::IntRect& area, TileManager::Type value);
 	static void filterWalls(std::vector<std::vector<TileManager::Type> >& in,
@@ -33,6 +33,9 @@ private:
 	static void generateAreas(Pathfinder& pathfinder,
 			std::vector<std::vector<TileManager::Type> >& tiles,
 			const sf::IntRect& area, const sf::Vector2f& offset);
+
+private:
+	std::vector<std::vector<TileManager::Type> > mGenerated;
 };
 
 #endif /* DG_GENERATOR_H_ */

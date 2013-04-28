@@ -30,7 +30,7 @@ Game::Game(sf::RenderWindow& window) :
 	generator.generateTiles(mTileManager, mPathfinder,
 			sf::IntRect(-32, -32, 64, 64));
 	mPlayer = std::shared_ptr<Player>(new Player(mWorld, mTileManager, mPathfinder,
-			sf::Vector2f(0.0f, 0.0f), Yaml("player.yaml")));
+			generator.getPlayerSpawn(), Yaml("player.yaml")));
 	mWorld.insertCharacter(mPlayer);
 }
 
