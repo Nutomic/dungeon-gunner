@@ -9,7 +9,7 @@
 
 #include <Thor/Vectors.hpp>
 
-#include "sprites/TileManager.h"
+#include "sprites/Tile.h"
 #include "util/Interval.h"
 
 /**
@@ -256,7 +256,7 @@ World::raycast(const sf::Vector2f& lineStart,
 	assert(lineStart != lineEnd);
 	sf::Vector2f lineCenter = lineStart + 0.5f * (lineEnd - lineStart);
 	for (const auto& it : mDrawables.at(Sprite::Category::CATEGORY_WORLD)) {
-		if (it->collisionEnabled(Sprite::Category::CATEGORY_WORLD))
+		if (dynamic_cast<Tile*>(it.get())->getType() != Tile::Type::WALL)
 			continue;
 		sf::Vector2f axis = it->getPosition() - lineCenter;
 		if (axis == sf::Vector2f())

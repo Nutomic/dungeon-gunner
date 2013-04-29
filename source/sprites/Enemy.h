@@ -15,9 +15,8 @@ class Yaml;
 
 class Enemy : public Character {
 public:
-	explicit Enemy(World& world, TileManager& tileManager,
-			Pathfinder& pathfinder,	const sf::Vector2f& position,
-			const Yaml& config);
+	explicit Enemy(World& world, Pathfinder& pathfinder,
+			const sf::Vector2f& position, const Yaml& config);
 
 protected:
 	virtual void onThink(int elapsed);

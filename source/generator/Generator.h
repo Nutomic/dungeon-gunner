@@ -10,32 +10,33 @@
 
 #include <SFML/Graphics.hpp>
 
-#include "../sprites/TileManager.h"
+#include "../sprites/Tile.h"
 
+class World;
 class Pathfinder;
 
 class Generator {
 public:
-	explicit Generator();
-	void generateTiles(TileManager& tm, Pathfinder& pathfinder,
-			const sf::IntRect& area);
+	explicit Generator(World& world, Pathfinder& pathfinder);
+	void generateTiles(const sf::IntRect& area);
 	sf::Vector2f getPlayerSpawn() const;
 
 private:
 	sf::Vector2i findClosestFloor(const sf::Vector2i& position) const;
-	static void fill(std::vector<std::vector<TileManager::Type> >& image,
-			const sf::IntRect& area, TileManager::Type value);
-	static void filterWalls(std::vector<std::vector<TileManager::Type> >& in,
-			std::vector<std::vector<TileManager::Type> >& out,
+	static void fill(std::vector<std::vector<Tile::Type> >& image,
+			const sf::IntRect& area, Tile::Type value);
+	static void filterWalls(std::vector<std::vector<Tile::Type> >& in,
+			std::vector<std::vector<Tile::Type> >& out,
 			int x, int y, int longside, int shortside, int subtract);
 	static int countWalls(const sf::IntRect& area,
-			std::vector<std::vector<TileManager::Type> >& tiles);
-	static void generateAreas(Pathfinder& pathfinder,
-			std::vector<std::vector<TileManager::Type> >& tiles,
+			std::vector<std::vector<Tile::Type> >& tiles);
+	void generateAreas(std::vector<std::vector<Tile::Type> >& tiles,
 			const sf::IntRect& area, const sf::Vector2f& offset);
 
 private:
-	std::vector<std::vector<TileManager::Type> > mGenerated;
+	World& mWorld;
+	Pathfinder& mPathfinder;
+	std::vector<std::vector<Tile::Type> > mGenerated;
 };
 
 #endif /* DG_GENERATOR_H_ */

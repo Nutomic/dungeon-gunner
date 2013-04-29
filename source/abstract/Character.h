@@ -11,7 +11,6 @@
 #include "Sprite.h"
 
 class Pathfinder;
-class TileManager;
 class World;
 class Weapon;
 class Yaml;
@@ -21,8 +20,8 @@ class Yaml;
  */
 class Character : public Sprite {
 public:
-	explicit Character(World& world, TileManager& tileManager,
-			Pathfinder& pathfinder,	const Data& data, const Yaml& config);
+	explicit Character(World& world, Pathfinder& pathfinder, const Data& data,
+			const Yaml& config);
 	virtual ~Character() = 0;
 
 	void onDamage(int damage);
@@ -47,7 +46,6 @@ private:
 
 	friend class World;
 	World& mWorld;
-	TileManager& mTileManager;
 	Pathfinder& mPathfinder;
 
 	const int mMaxHealth;

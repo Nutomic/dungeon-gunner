@@ -8,14 +8,11 @@
 #ifndef DG_GAME_H_
 #define DG_GAME_H_
 
-#include "sprites/TileManager.h"
+#include "generator/Generator.h"
 #include "Pathfinder.h"
 #include "World.h"
 
-class TileManager;
-class Pathfinder;
 class Player;
-class World;
 
 /*
  * High level game managing, including game loop, input, high
@@ -47,8 +44,8 @@ private:
 	sf::View mView;
 
 	World mWorld;
-	TileManager mTileManager;
 	Pathfinder mPathfinder;
+	Generator mGenerator;
 	std::shared_ptr<Player> mPlayer;
 
 	bool mQuit;

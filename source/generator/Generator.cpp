@@ -17,8 +17,8 @@
 #include <Thor/Vectors.hpp>
 
 #include "simplexnoise.h"
-#include "../sprites/TileManager.h"
 #include "../Pathfinder.h"
+#include "../World.h"
 
 /// For usage with simplexnoise.h
 uint8_t perm[512];
@@ -26,7 +26,9 @@ uint8_t perm[512];
 /**
  * Generates new random seed.
  */
-Generator::Generator() {
+Generator::Generator(World& world, Pathfinder& pathfinder) :
+		mWorld(world),
+		mPathfinder(pathfinder) {
 	std::mt19937 mersenne(time(nullptr));
 	std::uniform_int_distribution<int> distribution(0, 255);
 
@@ -36,24 +38,23 @@ Generator::Generator() {
 }
 
 /**
- * Fill TileManager with procedurally generated tiles.
+ * Fill Tile with procedurally generated tiles.
  *
- * @param tm TileManager instance to set tiles in.
+ * @param tm Tile instance to set tiles in.
  * @param area Size and position of area to generate tiles for. Must be
  * 				power of two.
  */
 void
-Generator::generateTiles(TileManager& tm, Pathfinder& pathfinder,
-		const sf::IntRect& area) {
+Generator::generateTiles(const sf::IntRect& area) {
 	// Check if width and height are power of two.
 	assert(area.width && !(area.width & (area.width - 1)));
 	assert(area.height && !(area.height & (area.height - 1)));
 
-	std::vector<std::vector<TileManager::Type> >
-			noise(area.width, std::vector<TileManager::Type>(area.height));
-	std::vector<std::vector<TileManager::Type> >
-			filtered(area.width, std::vector<TileManager::Type>(
-					area.height, TileManager::Type::FLOOR));
+	std::vector<std::vector<Tile::Type> >
+			noise(area.width, std::vector<Tile::Type>(area.height));
+	std::vector<std::vector<Tile::Type> >
+			filtered(area.width, std::vector<Tile::Type>(
+					area.height, Tile::Type::FLOOR));
 
 	for (int x = area.left; x < area.left + area.width; x++) {
 		for (int y = area.top; y < area.top + area.height; y++) {
@@ -61,8 +62,8 @@ Generator::generateTiles(TileManager& tm, Pathfinder& pathfinder,
 					(scaled_octave_noise_2d(2, 2, 0.05f, 0.5f, -0.5f, x, y) +
 					scaled_octave_noise_2d(2, 2, 0.5f, 0.15f, -0.15f, x, y)
 					< -0.1f)
-							? TileManager::Type::WALL
-							: TileManager::Type::FLOOR;
+							? Tile::Type::WALL
+							: Tile::Type::FLOOR;
 		}
 	}
 	for (int x = 0; x < (int) noise.size(); x++) {
@@ -74,13 +75,13 @@ Generator::generateTiles(TileManager& tm, Pathfinder& pathfinder,
 	}
 	for (int x = area.left; x < area.left + area.width; x++) {
 		for (int y = area.top; y < area.top + area.height; y++) {
-			tm.insertTile(TileManager::TilePosition(x, y),
-					filtered[x-area.left][y-area.top]);
+			mWorld.insert(std::shared_ptr<Sprite>(
+					new Tile(filtered[x-area.left][y-area.top], x, y)));
 		}
 	}
-	generateAreas(pathfinder, filtered, area,
+	generateAreas(filtered, area,
 			sf::Vector2f(area.left, area.top));
-	pathfinder.generatePortals();
+	mPathfinder.generatePortals();
 	mGenerated = filtered;
 }
 
@@ -92,8 +93,8 @@ Generator::generateTiles(TileManager& tm, Pathfinder& pathfinder,
  * @param value The value to set.
  */
 void
-Generator::fill(std::vector<std::vector<TileManager::Type> >& image,
-		const sf::IntRect& area, TileManager::Type value) {
+Generator::fill(std::vector<std::vector<Tile::Type> >& image,
+		const sf::IntRect& area, Tile::Type value) {
 	for (int x = area.left;
 			x < area.left + area.width && x < (int) image.size(); x++) {
 		for (int y = area.top;
@@ -110,11 +111,11 @@ Generator::fill(std::vector<std::vector<TileManager::Type> >& image,
  * @param tiles Array of tile values.
  */
 int Generator::countWalls(const sf::IntRect& area,
-		std::vector<std::vector<TileManager::Type> >& tiles) {
+		std::vector<std::vector<Tile::Type> >& tiles) {
 	int count = 0;
 	for (int x = area.left; x < area.left + area.width; x++) {
 		for (int y = area.top; y < area.top + area.height; y++)
-			count += (int) (tiles[x][y] == TileManager::Type::WALL);
+			count += (int) (tiles[x][y] == Tile::Type::WALL);
 	}
 	return count;
 }
@@ -133,8 +134,8 @@ int Generator::countWalls(const sf::IntRect& area,
  * 			tiles is not walls (tilecount >= longside * shortside - subtract).
  */
 void
-Generator::filterWalls(std::vector<std::vector<TileManager::Type> >& in,
-		std::vector<std::vector<TileManager::Type> >& out,
+Generator::filterWalls(std::vector<std::vector<Tile::Type> >& in,
+		std::vector<std::vector<Tile::Type> >& out,
 		int x, int y, int longside, int shortside, int subtract) {
 	// Skip if we would go out of range.
 	if ((x + longside >= (int) in.size()) ||
@@ -144,31 +145,30 @@ Generator::filterWalls(std::vector<std::vector<TileManager::Type> >& in,
 	// Filter in horizontal direction.
 	if (countWalls(sf::IntRect(x, y, longside, shortside), in) >=
 			shortside * longside - subtract)
-		fill(out, sf::IntRect(x, y, longside, shortside), TileManager::Type::WALL);
+		fill(out, sf::IntRect(x, y, longside, shortside), Tile::Type::WALL);
 	// Filter in vertical direction.
 	if (countWalls(sf::IntRect(x, y, shortside, longside), in) >=
 			shortside * longside - subtract)
-		fill(out, sf::IntRect(x, y, shortside, longside), TileManager::Type::WALL);
+		fill(out, sf::IntRect(x, y, shortside, longside), Tile::Type::WALL);
 }
 
 /**
  * Inserts tile if all values within area are the same, otherwise divides area
  * into four and continues recursively.
  *
- * @param tm World to insert areas into.
  * @param tiles Array of tile values.
  * @param area The area to generate areas for.
  * @param offset Offset of tiles[0][0] from World coordinate (0, 0).
  */
 void
-Generator::generateAreas(Pathfinder& pathfinder,
-		std::vector<std::vector<TileManager::Type> >& tiles,
+Generator::generateAreas(
+		std::vector<std::vector<Tile::Type> >& tiles,
 		const sf::IntRect& area, const sf::Vector2f& offset) {
 	assert(area.width > 0 && area.height > 0);
 	int count = countWalls(sf::IntRect(area.left - offset.y, area.top - offset.x,
 			area.width, area.height), tiles);
 	if (count == 0) {
-		pathfinder.insertArea(sf::IntRect(area));
+		mPathfinder.insertArea(sf::IntRect(area));
 	}
 	else if (count == area.width * area.height) {
 		return;
@@ -176,13 +176,13 @@ Generator::generateAreas(Pathfinder& pathfinder,
 	else {
 		int halfWidth = area.width / 2.0f;
 		int halfHeight = area.height / 2.0f;
-		generateAreas(pathfinder, tiles, sf::IntRect(area.left,
+		generateAreas(tiles, sf::IntRect(area.left,
 				area.top,             halfWidth, halfHeight), offset);
-		generateAreas(pathfinder, tiles, sf::IntRect(area.left + halfWidth,
+		generateAreas(tiles, sf::IntRect(area.left + halfWidth,
 				area.top,             halfWidth, halfHeight), offset);
-		generateAreas(pathfinder, tiles, sf::IntRect(area.left,
+		generateAreas(tiles, sf::IntRect(area.left,
 				area.top + halfHeight, halfWidth, halfHeight), offset);
-		generateAreas(pathfinder, tiles, sf::IntRect(area.left + halfWidth,
+		generateAreas(tiles, sf::IntRect(area.left + halfWidth,
 				area.top + halfHeight, halfWidth, halfHeight), offset);
 	}
 }
@@ -195,8 +195,8 @@ Generator::getPlayerSpawn() const {
 	sf::Vector2i spawn = findClosestFloor(sf::Vector2i(mGenerated.size() / 2,
 			mGenerated[0].size() / 2));
 	return sf::Vector2f(
-			(spawn.x - mGenerated.size() / 2.0f) * TileManager::TILE_SIZE.x,
-			(spawn.y - mGenerated[0].size() / 2.0f) * TileManager::TILE_SIZE.y);
+			(spawn.x - mGenerated.size() / 2.0f) * Tile::TILE_SIZE.x,
+			(spawn.y - mGenerated[0].size() / 2.0f) * Tile::TILE_SIZE.y);
 }
 
 /**
@@ -219,7 +219,7 @@ Generator::findClosestFloor(const sf::Vector2i& position) const {
 		const sf::Vector2i& current = open.begin()->first;
 		open.erase(current);
 		closed.insert(current);
-		if (mGenerated[current.x][current.y] == TileManager::Type::FLOOR)
+		if (mGenerated[current.x][current.y] == Tile::Type::FLOOR)
 			return current;
 		else {
 			if (closed.find(sf::Vector2i(current.x + 1, current.y)) == closed.end())

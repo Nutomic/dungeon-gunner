@@ -20,17 +20,15 @@ const int Game::FPS_GOAL = 60;
 Game::Game(sf::RenderWindow& window) :
 		mWindow(window),
 		mView(sf::Vector2f(0, 0), mWindow.getView().getSize()),
-		mTileManager(mWorld),
+		mGenerator(mWorld, mPathfinder),
 		mQuit(false),
 		mPaused(false) {
 	mWindow.setFramerateLimit(FPS_GOAL);
 	mWindow.setKeyRepeatEnabled(true);
 
-	Generator generator;
-	generator.generateTiles(mTileManager, mPathfinder,
-			sf::IntRect(-32, -32, 64, 64));
-	mPlayer = std::shared_ptr<Player>(new Player(mWorld, mTileManager, mPathfinder,
-			generator.getPlayerSpawn(), Yaml("player.yaml")));
+	mGenerator.generateTiles(sf::IntRect(-32, -32, 64, 64));
+	mPlayer = std::shared_ptr<Player>(new Player(mWorld, mPathfinder,
+			mGenerator.getPlayerSpawn(), Yaml("player.yaml")));
 	mWorld.insertCharacter(mPlayer);
 }
 

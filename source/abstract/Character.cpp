@@ -11,7 +11,6 @@
 
 #include "../items/Weapon.h"
 #include "../sprites/Corpse.h"
-#include "../sprites/TileManager.h"
 #include "../util/Log.h"
 #include "../util/Yaml.h"
 #include "../World.h"
@@ -22,11 +21,10 @@ const float Character::VISION_DISTANCE = 500.0f;
 /**
  * Saves pointer to this instance in static var for think().
  */
-Character::Character(World& world, TileManager& tileManager, Pathfinder& pathfinder,
-		const Data& data, const Yaml& config) :
+Character::Character(World& world, Pathfinder& pathfinder, const Data& data,
+	const Yaml& config) :
 		Sprite(data, config),
 		mWorld(world),
-		mTileManager(tileManager),
 		mPathfinder(pathfinder),
 		mMaxHealth(config.get(YAML_KEY::HEALTH, YAML_DEFAULT::HEALTH)),
 		mCurrentHealth(mMaxHealth),

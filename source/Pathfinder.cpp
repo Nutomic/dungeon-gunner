@@ -14,7 +14,7 @@
 #include <Thor/Vectors.hpp>
 
 #include "util/Interval.h"
-#include "sprites/TileManager.h"
+#include "sprites/Tile.h"
 
 const float Pathfinder::WALL_DISTANCE_MULTIPLIER = 1.5f;
 
@@ -156,10 +156,10 @@ Pathfinder::insertArea(const sf::IntRect& rect) {
 	Area a;
 	// Not sure why the offset of -50 is required, but with it, areas align
 	// with tiles perfectly.
-	a.area = sf::IntRect(rect.left * TileManager::TILE_SIZE.x - 50,
-			rect.top * TileManager::TILE_SIZE.y - 50,
-			rect.width * TileManager::TILE_SIZE.x,
-			rect.height * TileManager::TILE_SIZE.y);
+	a.area = sf::IntRect(rect.left * Tile::TILE_SIZE.x - 50,
+			rect.top * Tile::TILE_SIZE.y - 50,
+			rect.width * Tile::TILE_SIZE.x,
+			rect.height * Tile::TILE_SIZE.y);
 	a.center = sf::Vector2i(a.area.left + a.area.width / 2,
 			a.area.top + a.area.height / 2);
 	mAreas.push_back(a);
