@@ -31,8 +31,6 @@ public:
 	explicit TileManager(World& world);
 
 	void insertTile(const TilePosition& position, Type type);
-	bool raycast(const sf::Vector2f& lineStart,
-			const sf::Vector2f& lineEnd) const;
 
 private:
 	class Tile;

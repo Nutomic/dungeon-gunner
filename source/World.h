@@ -28,6 +28,8 @@ public:
 	void think(int elapsed);
 	std::vector<std::shared_ptr<Character> >
 			getCharacters(const sf::Vector2f& position, float maxDistance) const;
+	bool raycast(const sf::Vector2f& lineStart,
+			const sf::Vector2f& lineEnd) const;
 
 private:
 

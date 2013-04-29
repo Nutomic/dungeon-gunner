@@ -156,7 +156,7 @@ Character::isMoving() const {
  */
 bool
 Character::isVisible(const sf::Vector2f& target) const {
-	return mTileManager.raycast(getPosition(), target);
+	return mWorld.raycast(getPosition(), target);
 }
 
 /**
