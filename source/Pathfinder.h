@@ -38,7 +38,6 @@ private:
  * Redundant data as portals are saved twice.
  */
 struct Pathfinder::Portal {
-	Portal() = default;
 	bool operator==(const Portal& p);
 	sf::Vector2i start;
 	sf::Vector2i end;
