@@ -25,7 +25,8 @@ const sf::Vector2i Tile::TILE_SIZE = sf::Vector2i(75, 75);
  */
 Tile::Tile(Type type, int x, int y) :
 		Sprite(Data(sf::Vector2f(x * TILE_SIZE.x, y * TILE_SIZE.y),
-				CATEGORY_WORLD, isSolid(type)),	Yaml(getConfig(type))),
+				CATEGORY_WORLD, (isSolid(type)) ? 0xffff : 0),
+				Yaml(getConfig(type))),
 		mType(type) {
 }
 

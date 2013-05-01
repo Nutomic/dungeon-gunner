@@ -11,6 +11,7 @@
 
 #include "sprites/Tile.h"
 #include "util/Interval.h"
+#include "util/Log.h"
 
 /**
  * Insert a drawable into the group. Drawables should only be handled with shared_ptr.
@@ -75,27 +76,35 @@ World::step(int elapsed) {
 				it--;
 			}
 			// Apply movement for movable sprites.
-			else if (spriteA->getSpeed() != sf::Vector2f()) {
-				bool overlap = false;
-				for (auto w = mDrawables.begin(); w != mDrawables.end(); w++) {
-					for (auto& spriteB : w->second) {
-						if (spriteA == spriteB)
-							continue;
-						// Ignore anything that is filtered by masks.
-						if (!spriteA->collisionEnabled(spriteB->getCategory()) ||
-								!spriteB->collisionEnabled(spriteA->getCategory()))
-							continue;
-						if (testCollision(spriteA, spriteB, elapsed)) {
-							spriteA->onCollide(spriteB);
-							overlap = true;
-						}
-					}
-				}
-				if (!overlap)
-					spriteA->setPosition(spriteA->getPosition() + speed);
+			else if (spriteA->getSpeed() != sf::Vector2f() &&
+					!doesOverlap(spriteA, elapsed))
+				spriteA->setPosition(spriteA->getPosition() + speed);
+		}
+	}
+}
+
+/**
+ * Tests spriteA for overlap with every other sprite (considering collision
+ * masks).
+ */
+bool
+World::doesOverlap(std::shared_ptr<Sprite> spriteA, int elapsed) {
+	for (auto w = mDrawables.begin(); w != mDrawables.end(); w++) {
+		for (auto& spriteB : w->second) {
+			if (spriteA == spriteB)
+				continue;
+			// Ignore anything that is filtered by masks.
+			if (!spriteA->collisionEnabled(spriteB->getCategory()) ||
+					!spriteB->collisionEnabled(spriteA->getCategory()))
+				continue;
+			if (testCollision(spriteA, spriteB, elapsed)) {
+				spriteA->onCollide(spriteB);
+				spriteB->onCollide(spriteA);
+				return true;
 			}
 		}
 	}
+	return false;
 }
 
 /**
@@ -134,7 +143,6 @@ World::testCollision(std::shared_ptr<Sprite> spriteA,
 	// circle-circle collision
 	if ((spriteA->mShape.type == Sprite::Shape::Type::CIRCLE) &&
 			(spriteB->mShape.type == Sprite::Shape::Type::CIRCLE)) {
-
 		sf::Vector2f axis = spriteA->getPosition() - spriteB->getPosition();
 		// If both objects are at the exact same position, allow any movement for unstucking.
 		if (axis == sf::Vector2f())
