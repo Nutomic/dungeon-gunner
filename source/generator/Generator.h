@@ -22,21 +22,23 @@ public:
 	sf::Vector2f getPlayerSpawn() const;
 
 private:
-	sf::Vector2i findClosestFloor(const sf::Vector2i& position) const;
-	static void fill(std::vector<std::vector<Tile::Type> >& image,
-			const sf::IntRect& area, Tile::Type value);
-	static void filterWalls(std::vector<std::vector<Tile::Type> >& in,
-			std::vector<std::vector<Tile::Type> >& out,
-			int x, int y, int longside, int shortside, int subtract);
-	static int countWalls(const sf::IntRect& area,
-			std::vector<std::vector<Tile::Type> >& tiles);
-	void generateAreas(std::vector<std::vector<Tile::Type> >& tiles,
-			const sf::IntRect& area, const sf::Vector2f& offset);
+	typedef Tile::Type type;
+	typedef std::map<int, std::map<int, type> > array;
 
 private:
+	sf::Vector2i findClosestFloor(const sf::Vector2i& position) const;
+	static void fill(array& in, const sf::IntRect& area, type value);
+	static void filterWalls(const array& in, array& out, int x, int y,
+			int longside, int shortside, int subtract);
+	static int countWalls(const array& in, const sf::IntRect& area);
+	void generateAreas(const array& in, const sf::IntRect& area,
+			const sf::Vector2f& offset) const;
+
+private:
+	static const int MARGIN;
 	World& mWorld;
 	Pathfinder& mPathfinder;
-	std::vector<std::vector<Tile::Type> > mGenerated;
+	array mGenerated;
 };
 
 #endif /* DG_GENERATOR_H_ */
