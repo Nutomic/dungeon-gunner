@@ -24,7 +24,6 @@ public:
 
 private:
     Area* getArea(const sf::Vector2f& point) const;
-    float heuristic_cost_estimate(Area* start, Area* end) const;
     std::vector<Portal*> astarArea(Area* start, Area* end) const;
 
 private:
@@ -38,7 +37,6 @@ private:
  * Redundant data as portals are saved twice.
  */
 struct Pathfinder::Portal {
-	bool operator==(const Portal& p);
 	sf::Vector2i start;
 	sf::Vector2i end;
 	Area* area;

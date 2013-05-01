@@ -8,8 +8,8 @@
 #include "Pathfinder.h"
 
 #include <algorithm>
-#include <unordered_set>
-#include <unordered_map>
+#include <set>
+#include <map>
 
 #include <Thor/Vectors.hpp>
 
@@ -31,19 +31,21 @@ std::vector<Pathfinder::Portal*>
 Pathfinder::astarArea(Area* start, Area* end) const {
 	assert(start);
 	assert(end);
+	auto heuristic_cost_estimate = [](Area* start, Area* end) {
+		return thor::length(sf::Vector2f(end->center - start->center));
+	};
 
-	std::unordered_set<Area*> closed;
-	std::unordered_map<Area*, float> openAreasEstimatedCost;
+	std::set<Area*> closed;
+	std::map<Area*, float> openAreasEstimatedCost;
 	// Navigated areas with previous area/portal.
-	std::unordered_map<Area*, std::pair<Area*, Portal*>> previousAreaAndPortal;
-	std::unordered_map<Area*, float> bestPathCost;
+	std::map<Area*, std::pair<Area*, Portal*>> previousAreaAndPortal;
+	std::map<Area*, float> bestPathCost;
 
 	openAreasEstimatedCost[start] = heuristic_cost_estimate(start, end);
 	bestPathCost[start] = 0;
 
 	while (!openAreasEstimatedCost.empty()) {
-		Area* current = std::min_element(openAreasEstimatedCost.begin(),
-				openAreasEstimatedCost.end())->first;
+		Area* current = openAreasEstimatedCost.begin()->first;
 		if (current == end) {
 			std::vector<Portal*> path;
 			auto previous = current;
@@ -132,18 +134,6 @@ Pathfinder::getPath(const sf::Vector2f& start, const sf::Vector2f& end,
 			std::swap(*(path.end() - 1), *(path.end() - 2));
 	}
 	return path;
-}
-
-/**
- * Returns the linear distance between two areas (using their center).
- */
-float
-Pathfinder::heuristic_cost_estimate(Area* start, Area* end) const {
-	return thor::length(sf::Vector2f(end->center - start->center));
-}
-
-bool Pathfinder::Portal::operator==(const Portal& p) {
-    return start == p.start && end == p.end && area == p.area;
 }
 
 /**
