@@ -7,7 +7,11 @@
 
 #include "Corpse.h"
 
-Corpse::Corpse(const sf::Vector2f& position, const Yaml& config) :
-		Sprite(Data(position, CATEGORY_NONSOLID, MASK_NONE), config) {
+#include "../util/Yaml.h"
+
+const std::string Corpse::CONFIG = "corpse.yaml";
+
+Corpse::Corpse(const sf::Vector2f& position) :
+		Sprite(Data(position, CATEGORY_NONSOLID, MASK_NONE), Yaml(CONFIG)) {
 }
 

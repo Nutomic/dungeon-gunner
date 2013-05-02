@@ -9,10 +9,14 @@
 
 #include <Thor/Vectors.hpp>
 
+#include "../util/Yaml.h"
+
+const std::string Enemy::CONFIG = "enemy.yaml";
+
 Enemy::Enemy(World& world, Pathfinder& pathfinder,
-		const sf::Vector2f& position, const Yaml& config) :
+		const sf::Vector2f& position) :
 		Character(world, pathfinder, Data(position, CATEGORY_ACTOR, MASK_ALL),
-				config) {
+				Yaml(CONFIG)) {
 }
 
 void

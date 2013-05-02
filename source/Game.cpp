@@ -28,7 +28,7 @@ Game::Game(sf::RenderWindow& window) :
 
 	mGenerator.generateTiles(sf::IntRect(-32, -32, 64, 64));
 	mPlayer = std::shared_ptr<Player>(new Player(mWorld, mPathfinder,
-			mGenerator.getPlayerSpawn(), Yaml("player.yaml")));
+			mGenerator.getPlayerSpawn()));
 	mWorld.insertCharacter(mPlayer);
 }
 

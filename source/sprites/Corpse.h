@@ -10,11 +10,12 @@
 
 #include "../abstract/Sprite.h"
 
-class Yaml;
-
 class Corpse : public Sprite {
 public:
-	explicit Corpse(const sf::Vector2f& position, const Yaml& config);
+	explicit Corpse(const sf::Vector2f& position);
+
+private:
+	static const std::string CONFIG;
 };
 
 #endif /* DG_CORPSE_H_ */

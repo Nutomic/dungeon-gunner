@@ -11,15 +11,17 @@
 #include "../abstract/Character.h"
 
 class World;
-class Yaml;
 
 class Enemy : public Character {
 public:
 	explicit Enemy(World& world, Pathfinder& pathfinder,
-			const sf::Vector2f& position, const Yaml& config);
+			const sf::Vector2f& position);
 
-protected:
+private:
 	virtual void onThink(int elapsed);
+
+private:
+	static const std::string CONFIG;
 };
 
 #endif /* DG_ENEMY_H_ */

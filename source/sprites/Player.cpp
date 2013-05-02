@@ -9,13 +9,17 @@
 
 #include <Thor/Vectors.hpp>
 
+#include "../util/Yaml.h"
+
+const std::string Player::CONFIG = "player.yaml";
+
 /**
  * Initializes Sprite.
  */
 Player::Player(World& world, Pathfinder& pathfinder,
-		const sf::Vector2f& position, const Yaml& config) :
+		const sf::Vector2f& position) :
 	Character(world, pathfinder,
-			Data(position, CATEGORY_ACTOR, MASK_ALL), config),
+			Data(position, CATEGORY_ACTOR, MASK_ALL), Yaml(CONFIG)),
 	mDirection(0) {
 }
 

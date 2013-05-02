@@ -10,7 +10,6 @@
 
 #include "../abstract/Character.h"
 
-class Yaml;
 class World;
 
 /**
@@ -30,7 +29,7 @@ public:
 
 public:
 	explicit Player(World& world, Pathfinder& pathfinder,
-			const sf::Vector2f& position, const Yaml& config);
+			const sf::Vector2f& position);
 
 	void setCrosshairPosition(const sf::Vector2f& position);
 	void pullTrigger();
@@ -42,6 +41,8 @@ private:
 	void onThink(int elapsed);
 
 private:
+	static const std::string CONFIG;
+
 	sf::Vector2f mCrosshairPosition; //< Relative position of the point to fire at (mouse cursor).
 	unsigned char mDirection; //< Current movement direction for direct control.
 };

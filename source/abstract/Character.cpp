@@ -71,7 +71,7 @@ Character::onThink(int elapsed) {
  */
 void
 Character::onDeath() {
-	mWorld.insert(std::shared_ptr<Sprite>(new Corpse(getPosition(), Yaml("body.yaml"))));
+	mWorld.insert(std::shared_ptr<Sprite>(new Corpse(getPosition())));
 }
 
 /**
