@@ -22,14 +22,12 @@
  */
 Bullet::Bullet(const sf::Vector2f& position, Sprite& shooter,
 		sf::Vector2f direction, const Yaml& config) :
-		Particle(config, Data(position, CATEGORY_PARTICLE,
-				~CATEGORY_PARTICLE)),
+		Particle(config, Data(position, CATEGORY_PARTICLE, ~CATEGORY_PARTICLE,
+				thor::rotatedVector(direction, -90.0f))),
 		mShooter(shooter),
 		mDamage(config.get(YAML_KEY::DAMAGE, YAML_DEFAULT::DAMAGE)),
 		mSpeed(config.get(YAML_KEY::SPEED, YAML_DEFAULT::SPEED)) {
-	thor::rotate(direction, - 90.0f);
 	setSpeed(direction, mSpeed);
-	setDirection(direction);
 }
 
 /**
