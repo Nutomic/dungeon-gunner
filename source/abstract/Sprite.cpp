@@ -12,78 +12,27 @@
 #include "../util/Loader.h"
 #include "../util/Log.h"
 #include "../util/ResourceManager.h"
-#include "../util/Yaml.h"
 
-/**
- * Initializes sprite data.
- *
- * @param data Container holding construction parameters.
- * @param config Additional construction parameters
- */
-Sprite::Sprite(const Data& data, const Yaml& config) :
-		mCategory(data.category),
-		mMask(data.mask),
-		mDelete(false) {
-	// Init shape
-	float radius = config.get(YAML_KEY::RADIUS, 0.0f);
-	sf::Vector2f size = config.get(YAML_KEY::SIZE, sf::Vector2f());
-	if (radius != 0.0f) {
-		mShape.type = Shape::Type::CIRCLE;
-		mShape.shape = std::unique_ptr<sf::Shape>(new sf::CircleShape(radius));
-		mShape.shape->setOrigin(radius, radius);
-		mShape.shape->setTextureRect(sf::IntRect(sf::Vector2i(0, 0),
-				sf::Vector2i(radius * 2, radius * 2)));
+Sprite::Sprite(const sf::Vector2f& position, Category category,
+			unsigned short mask, const sf::Vector2f& size,
+			const std::string& texture,	const sf::Vector2f& direction) :
+			mCategory(category),
+			mMask(mask),
+			mDelete(false) {
+	mShape.setSize(size);
+	mShape.setOrigin(size / 2.0f);
+	mShape.setTextureRect(sf::IntRect(sf::Vector2i(), sf::Vector2i(size)));
+	setPosition(position);
+	setDirection(direction);
+	try {
+		mTexture = ResourceManager::i().acquire(Loader::i()
+				.fromFile<sf::Texture>(texture));
+		mShape.setTexture(&*mTexture, false);
 	}
-	else if (size == sf::Vector2f()) {
-		LOG_E("Failed to read size or radius from " << config.getFilename() <<
-				", using texture size.");
-		size = sf::Vector2f(mTexture->getSize());
+	catch (thor::ResourceLoadingException&) {
+		LOG_W("Failed to load texture " << texture << ", coloring red.");
+		mShape.setFillColor(sf::Color(255, 0, 0));
 	}
-	else if (size != sf::Vector2f()) {
-		mShape.type = Shape::Type::RECTANGLE;
-		mShape.shape = std::unique_ptr<sf::Shape>(new sf::RectangleShape(size));
-		mShape.shape->setOrigin(size / 2.0f);
-		mShape.shape->setTextureRect(sf::IntRect(sf::Vector2i(0, 0), sf::Vector2i(size)));
-	}
-
-	// Init texture
-	std::string texture = config.get<std::string>(YAML_KEY::TEXTURE, "");
-	if (texture != "") {
-		try {
-			mTexture = ResourceManager::i().acquire(Loader::i()
-					.fromFile<sf::Texture>(texture));
-			mShape.shape->setTexture(&*mTexture, false);
-		}
-		catch (thor::ResourceLoadingException&) {
-			LOG_W("Failed to load texture " << texture << ", coloring red.");
-			mShape.shape->setFillColor(sf::Color(255, 0, 0));
-		}
-	}
-	else {
-		LOG_W("Failed to read texture file name from YAML file " <<
-				config.getFilename() << ", coloring red.");
-		mShape.shape->setFillColor(sf::Color(255, 0, 0));
-	}
-
-	setPosition(data.position);
-	setDirection(data.direction);
-}
-
-/**
- * Used to make this class pure virtual without any pure virtual function.
- */
-Sprite::~Sprite() {
-}
-
-/**
- * Initializes container.
- */
-Sprite::Data::Data(const sf::Vector2f& position, Category category,
-		unsigned short mask, const sf::Vector2f& direction) :
-		position(position),
-		direction(direction),
-		category(category),
-		mask(mask) {
 }
 
 /**
@@ -91,7 +40,7 @@ Sprite::Data::Data(const sf::Vector2f& position, Category category,
  */
 sf::Vector2f
 Sprite::getPosition() const {
-	return mShape.shape->getPosition();
+	return mShape.getPosition();
 }
 
 /**
@@ -107,7 +56,7 @@ Sprite::getSpeed() const {
  */
 sf::Vector2f
 Sprite::getDirection() const {
-	return thor::rotatedVector(sf::Vector2f(1, 0), mShape.shape->getRotation());
+	return thor::rotatedVector(sf::Vector2f(1, 0), mShape.getRotation());
 }
 
 /**
@@ -132,13 +81,13 @@ Sprite::getCategory() const {
  */
 sf::Vector2f
 Sprite::getSize() const {
-	sf::FloatRect bounds = mShape.shape->getLocalBounds();
+	sf::FloatRect bounds = mShape.getLocalBounds();
 	return sf::Vector2f(bounds.width, bounds.height);
 }
 
 void
 Sprite::draw(sf::RenderTarget& target, sf::RenderStates states) const {
-	target.draw(*mShape.shape, states);
+	target.draw(mShape, states);
 }
 
 /**
@@ -151,7 +100,7 @@ Sprite::collisionEnabled(Category category) const {
 
 bool
 Sprite::isInside(const sf::FloatRect& rect) const {
-	return rect.intersects(mShape.shape->getGlobalBounds());
+	return rect.intersects(mShape.getGlobalBounds());
 }
 /**
  * Called when a collision with another Sprite occured. Override this method
@@ -187,7 +136,7 @@ Sprite::setSpeed(sf::Vector2f direction, float speed) {
 void
 Sprite::setDirection(const sf::Vector2f& direction) {
 	if (direction != sf::Vector2f())
-		mShape.shape->setRotation(thor::polarAngle(direction) + 90);
+		mShape.setRotation(thor::polarAngle(direction) + 90);
 }
 
 /**
@@ -195,18 +144,5 @@ Sprite::setDirection(const sf::Vector2f& direction) {
  */
 void
 Sprite::setPosition(const sf::Vector2f& position) {
-	mShape.shape->setPosition(position);
-}
-
-/**
- * Returns the radius of this sprite. Will fail if this is not a circle.
- *
- * @return The radius of this sprite.
- */
-float
-Sprite::getRadius() const {
-	std::shared_ptr<sf::CircleShape> circleShape =
-			std::dynamic_pointer_cast<sf::CircleShape>(mShape.shape);
-	assert(circleShape);
-	return circleShape->getRadius();
+	mShape.setPosition(position);
 }

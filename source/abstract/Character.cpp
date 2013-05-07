@@ -21,9 +21,10 @@ const float Character::VISION_DISTANCE = 500.0f;
 /**
  * Saves pointer to this instance in static var for think().
  */
-Character::Character(World& world, Pathfinder& pathfinder, const Data& data,
-	const Yaml& config) :
-		Sprite(data, config),
+Character::Character(const sf::Vector2f& position, Category category,
+		unsigned short mask, const Yaml& config, World& world,
+		Pathfinder& pathfinder) :
+		Circle(position, category, mask, config),
 		mWorld(world),
 		mPathfinder(pathfinder),
 		mMaxHealth(config.get(YAML_KEY::HEALTH, YAML_DEFAULT::HEALTH)),

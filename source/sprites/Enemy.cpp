@@ -15,8 +15,8 @@ const std::string Enemy::CONFIG = "enemy.yaml";
 
 Enemy::Enemy(World& world, Pathfinder& pathfinder,
 		const sf::Vector2f& position) :
-		Character(world, pathfinder, Data(position, CATEGORY_ACTOR, MASK_ALL),
-				Yaml(CONFIG)) {
+		Character(position, CATEGORY_ACTOR, MASK_ALL, Yaml(CONFIG), world,
+				pathfinder) {
 }
 
 void

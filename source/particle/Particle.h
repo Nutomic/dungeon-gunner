@@ -8,16 +8,18 @@
 #ifndef DG_PARTICLE_H_
 #define DG_PARTICLE_H_
 
-#include "../abstract/Sprite.h"
+#include "../abstract/Circle.h"
 
 class Yaml;
 
 /**
  * Prototype for a particle.
  */
-class Particle : public Sprite {
+class Particle : public Circle {
 public:
-	explicit Particle(const Yaml& config, const Data& data);
+	explicit Particle(const sf::Vector2f& position, Category category,
+			unsigned short mask, const Yaml& config,
+			const sf::Vector2f& direction);
 	virtual ~Particle();
 };
 

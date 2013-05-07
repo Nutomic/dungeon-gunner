@@ -18,8 +18,8 @@ const std::string Player::CONFIG = "player.yaml";
  */
 Player::Player(World& world, Pathfinder& pathfinder,
 		const sf::Vector2f& position) :
-	Character(world, pathfinder,
-			Data(position, CATEGORY_ACTOR, MASK_ALL), Yaml(CONFIG)),
+	Character(position, CATEGORY_ACTOR, MASK_ALL, Yaml(CONFIG), world,
+			pathfinder),
 	mDirection(0) {
 }
 

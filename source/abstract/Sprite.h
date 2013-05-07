@@ -12,8 +12,6 @@
 
 #include <SFML/Graphics.hpp>
 
-class Yaml;
-
 /**
  * An sprite that is rendered in the world.
  */
@@ -31,21 +29,6 @@ public:
 	};
 
 	/**
-	 * Container that carries all data required to construct an object of
-	 * this class.
-	 */
-	class Data {
-	public:
-		explicit Data(const sf::Vector2f& position,
-				Category category, unsigned short mask,
-				const sf::Vector2f& direction = sf::Vector2f(0, 0));
-		const sf::Vector2f& position;
-		const sf::Vector2f& direction;
-		Category category;
-		unsigned short mask;
-	};
-
-	/**
 	 * Common collision masking values.
 	 */
 	enum Mask : unsigned short {
@@ -55,8 +38,10 @@ public:
 
 // Public functions.
 public:
-	explicit Sprite(const Data& data, const Yaml& config);
-	virtual ~Sprite() = 0;
+	explicit Sprite(const sf::Vector2f& position, Category category,
+			unsigned short mask, const sf::Vector2f& size,
+			const std::string& texture,	const sf::Vector2f& direction);
+	virtual ~Sprite() = default;
 
 	sf::Vector2f getPosition() const;
 	sf::Vector2f getSpeed() const;
@@ -68,6 +53,7 @@ public:
 	bool collisionEnabled(Category category) const;
 	bool isInside(const sf::FloatRect& rect) const;
 
+	virtual bool testCollision(std::shared_ptr<Sprite> other, int elapsed) = 0;
 	virtual void onCollide(std::shared_ptr<Sprite> other);
 
 protected:
@@ -75,24 +61,11 @@ protected:
 	void setSpeed(sf::Vector2f direction, float speed);
 	void setDirection(const sf::Vector2f& direction);
 	void setPosition(const sf::Vector2f& position);
-	float getRadius() const;
-
-private:
-	class Shape {
-	public:
-		enum class Type {
-			CIRCLE,
-			RECTANGLE
-		};
-
-		Type type;
-		std::shared_ptr<sf::Shape> shape;
-	};
 
 private:
 	friend class World;
 
-	Shape mShape;
+	sf::RectangleShape mShape;
 	std::shared_ptr<sf::Texture> mTexture;
 	sf::Vector2f mSpeed;
 	Category mCategory;

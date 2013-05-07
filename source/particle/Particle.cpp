@@ -7,8 +7,10 @@
 
 #include "Particle.h"
 
-Particle::Particle(const Yaml& config, const Data& data) :
-		Sprite(data, config) {
+Particle::Particle(const sf::Vector2f& position, Category category,
+		unsigned short mask, const Yaml& config,
+		const sf::Vector2f& direction) :
+	Circle(position, category, mask, config, direction) {
 }
 
 Particle::~Particle() {

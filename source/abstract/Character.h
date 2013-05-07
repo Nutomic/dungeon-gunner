@@ -8,7 +8,7 @@
 #ifndef DG_ACTOR_H_
 #define DG_ACTOR_H_
 
-#include "Sprite.h"
+#include "Circle.h"
 
 class Pathfinder;
 class World;
@@ -18,10 +18,11 @@ class Yaml;
 /**
  * Provides think function for AI, manages health, drops body on death.
  */
-class Character : public Sprite {
+class Character : public Circle {
 public:
-	explicit Character(World& world, Pathfinder& pathfinder, const Data& data,
-			const Yaml& config);
+	explicit Character(const sf::Vector2f& position, Category category,
+			unsigned short mask, const Yaml& config, World& world,
+			Pathfinder& pathfinder);
 	virtual ~Character() = 0;
 
 	void onDamage(int damage);

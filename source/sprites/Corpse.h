@@ -8,9 +8,9 @@
 #ifndef DG_CORPSE_H_
 #define DG_CORPSE_H_
 
-#include "../abstract/Sprite.h"
+#include "../abstract/Circle.h"
 
-class Corpse : public Sprite {
+class Corpse : public Circle {
 public:
 	explicit Corpse(const sf::Vector2f& position);
 

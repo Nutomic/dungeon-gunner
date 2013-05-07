@@ -8,12 +8,12 @@
 #ifndef DG_TILE_H_
 #define DG_TILE_H_
 
-#include "../abstract/Sprite.h"
+#include "../abstract/Rectangle.h"
 
 /**
  * Holds information about a single tile.
  */
-class Tile : public Sprite {
+class Tile : public Rectangle {
 public:
 	enum class Type : char {
 		FLOOR,
