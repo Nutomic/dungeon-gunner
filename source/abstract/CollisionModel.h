@@ -18,6 +18,7 @@ class CollisionModel {
 public:
 	virtual ~CollisionModel() = 0;
 
+protected:
 	static bool testCollision(const Circle& circle, const Rectangle& rect,
 			int elapsed);
 	static bool testCollision(const Circle& first, const Circle& second,

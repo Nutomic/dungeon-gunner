@@ -12,9 +12,6 @@
 #include "generator/Generator.h"
 #include "sprites/Enemy.h"
 #include "sprites/Player.h"
-#include "util/Log.h"
-
-#include "sprites/Corpse.h"
 
 const int Game::FPS_GOAL = 60;
 
@@ -38,7 +35,6 @@ Game::Game(sf::RenderWindow& window) :
 
 	auto enemyPositions = mGenerator.getEnemySpawns(area);
 	for (const auto& position : enemyPositions) {
-		LOG_D(position);
 		if (thor::length(mPlayer->getPosition() - position) > Character::VISION_DISTANCE)
 			mWorld.insertCharacter(std::shared_ptr<Enemy>(new Enemy(mWorld, mPathfinder, position)));
 	}
