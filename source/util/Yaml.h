@@ -89,6 +89,7 @@ namespace YAML_KEY {
 	const std::string HEALTH = "health";
 	const std::string SPEED = "speed";
 	const std::string WEAPON = "weapon";
+	const std::string FACTION = "faction";
 
 	// Bullet
 	const std::string DAMAGE = "damage";
@@ -107,6 +108,7 @@ namespace YAML_DEFAULT {
 	const int INTERVAL = 250;
 	const std::string BULLET = "bullet.yaml";
 	const bool AUTOMATIC = false;
+	const int FACTION = 1;
 }
 
 #endif /* DG_YAML_H_ */

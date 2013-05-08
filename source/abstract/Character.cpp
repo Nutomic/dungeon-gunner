@@ -32,7 +32,8 @@ Character::Character(const sf::Vector2f& position, Category category,
 		mMovementSpeed(config.get(YAML_KEY::SPEED, YAML_DEFAULT::SPEED)),
 		mWeapon(new Weapon(world, *this,
 				Yaml(config.get(YAML_KEY::WEAPON, YAML_DEFAULT::WEAPON)))),
-		mLastPosition(getPosition()) {
+		mLastPosition(getPosition()),
+		mFaction((Faction) config.get(YAML_KEY::FACTION, YAML_DEFAULT::FACTION)) {
 }
 
 Character::~Character() {
@@ -64,6 +65,14 @@ void
 Character::onThink(int elapsed) {
 	mWeapon->onThink(elapsed);
 	move();
+}
+
+/**
+ * Returns the faction this character belongs to.
+ */
+Character::Faction
+Character::getFaction() const {
+	return mFaction;
 }
 
 /**
@@ -163,5 +172,9 @@ Character::isVisible(const sf::Vector2f& target) const {
  */
 std::vector<std::shared_ptr<Character> >
 Character::getCharacters() const {
-	return mWorld.getCharacters(getPosition(), VISION_DISTANCE);
+	auto characters = mWorld.getCharacters(getPosition(), VISION_DISTANCE);
+	characters.erase(std::remove_if(characters.begin(), characters.end(),
+			[this](const std::shared_ptr<Character>& c)
+			{return c->getFaction() == getFaction();}), characters.end());
+	return characters;
 }
