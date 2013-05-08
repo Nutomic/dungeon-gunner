@@ -28,6 +28,10 @@ uint8_t perm[512];
  */
 const int Generator::MARGIN = 10;
 
+// Different layers in 3d noise so we don't use the same noise values.
+const float Generator::LAYER_TILES = 0;
+const float Generator::LAYER_ENEMIES = 1.0f;
+
 /**
  * Generates new random seed.
  */
@@ -58,8 +62,8 @@ Generator::generateTiles(const sf::IntRect& area) {
 	for (int x = area.left - MARGIN; x < area.left + area.width + MARGIN; x++) {
 		for (int y = area.top - MARGIN; y < area.top + area.height + MARGIN; y++) {
 			noise[x][y] =
-					(scaled_octave_noise_2d(2, 2, 0.05f, 0.5f, -0.5f, x, y) +
-					scaled_octave_noise_2d(2, 2, 0.5f, 0.15f, -0.15f, x, y)
+					(scaled_octave_noise_3d(2, 2, 0.05f, 0.5f, -0.5f, x, y, LAYER_TILES) +
+					scaled_octave_noise_3d(2, 2, 0.5f, 0.15f, -0.15f, x, y, LAYER_TILES)
 					< -0.1f)
 							? type::WALL
 							: type::FLOOR;
@@ -84,6 +88,24 @@ Generator::generateTiles(const sf::IntRect& area) {
 	generateAreas(filtered, area, sf::Vector2f(area.left, area.top));
 	mPathfinder.generatePortals();
 	mGenerated = filtered;
+}
+
+std::vector<sf::Vector2f>
+Generator::getEnemySpawns(const sf::IntRect& area) const {
+	auto compare = [](const sf::Vector2f& a, const sf::Vector2f& b) {
+		return a.x < b.x || (a.x == b.x && a.y < b.y);
+	};
+	std::set<sf::Vector2f, decltype(compare)> ret(compare);
+	for (int x = area.left; x < area.left + area.width; x++) {
+		for (int y = area.top; y < area.top + area.height; y++) {
+			if (scaled_octave_noise_3d(2, 2, 0.5f, 10.0f, 0, x, y, LAYER_ENEMIES)
+			< 1.0f) {
+				ret.insert(sf::Vector2f(thor::componentwiseProduct(
+						findClosestFloor(sf::Vector2i(x, y)), Tile::TILE_SIZE)));
+			}
+		}
+	}
+	return std::vector<sf::Vector2f>(ret.begin(), ret.end());
 }
 
 /**
@@ -209,7 +231,9 @@ Generator::findClosestFloor(const sf::Vector2i& position) const {
 		const sf::Vector2i& current = open.begin()->first;
 		open.erase(current);
 		closed.insert(current);
-		if (mGenerated.at(current.x).at(current.y) == Tile::Type::FLOOR)
+		if (mGenerated.count(current.x) != 0 &&
+				mGenerated.at(current.x).count(current.y) != 0 &&
+				mGenerated.at(current.x).at(current.y) == Tile::Type::FLOOR)
 			return current;
 		else {
 			if (closed.find(sf::Vector2i(current.x + 1, current.y)) == closed.end())

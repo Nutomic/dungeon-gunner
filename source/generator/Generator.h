@@ -20,6 +20,7 @@ public:
 	explicit Generator(World& world, Pathfinder& pathfinder);
 	void generateTiles(const sf::IntRect& area);
 	sf::Vector2f getPlayerSpawn() const;
+	std::vector<sf::Vector2f> getEnemySpawns(const sf::IntRect& area) const;
 
 private:
 	typedef Tile::Type type;
@@ -36,6 +37,9 @@ private:
 
 private:
 	static const int MARGIN;
+	static const float LAYER_TILES;
+	static const float LAYER_ENEMIES;
+
 	World& mWorld;
 	Pathfinder& mPathfinder;
 	array mGenerated;

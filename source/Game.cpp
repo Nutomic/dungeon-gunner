@@ -7,10 +7,14 @@
 
 #include "Game.h"
 
+#include <Thor/Vectors.hpp>
+
 #include "generator/Generator.h"
 #include "sprites/Enemy.h"
 #include "sprites/Player.h"
-#include "util/Yaml.h"
+#include "util/Log.h"
+
+#include "sprites/Corpse.h"
 
 const int Game::FPS_GOAL = 60;
 
@@ -26,10 +30,18 @@ Game::Game(sf::RenderWindow& window) :
 	mWindow.setFramerateLimit(FPS_GOAL);
 	mWindow.setKeyRepeatEnabled(true);
 
-	mGenerator.generateTiles(sf::IntRect(-32, -32, 64, 64));
+	sf::IntRect area(-32, -32, 64, 64);
+	mGenerator.generateTiles(area);
 	mPlayer = std::shared_ptr<Player>(new Player(mWorld, mPathfinder,
 			mGenerator.getPlayerSpawn()));
 	mWorld.insertCharacter(mPlayer);
+
+	auto enemyPositions = mGenerator.getEnemySpawns(area);
+	for (const auto& position : enemyPositions) {
+		LOG_D(position);
+		if (thor::length(mPlayer->getPosition() - position) > Character::VISION_DISTANCE)
+			mWorld.insertCharacter(std::shared_ptr<Enemy>(new Enemy(mWorld, mPathfinder, position)));
+	}
 }
 
 /**

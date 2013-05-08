@@ -27,6 +27,10 @@ public:
 
 	void onDamage(int damage);
 
+public:
+	/// Maximum distance where an enemy will be detected.
+	static const float VISION_DISTANCE;
+
 protected:
 	virtual void onThink(int elapsed);
 	virtual void onDeath();
@@ -42,9 +46,6 @@ private:
 	void move();
 
 private:
-	/// Maximum distance where an enemy will be detected.
-	static const float VISION_DISTANCE;
-
 	friend class World;
 	World& mWorld;
 	Pathfinder& mPathfinder;
