@@ -27,8 +27,7 @@ Game::Game(sf::RenderWindow& window) :
 	mWindow.setFramerateLimit(FPS_GOAL);
 	mWindow.setKeyRepeatEnabled(false);
 
-	sf::IntRect area(-32, -32, 64, 64);
-	mGenerator.generateTiles(area);
+	mGenerator.generateCurrentAreaIfNeeded(sf::Vector2f());
 	mPlayer = std::shared_ptr<Player>(new Player(mWorld, mPathfinder,
 			mGenerator.getPlayerSpawn()));
 	mWorld.insertCharacter(mPlayer);
@@ -63,7 +62,10 @@ Game::loop() {
 		mWorld.think(elapsed);
 
 		mWorld.step(elapsed);
+
 		render();
+
+		mGenerator.generateCurrentAreaIfNeeded(mPlayer->getPosition());
 	}
 }
 

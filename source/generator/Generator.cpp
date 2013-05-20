@@ -7,6 +7,7 @@
 
 #include "Generator.h"
 
+#include <algorithm>
 #include <assert.h>
 #include <map>
 #include <set>
@@ -21,6 +22,9 @@
 
 /// Seed for usage with simplexnoise.h
 uint8_t perm[512];
+
+const int Generator::GENERATE_AREA_SIZE = 4;
+const float Generator::GENERATE_AREA_RANGE = 4.0f;
 
 /**
  * Amount of tiles extra to generate, to get consistent walls
@@ -43,6 +47,55 @@ Generator::Generator(World& world, Pathfinder& pathfinder) :
 
 	for (int i = 0; i < 512; i++)
 		perm[i] = distribution(mersenne);
+}
+
+/**
+ * Generates tiles near position (maximum distance is determined by
+ * GENERATE_AREA_SIZE and GENERATE_AREA_RANGE).
+ */
+void
+Generator::generateCurrentAreaIfNeeded(const sf::Vector2f& position) {
+	auto compare = [](const sf::Vector2i& a, const sf::Vector2i& b) {
+		return a.x < b.x || (a.x == b.x && a.y < b.y);
+	};
+	std::map<sf::Vector2i, float, decltype(compare)> open(compare);
+	std::set<sf::Vector2i, decltype(compare)> closed(compare);
+
+	sf::Vector2i start((int) floor(position.x / Tile::TILE_SIZE.x),
+			(int) floor(position.y / Tile::TILE_SIZE.y));
+	start /= GENERATE_AREA_SIZE;
+	auto makePair = [&start](const sf::Vector2i& point) {
+		return std::make_pair(point, thor::length(sf::Vector2f(point - start)));
+	};
+
+	open.insert(makePair(start));
+	while (!open.empty()) {
+		auto intComp = [](const std::pair<sf::Vector2i, float>& left,
+				const std::pair<sf::Vector2i, float>& right) {
+			return left.second < right.second;
+		};
+		sf::Vector2i current =
+				std::min_element(open.begin(), open.end(), intComp)->first;
+		float distance = open[current];
+		open.erase(current);
+		closed.insert(current);
+		if (!mGenerated[current.x][current.y] && distance <= GENERATE_AREA_RANGE) {
+			mGenerated[current.x][current.y] = true;
+			generateTiles(sf::IntRect(current * GENERATE_AREA_SIZE -
+					sf::Vector2i(GENERATE_AREA_SIZE, GENERATE_AREA_SIZE) / 2,
+					sf::Vector2i(GENERATE_AREA_SIZE, GENERATE_AREA_SIZE)));
+		}
+		if (mGenerated[current.x][current.y] && distance <= GENERATE_AREA_RANGE) {
+			if (closed.find(sf::Vector2i(current.x + 1, current.y)) == closed.end())
+				open.insert(makePair(sf::Vector2i(current.x + 1, current.y)));
+			if (closed.find(sf::Vector2i(current.x, current.y + 1)) == closed.end())
+				open.insert(makePair(sf::Vector2i(current.x, current.y + 1)));
+			if (closed.find(sf::Vector2i(current.x - 1, current.y)) == closed.end())
+				open.insert(makePair(sf::Vector2i(current.x - 1, current.y)));
+			if (closed.find(sf::Vector2i(current.x, current.y - 1)) == closed.end())
+				open.insert(makePair(sf::Vector2i(current.x, current.y - 1)));
+		}
+	}
 }
 
 /**
@@ -87,7 +140,7 @@ Generator::generateTiles(const sf::IntRect& area) {
 	}
 	generateAreas(filtered, area, sf::Vector2f(area.left, area.top));
 	mPathfinder.generatePortals();
-	mGenerated = filtered;
+	mTiles = filtered;
 }
 
 std::vector<sf::Vector2f>
@@ -228,12 +281,16 @@ Generator::findClosestFloor(const sf::Vector2i& position) const {
 
 	open.insert(makePair(start));
 	while (!open.empty()) {
-		const sf::Vector2i& current = open.begin()->first;
+		auto intComp = [](const std::pair<sf::Vector2i, float>& left,
+				const std::pair<sf::Vector2i, float>& right) {
+			return left.second < right.second;
+		};
+		sf::Vector2i current = std::min_element(open.begin(), open.end(), intComp)->first;
 		open.erase(current);
 		closed.insert(current);
-		if (mGenerated.count(current.x) != 0 &&
-				mGenerated.at(current.x).count(current.y) != 0 &&
-				mGenerated.at(current.x).at(current.y) == Tile::Type::FLOOR)
+		if (mTiles.count(current.x) != 0 &&
+				mTiles.at(current.x).count(current.y) != 0 &&
+				mTiles.at(current.x).at(current.y) == Tile::Type::FLOOR)
 			return current;
 		else {
 			if (closed.find(sf::Vector2i(current.x + 1, current.y)) == closed.end())
