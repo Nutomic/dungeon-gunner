@@ -25,19 +25,20 @@ Game::Game(sf::RenderWindow& window) :
 		mQuit(false),
 		mPaused(false) {
 	mWindow.setFramerateLimit(FPS_GOAL);
-	mWindow.setKeyRepeatEnabled(true);
+	mWindow.setKeyRepeatEnabled(false);
 
 	sf::IntRect area(-32, -32, 64, 64);
 	mGenerator.generateTiles(area);
 	mPlayer = std::shared_ptr<Player>(new Player(mWorld, mPathfinder,
 			mGenerator.getPlayerSpawn()));
 	mWorld.insertCharacter(mPlayer);
-
+	/*
 	auto enemyPositions = mGenerator.getEnemySpawns(area);
 	for (const auto& position : enemyPositions) {
 		if (thor::length(mPlayer->getPosition() - position) > Character::VISION_DISTANCE)
 			mWorld.insertCharacter(std::shared_ptr<Enemy>(new Enemy(mWorld, mPathfinder, position)));
 	}
+	*/
 }
 
 /**
