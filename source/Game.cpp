@@ -156,7 +156,7 @@ Game::keyDown(const sf::Event& event) {
  */
 sf::Vector2<float>
 Game::convertCoordinates(int x, int y) {
-	return mWindow.convertCoords(sf::Vector2i(x, y), mView);
+	return mWindow.mapPixelToCoords(sf::Vector2i(x, y), mView);
 }
 
 void

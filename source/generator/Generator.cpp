@@ -100,7 +100,7 @@ Generator::getEnemySpawns(const sf::IntRect& area) const {
 		for (int y = area.top; y < area.top + area.height; y++) {
 			if (scaled_octave_noise_3d(2, 2, 0.5f, 10.0f, 0, x, y, LAYER_ENEMIES)
 			< 1.0f) {
-				ret.insert(sf::Vector2f(thor::componentwiseProduct(
+				ret.insert(sf::Vector2f(thor::cwiseProduct(
 						findClosestFloor(sf::Vector2i(x, y)), Tile::TILE_SIZE)));
 			}
 		}

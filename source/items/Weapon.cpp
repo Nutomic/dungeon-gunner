@@ -7,7 +7,7 @@
 
 #include "Weapon.h"
 
-#include <thor/Vectors.hpp>
+#include <Thor/Vectors.hpp>
 
 #include "../World.h"
 #include "../effects/Bullet.h"
