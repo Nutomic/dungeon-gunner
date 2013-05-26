@@ -10,6 +10,7 @@
 
 #include "../particle/Particle.h"
 
+class Character;
 class Yaml;
 
 /**
@@ -17,13 +18,13 @@ class Yaml;
  */
 class Bullet : public Particle {
 public:
-	explicit Bullet(const sf::Vector2f& position, Sprite& shooter,
+	explicit Bullet(const sf::Vector2f& position, Character& shooter,
 			sf::Vector2f direction, const Yaml& config);
 
 	void onCollide(std::shared_ptr<Sprite> other);
 
 private:
-	Sprite& mShooter;
+	const Character& mShooter;
 	const int mDamage;
 	const float mSpeed;
 };

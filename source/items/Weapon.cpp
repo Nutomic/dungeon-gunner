@@ -13,7 +13,7 @@
 #include "../effects/Bullet.h"
 #include "../util/Yaml.h"
 
-Weapon::Weapon(World& world, Sprite& holder, const Yaml& config) :
+Weapon::Weapon(World& world, Character& holder, const Yaml& config) :
 		Emitter(world),
 		mHolder(holder),
 		mBullet(config.get(YAML_KEY::BULLET, YAML_DEFAULT::BULLET)),
@@ -21,12 +21,6 @@ Weapon::Weapon(World& world, Sprite& holder, const Yaml& config) :
 		mFireInterval(config.get(YAML_KEY::INTERVAL, YAML_DEFAULT::INTERVAL)),
 		mFire(false),
 		mAutomatic(config.get(YAML_KEY::AUTOMATIC, YAML_DEFAULT::AUTOMATIC)) {
-	sf::Vector2f holderSize = mHolder.getSize();
-	Yaml bullet(mBullet);
-	sf::Vector2f bulletSize = bullet.get(YAML_KEY::SIZE, sf::Vector2f());
-	mOffset = sf::Vector2f(0,
-			std::max(holderSize.x, holderSize.y) / 2 +
-			std::max(bulletSize.x, bulletSize.y) / 2);
 }
 
 /**
@@ -70,7 +64,7 @@ Weapon::onThink(int elapsed) {
 std::shared_ptr<Sprite>
 Weapon::createParticle() {
 	// Minus to account for positive y-axis going downwards in SFML.
-	sf::Vector2f offset(- mOffset);
+	sf::Vector2f offset(0, - mHolder.getRadius());
 	thor::rotate(offset, thor::polarAngle(mHolder.getDirection()));
 	return std::shared_ptr<Sprite>(new Bullet(mHolder.getPosition() + offset,
 			mHolder, mHolder.getDirection(), Yaml(mBullet)));

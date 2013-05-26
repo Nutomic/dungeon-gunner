@@ -14,10 +14,10 @@
 
 #include "../particle/Emitter.h"
 
-class Sprite;
-class Yaml;
+class Character;
 class World;
 class Particle;
+class Yaml;
 
 /**
  * Loading mechanism:
@@ -26,7 +26,7 @@ class Particle;
  */
 class Weapon : public Emitter {
 public:
-	explicit Weapon(World& world, Sprite& holder, const Yaml& config);
+	explicit Weapon(World& world, Character& holder, const Yaml& config);
 
 	void pullTrigger();
 	void releaseTrigger();
@@ -36,9 +36,8 @@ protected:
 	std::shared_ptr<Sprite> createParticle();
 
 private:
-	Sprite& mHolder;
+	Character& mHolder;
 
-	sf::Vector2f mOffset; //< Offset to the point where bullets are inserted (from holder center).
 	const std::string mBullet; //< Bullet config filename.
 	int mLastShotWaitInterval; //< Remaining time left after firing last bullet before firing next one.
 	const int mFireInterval; //< Time between firing bullets.

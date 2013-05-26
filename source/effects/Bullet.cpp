@@ -20,7 +20,7 @@
  * @param world Box2d world.
  * @param texture Texture to display for bullet.
  */
-Bullet::Bullet(const sf::Vector2f& position, Sprite& shooter,
+Bullet::Bullet(const sf::Vector2f& position, Character& shooter,
 		sf::Vector2f direction, const Yaml& config) :
 		Particle(position, CATEGORY_PARTICLE, ~CATEGORY_PARTICLE,
 				config, thor::rotatedVector(direction, -90.0f)),
@@ -31,12 +31,13 @@ Bullet::Bullet(const sf::Vector2f& position, Sprite& shooter,
 }
 
 /**
- * @copydoc Physical::onCollide
+ * Deletes this and calls onDamage if other is a character. Does not
+ * damage shooter.
  */
 void
 Bullet::onCollide(std::shared_ptr<Sprite> other) {
 	// Make sure we do not damage twice.
-	if (!getDelete()) {
+	if (!getDelete() && (&*other != &mShooter)) {
 		// Call onShot on other, with damage as param.
 		if (other->getCategory() == CATEGORY_ACTOR) {
 			std::shared_ptr<Character> character = std::static_pointer_cast<Character>(other);
