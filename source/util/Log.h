@@ -10,6 +10,9 @@
 
 #include <iostream>
 
+#include <SFML/System/Vector2.hpp>
+#include <SFML/Graphics/Rect.hpp>
+
 /**
  * Logging functions for different levels.
  *
@@ -58,6 +61,26 @@ operator<<(std::ostream& os, const sf::Vector2f& vector) {
 inline std::ostream&
 operator<<(std::ostream& os, const sf::Vector2i& vector) {
     os << "(" << vector.x << ", " << vector.y << ")";
+    return os;
+}
+
+/**
+ * Adds an output operator specalization for sf::FloatRect
+ */
+inline std::ostream&
+operator<<(std::ostream& os, const sf::FloatRect& rect) {
+    os << "(x: " << rect.left << ", y: " << rect.top << ", w: " <<
+    		rect.width << ", h: " << rect.height << ")";
+    return os;
+}
+
+/**
+ * Adds an output operator specalization for sf::IntRect
+ */
+inline std::ostream&
+operator<<(std::ostream& os, const sf::IntRect& rect) {
+    os << "(x: " << rect.left << ", y: " << rect.top << ", w: " <<
+    		rect.width << ", h: " << rect.height << ")";
     return os;
 }
 

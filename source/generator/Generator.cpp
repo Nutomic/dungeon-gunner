@@ -19,6 +19,7 @@
 #include "simplexnoise.h"
 #include "../Pathfinder.h"
 #include "../World.h"
+#include "../util/Log.h"
 
 /// Seed for usage with simplexnoise.h
 uint8_t perm[512];
@@ -81,9 +82,11 @@ Generator::generateCurrentAreaIfNeeded(const sf::Vector2f& position) {
 		closed.insert(current);
 		if (!mGenerated[current.x][current.y] && distance <= GENERATE_AREA_RANGE) {
 			mGenerated[current.x][current.y] = true;
-			generateTiles(sf::IntRect(current * GENERATE_AREA_SIZE -
+			sf::IntRect area(current * GENERATE_AREA_SIZE -
 					sf::Vector2i(GENERATE_AREA_SIZE, GENERATE_AREA_SIZE) / 2,
-					sf::Vector2i(GENERATE_AREA_SIZE, GENERATE_AREA_SIZE)));
+					sf::Vector2i(GENERATE_AREA_SIZE, GENERATE_AREA_SIZE));
+			LOG_I("Generating area " << area);
+			generateTiles(area);
 		}
 		if (mGenerated[current.x][current.y] && distance <= GENERATE_AREA_RANGE) {
 			if (closed.find(sf::Vector2i(current.x + 1, current.y)) == closed.end())
