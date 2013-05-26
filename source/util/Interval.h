@@ -12,7 +12,7 @@ class Interval {
 public:
 	static Interval IntervalFromRadius(float center, float radius);
 	static Interval IntervalFromPoints(float start, float end);
-	Interval getOverlap(Interval other) const;
+	Interval getOverlap(const Interval& other) const;
 	bool isInside(float point) const;
 	float getLength();
 

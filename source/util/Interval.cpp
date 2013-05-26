@@ -12,7 +12,7 @@
 Interval::Interval(float start, float end) :
 		start(start),
 		end(end) {
-	if (this->start > this->end)
+	if (start > end)
 		std::swap(this->start, this->end);
 };
 /**
@@ -37,20 +37,16 @@ Interval::IntervalFromPoints(float start, float end) {
  * intervals (1,3) and (2,4) is (2,3).
  */
 Interval
-Interval::getOverlap(Interval other) const {
-	if ((start == other.start) && (end == other.end))
-		return *this;
-	Interval smaller = *this;
-	Interval bigger = other;
-	if (smaller.start > bigger.start)
-		std::swap(smaller, bigger);
+Interval::getOverlap(const Interval& other) const {
 	Interval iv(0, 0);
-	if (bigger.start < smaller.end) {
-		iv.start = bigger.start;
-		iv.end = smaller.end;
-	}
-	else
-		iv.start = iv.end = 0.0f;
+	if (other.isInside(start))
+		iv.start = start;
+	else if (isInside(other.start))
+		iv.start = other.start;
+	if (other.isInside(end))
+		iv.end = end;
+	else if (isInside(other.end))
+		iv.end = other.end;
 	return iv;
 }
 
@@ -59,7 +55,7 @@ Interval::getOverlap(Interval other) const {
  */
 bool
 Interval::isInside(float point) const {
-	return start < point && point < end;
+	return start <= point && point <= end;
 }
 /**
  * Returns the length of the interval (distance between start and end).
