@@ -17,111 +17,112 @@
 
 CollisionModel::~CollisionModel() {
 }
+
 /**
- * Tests for collision between rectangle and circle.
+ * Tests for collision between a circle and a rectangle. Offset is the maximum
+ * value between zero and the original value of previous, for which the
+ * objects do not collide. Rectangles are assumed to be axis aligned.
  *
+ * @param [in,out] offset The movement offset of the circle.
+ * @param offsetSecond Movement offset of the rectangle.
  * @return True if a collision occured.
  */
 bool
 CollisionModel::testCollision(const Circle& circle, const Rectangle& rect,
-		int elapsed) {
-	sf::Vector2f halfsize = rect.getSize() / 2.0f;
-	sf::Vector2f circlePos = circle.getPosition();
-	sf::Vector2f rectPos = rect.getPosition();
-	// Only circle movement as rectangles don't move.
-	sf::Vector2f circleMovement = circle.getSpeed() * (elapsed / 1000.0f);
+		sf::Vector2f& offsetFirst, const sf::Vector2f& offsetSecond) {
+	sf::Vector2f halfSize = rect.getSize() / 2.0f;
+	sf::Vector2f circleNewPos = circle.getPosition() + offsetFirst;
+	sf::Vector2f rectNewPos = rect.getPosition() + offsetSecond;
 
-	// We assume that rectangles are always axis aligned.
-	float overlapNoMovementX = Interval::IntervalFromRadius(circlePos.x, circle.getRadius())
-							.getOverlap(Interval::IntervalFromRadius(rectPos.x, halfsize.x)).getLength();
-	float overlapMovementX = Interval::IntervalFromRadius(circlePos.x + circleMovement.x, circle.getRadius())
-							.getOverlap(Interval::IntervalFromRadius(rectPos.x, halfsize.x)).getLength();
-	float overlapNoMovementY = Interval::IntervalFromRadius(circlePos.y, circle.getRadius())
-							.getOverlap(Interval::IntervalFromRadius(rectPos.y, halfsize.y)).getLength();
-	float overlapMovementY = Interval::IntervalFromRadius(circlePos.y + circleMovement.y, circle.getRadius())
-							.getOverlap(Interval::IntervalFromRadius(rectPos.y, halfsize.y)).getLength();
-
-	bool xyCollisionResult = (((overlapNoMovementX < overlapMovementX) &&
-			(overlapNoMovementY > 0)) ||
-			((overlapNoMovementY < overlapMovementY) && (overlapNoMovementX > 0)));
-	// If circle center is overlapping rectangle on x or y axis, we can take xyCollisionResult.
-	if (Interval::IntervalFromRadius(rectPos.x, halfsize.x).isInside(circlePos.x) ||
-			Interval::IntervalFromRadius(rectPos.y, halfsize.y).isInside(circlePos.y))
-		return xyCollisionResult;
-	// Test if the circle is colliding with a corner of the rectangle.
-	else if (xyCollisionResult) {
-		// This is the same as circle-circle collision.
-		sf::Vector2f axis = circlePos - rectPos;
-		// If both objects are at the exact same position, allow any
-		// movement for unstucking.
-		if (axis == sf::Vector2f())
-			return true;
-		axis = thor::unitVector(axis);
-
-		float circlePosProjected = thor::dotProduct(axis, circlePos);
-		float movementProjected = thor::dotProduct(axis, circleMovement);
-		float rectPosProjected = thor::dotProduct(axis, rectPos);
-		// For corner projections, those on the same line with the rect
-		// center are equal by value, so we only need one on each axis
-		// and take the maximum.
-		float rectHalfWidthProjected = std::max(
-				abs(thor::dotProduct(axis, halfsize)),
-				abs(thor::dotProduct(axis,
-						sf::Vector2f(halfsize.x, -halfsize.y))));
-
-		// Allow movement if sprites are moving apart.
-		return Interval::IntervalFromRadius(circlePosProjected, circle.getRadius())
-						.getOverlap(Interval::IntervalFromRadius(rectPosProjected,
-								rectHalfWidthProjected))
-						.getLength() <
-				Interval::IntervalFromRadius(circlePosProjected + movementProjected, circle.getRadius())
-						.getOverlap(Interval::IntervalFromRadius(rectPosProjected,
-								rectHalfWidthProjected))
+	// If circle center is inside rect on x plane, we just take y direction result.
+	if (Interval::IntervalFromRadius(rectNewPos.x, halfSize.x)
+			.isInside(circleNewPos.x)) {
+		float overlapY =
+				Interval::IntervalFromRadius(circleNewPos.y, circle.getRadius())
+				.getOverlap(Interval::IntervalFromRadius(rectNewPos.y, halfSize.y))
 						.getLength();
+		offsetFirst.y += (circleNewPos.y > rectNewPos.y)
+				? overlapY : - overlapY;
+		return overlapY > 0;
 	}
-	// If there is no collision on x and y axis, there can't be one at all.
+	// Same here (just switched x/y).
+	else if (Interval::IntervalFromRadius(rectNewPos.y, halfSize.y)
+			.isInside(circleNewPos.y)) {
+		float overlapX =
+				Interval::IntervalFromRadius(circleNewPos.x, circle.getRadius())
+				.getOverlap(Interval::IntervalFromRadius(rectNewPos.x, halfSize.x))
+						.getLength();
+		offsetFirst.x += (circleNewPos.x > rectNewPos.x)
+				? overlapX : - overlapX;
+		return overlapX > 0;
+	}
+	// Test if the circle is colliding with a corner of the rectangle, using
+	// the same method as circle-circle collision (distance to corner instead
+	// of radius.
 	else {
-		return false;
-	}
+		sf::Vector2f axis(thor::unitVector(rectNewPos - circleNewPos));
 
+		// Use correct vector for corner projections (positive/negative
+		// direction does not matter).
+		float rectHalfSizeProjected;
+		if ((circleNewPos.x > rectNewPos.x && circleNewPos.y > rectNewPos.y) ||
+				(circleNewPos.x < rectNewPos.x && circleNewPos.y < rectNewPos.y))
+			rectHalfSizeProjected = thor::dotProduct(axis, halfSize);
+		else
+			rectHalfSizeProjected = thor::dotProduct(axis,
+					sf::Vector2f(halfSize.x, -halfSize.y));
+
+		Interval projectedCircle = Interval::IntervalFromRadius(
+				thor::dotProduct(axis, circleNewPos),
+				circle.getRadius());
+		Interval projectedRect = Interval::IntervalFromRadius(
+				thor::dotProduct(axis, rectNewPos),
+				rectHalfSizeProjected);
+		// using -5: works perfectly going between corner/side
+		// without -5 works perfectly on corner, but skips when going in between
+		float overlap = projectedCircle.getOverlap(projectedRect).getLength() - 5;
+		if (overlap > 0)
+			offsetFirst -= overlap * axis;
+		return overlap > 0;
+	}
 }
 
 /**
- * Tests for collision between two circles.
+ * Tests for collision between two circles. Offset is the maximum value between
+ * zero and the original value of previous, for which the objects do
+ * not collide.
  *
+ * @param [in,out] offset The movement offset of the first circle.
+ * @param offsetSecond Movement offset of the second circle.
  * @return True if a collision occured.
  */
 bool
 CollisionModel::testCollision(const Circle& first, const Circle& second,
-		int elapsed) {
-	sf::Vector2f axis = first.getPosition() - second.getPosition();
-	// If both objects are at the exact same position, allow any movement for unstucking.
-	if (axis == sf::Vector2f())
-		return true;
-	axis = thor::unitVector(axis);
-	float centerA = thor::dotProduct(axis, first.getPosition());
-	float radiusA = first.getRadius();
-	float movementA = thor::dotProduct(axis, first.getSpeed() * (elapsed / 1000.0f));
-	float centerB = thor::dotProduct(axis, second.getPosition());
-	float radiusB = second.getRadius();
-	float movementB = thor::dotProduct(axis, second.getSpeed() * (elapsed / 1000.0f));
+		sf::Vector2f& offsetFirst, const sf::Vector2f& offsetSecond) {
+	sf::Vector2f axis(thor::unitVector(second.getPosition() + offsetFirst -
+			(first.getPosition() + offsetSecond)));
+	Interval projectedFirst = Interval::IntervalFromRadius(
+			thor::dotProduct(axis, first.getPosition() + offsetFirst),
+			first.getRadius());
+	Interval projectedSecond = Interval::IntervalFromRadius(
+			thor::dotProduct(axis, second.getPosition() + offsetSecond),
+			second.getRadius());
 
-	// Allow movement if sprites are moving apart.
-	return Interval::IntervalFromRadius(centerA, radiusA).getOverlap(
-			Interval::IntervalFromRadius(centerB, radiusB)).getLength() <
-			Interval::IntervalFromRadius(centerA + movementA, radiusA).getOverlap(
-					Interval::IntervalFromRadius(centerB + movementB, radiusB)).getLength();
+	float overlap = projectedFirst.getOverlap(projectedSecond).getLength();
+	if (overlap > 0)
+		offsetFirst -= overlap * axis;
+	return overlap > 0;
 
 }
 
 /**
- * Tests for collision between two rectangles. Not implemented as these can't
- * occur (rectangles can't move).
+ * Tests for collision between two rectangles. Always returns false as
+ * these can't occur (rectangles can't move).
  *
  * @return True if a collision occured.
  */
 bool
 CollisionModel::testCollision(const Rectangle& first, const Rectangle& second,
-		int elapsed) {
+		sf::Vector2f& offsetFirst, const sf::Vector2f& offsetSecond) {
 	return false;
 }

@@ -69,16 +69,13 @@ void
 World::step(int elapsed) {
 	for (auto v = mDrawables.begin(); v != mDrawables.end(); v++) {
 		for (auto it = v->second.begin(); it != v->second.end(); it++) {
-			auto& spriteA = *it;
-			if (spriteA->getDelete()) {
+			if ((*it)->getDelete()) {
 				v->second.erase(it);
 				it--;
 			}
-			else if (spriteA->getSpeed() != sf::Vector2f()) {
-				sf::Vector2f speed = spriteA->getSpeed() * (elapsed / 1000.0f);
-				if (!doesOverlap(spriteA, elapsed))
-					spriteA->setPosition(spriteA->getPosition() + speed);
-			}
+			// Don't run collision tests if sprite is not moving.
+			else if ((*it)->getSpeed() != sf::Vector2f())
+				applyMovement(*it, elapsed);
 		}
 	}
 }
@@ -87,24 +84,25 @@ World::step(int elapsed) {
  * Tests spriteA for overlap with every other sprite (considering collision
  * masks).
  */
-bool
-World::doesOverlap(std::shared_ptr<Sprite> spriteA, int elapsed) {
+void
+World::applyMovement(std::shared_ptr<Sprite> sprite, int elapsed) {
+	sf::Vector2f offset = sprite->getSpeed() * (elapsed / 1000.0f);
 	for (auto w = mDrawables.begin(); w != mDrawables.end(); w++) {
-		for (auto& spriteB : w->second) {
-			if (spriteA == spriteB)
+		for (auto& other : w->second) {
+			if (sprite == other)
 				continue;
 			// Ignore anything that is filtered by masks.
-			if (!spriteA->collisionEnabled(spriteB->getCategory()) ||
-					!spriteB->collisionEnabled(spriteA->getCategory()))
+			if (!sprite->collisionEnabled(other->getCategory()) ||
+					!other->collisionEnabled(sprite->getCategory()))
 				continue;
-			if (spriteA->testCollision(spriteB, elapsed)) {
-				spriteA->onCollide(spriteB);
-				spriteB->onCollide(spriteA);
-				return true;
+			if (sprite->testCollision(other, offset,
+					other->getSpeed() * (elapsed / 1000.0f))) {
+				sprite->onCollide(other);
+				other->onCollide(sprite);
 			}
 		}
 	}
-	return false;
+	sprite->setPosition(sprite->getPosition() + offset);
 }
 
 /**

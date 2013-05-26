@@ -12,6 +12,7 @@
 #include "generator/Generator.h"
 #include "sprites/Enemy.h"
 #include "sprites/Player.h"
+#include "util/Yaml.h"
 
 const int Game::FPS_GOAL = 60;
 

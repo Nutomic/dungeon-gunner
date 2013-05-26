@@ -24,13 +24,16 @@ Circle::Circle(const sf::Vector2f& position, Category category,
  * matter which object is this or other.
  */
 bool
-Circle::testCollision(std::shared_ptr<Sprite> other, int elapsed) {
+Circle::testCollision(std::shared_ptr<Sprite> other,
+		sf::Vector2f& offsetFirst, const sf::Vector2f& offsetSecond) {
 	Rectangle* rect = dynamic_cast<Rectangle*>(other.get());
 	Circle* circle = dynamic_cast<Circle*>(other.get());
 	if (circle != nullptr)
-		return CollisionModel::testCollision(*this, *circle, elapsed);
+		return CollisionModel::testCollision(*this, *circle,
+				offsetFirst, offsetSecond);
 	else if (rect != nullptr)
-		return CollisionModel::testCollision(*this, *rect, elapsed);
+		return CollisionModel::testCollision(*this, *rect,
+				offsetFirst, offsetSecond);
 	else {
 		assert(false);
 		return false;

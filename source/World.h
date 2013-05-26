@@ -35,9 +35,7 @@ private:
 
 private:
     void draw(sf::RenderTarget& target, sf::RenderStates states) const;
-    bool testCollision(std::shared_ptr<Sprite> spriteA,
-    		std::shared_ptr<Sprite> spriteB, int elapsed) const;
-    bool doesOverlap(std::shared_ptr<Sprite> spriteA, int elapsed);
+   	void applyMovement(std::shared_ptr<Sprite> sprite, int elapsed);
 
 private:
 	std::map<Sprite::Category, std::vector<std::shared_ptr<Sprite> > > mDrawables;

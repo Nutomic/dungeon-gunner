@@ -23,7 +23,8 @@ public:
 			const sf::Vector2f& direction = sf::Vector2f(0, 0));
 	virtual ~Rectangle() = default;
 
-	bool testCollision(std::shared_ptr<Sprite> other, int elapsed);
+	bool testCollision(std::shared_ptr<Sprite> other,
+			sf::Vector2f& offsetFirst, const sf::Vector2f& offsetSecond);
 };
 
 #endif /* DG_RECTANGLE_H_ */

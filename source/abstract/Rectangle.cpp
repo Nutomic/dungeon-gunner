@@ -22,13 +22,16 @@ Rectangle::Rectangle(const sf::Vector2f& position, Category category,
  * matter which object is this or other.
  */
 bool
-Rectangle::testCollision(std::shared_ptr<Sprite> other, int elapsed) {
+Rectangle::testCollision(std::shared_ptr<Sprite> other,
+		sf::Vector2f& offsetFirst, const sf::Vector2f& offsetSecond) {
 	Rectangle* rect = dynamic_cast<Rectangle*>(other.get());
 	Circle* circle = dynamic_cast<Circle*>(other.get());
 	if (circle != nullptr)
-		return CollisionModel::testCollision(*circle, *this, elapsed);
+		return CollisionModel::testCollision(*circle, *this,
+				offsetFirst, offsetSecond);
 	else if (rect != nullptr)
-		return CollisionModel::testCollision(*rect, *this, elapsed);
+		return CollisionModel::testCollision(*rect, *this,
+				offsetFirst, offsetSecond);
 	else {
 		assert(false);
 		return false;

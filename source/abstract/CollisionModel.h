@@ -11,8 +11,12 @@
 class Circle;
 class Rectangle;
 
+#include <SFML/System.hpp>
+
 /**
  * Abstract class providing helper functions to test for collisions between shapes.
+ *
+ * http://www.metanetsoftware.com/technique/tutorialA.html
  */
 class CollisionModel {
 public:
@@ -20,11 +24,11 @@ public:
 
 protected:
 	static bool testCollision(const Circle& circle, const Rectangle& rect,
-			int elapsed);
+			sf::Vector2f& offsetFirst, const sf::Vector2f& offsetSecond);
 	static bool testCollision(const Circle& first, const Circle& second,
-			int elapsed);
+			sf::Vector2f& offsetFirst, const sf::Vector2f& offsetSecond);
 	static bool testCollision(const Rectangle& first, const Rectangle& second,
-			int elapsed);
+			sf::Vector2f& offsetFirst, const sf::Vector2f& offsetSecond);
 };
 
 #endif /* DG_COLLISIONMODEL_H_ */

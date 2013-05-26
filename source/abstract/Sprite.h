@@ -53,7 +53,8 @@ public:
 	bool collisionEnabled(Category category) const;
 	bool isInside(const sf::FloatRect& rect) const;
 
-	virtual bool testCollision(std::shared_ptr<Sprite> other, int elapsed) = 0;
+	virtual bool testCollision(std::shared_ptr<Sprite> other,
+			sf::Vector2f& offsetFirst, const sf::Vector2f& offsetSecond) = 0;
 	virtual void onCollide(std::shared_ptr<Sprite> other);
 
 protected:
