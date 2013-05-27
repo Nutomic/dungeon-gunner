@@ -2,5 +2,5 @@ name: Bullet
 texture: bullet.png
 
 damage: 10
-radius: 10
-speed: 500
+radius: 5
+speed: 1000
