@@ -3,4 +3,5 @@ texture: bullet.png
 
 damage: 10
 radius: 5
+size: [3, 10]
 speed: 1000

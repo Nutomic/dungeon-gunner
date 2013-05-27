@@ -1,3 +1,4 @@
 name: Corpse
 texture: corpse.png
-radius: 25.0
+radius: 25
+size: [50, 50]

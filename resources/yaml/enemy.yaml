@@ -2,7 +2,8 @@ name: Enemy
 texture: enemy.png
 
 health: 100
-speed: 100.0
-radius: 25.0
+speed: 100
+radius: 25
+size: [50, 50]
 weapon: weapon.yaml
 faction: 1
