@@ -16,7 +16,6 @@
 
 #include <Thor/Vectors.hpp>
 
-#include "simplexnoise.h"
 #include "../Pathfinder.h"
 #include "../World.h"
 #include "../util/Log.h"
@@ -43,11 +42,6 @@ const float Generator::LAYER_ENEMIES = 1.0f;
 Generator::Generator(World& world, Pathfinder& pathfinder) :
 		mWorld(world),
 		mPathfinder(pathfinder) {
-	std::mt19937 mersenne(time(nullptr));
-	std::uniform_int_distribution<int> distribution(0, 255);
-
-	for (int i = 0; i < 512; i++)
-		perm[i] = distribution(mersenne);
 }
 
 /**
@@ -113,49 +107,39 @@ Generator::generateTiles(const sf::IntRect& area) {
 	assert(area.width && !(area.width & (area.width - 1)));
 	assert(area.height && !(area.height & (area.height - 1)));
 
-	array noise;
-	array filtered;
-	for (int x = area.left - MARGIN; x < area.left + area.width + MARGIN; x++) {
-		for (int y = area.top - MARGIN; y < area.top + area.height + MARGIN; y++) {
-			noise[x][y] =
-					(scaled_octave_noise_3d(2, 2, 0.05f, 0.5f, -0.5f, x, y, LAYER_TILES) +
-					scaled_octave_noise_3d(2, 2, 0.5f, 0.15f, -0.15f, x, y, LAYER_TILES)
-					< -0.1f)
-							? type::WALL
-							: type::FLOOR;
-		}
-	}
-	fill(filtered, area, type::FLOOR);
+	array generatedTiles;
+	fill(generatedTiles, area, type::FLOOR);
 
 	for (int x = area.left; x < area.left + area.width; x++) {
 		for (int y = area.top; y < area.top + area.height; y++) {
-			filterWalls(noise, filtered, x, y, 2, 1, 0);
-			filterWalls(noise, filtered, x, y, 6, 1, 2);
-			filterWalls(noise, filtered, x, y, 10, 1, 4);
+			filterWalls(generatedTiles, x, y, 2, 1, 0);
+			filterWalls(generatedTiles, x, y, 6, 1, 2);
+			filterWalls(generatedTiles, x, y, 10, 1, 4);
 		}
 	}
 
-	for (int x = area.left; x < area.left + area.width; x++) {
+	for (int x = area.left; x < area.left + area.width; x++)
 		for (int y = area.top; y < area.top + area.height; y++) {
+			// Merge map that we just generated with stored map.
+			mTiles[x][y] = generatedTiles[x][y];
+			// Actually generate physical tiles.
 			mWorld.insert(std::shared_ptr<Sprite>(
-					new Tile(filtered.at(x).at(y), x, y)));
+					new Tile(generatedTiles.at(x).at(y), x, y)));
 		}
-	}
-	generateAreas(filtered, area, sf::Vector2f(area.left, area.top));
+
+	generateAreas(area, sf::Vector2f(area.left, area.top));
 	mPathfinder.generatePortals();
-	mTiles = filtered;
 }
 
 std::vector<sf::Vector2f>
-Generator::getEnemySpawns(const sf::IntRect& area) const {
+Generator::getEnemySpawns(const sf::IntRect& area) {
 	auto compare = [](const sf::Vector2f& a, const sf::Vector2f& b) {
 		return a.x < b.x || (a.x == b.x && a.y < b.y);
 	};
 	std::set<sf::Vector2f, decltype(compare)> ret(compare);
 	for (int x = area.left; x < area.left + area.width; x++) {
 		for (int y = area.top; y < area.top + area.height; y++) {
-			if (scaled_octave_noise_3d(2, 2, 0.5f, 10.0f, 0, x, y, LAYER_ENEMIES)
-			< 1.0f) {
+			if (mCharacterNoise.getNoise(x, y) < 0.05f) {
 				ret.insert(sf::Vector2f(thor::cwiseProduct(
 						findClosestFloor(sf::Vector2i(x, y)), Tile::TILE_SIZE)));
 			}
@@ -172,35 +156,34 @@ Generator::getEnemySpawns(const sf::IntRect& area) const {
  * @param value The value to set.
  */
 void
-Generator::fill(array& image, const sf::IntRect& area, Tile::Type value) {
+Generator::fill(array& tiles, const sf::IntRect& area, Tile::Type value) {
 	for (int x = area.left;	x < area.left + area.width; x++) {
 		for (int y = area.top; y < area.top + area.height; y++)
-			image[x][y] = value;
+			tiles[x][y] = value;
 	}
 }
 
 /**
  * Counts and returns the number of walls within the area.
  *
- * @param[in] tiles Array of tile values.
  * @param area The area to count in.
  */
 int
-Generator::countWalls(const array& tiles, const sf::IntRect& area) {
+Generator::countWalls(const sf::IntRect& area) {
 	int count = 0;
 	for (int x = area.left; x < area.left + area.width; x++) {
 		for (int y = area.top; y < area.top + area.height; y++)
-			count += (int) (tiles.at(x).at(y) == type::WALL);
+			count += (int) (getTileType(mCharacterNoise.getNoise(x, y)) ==
+					type::WALL);
 	}
 	return count;
 }
 
 /**
- * Finds rectangles of specific size inside vector in and
+ * Finds rectangles of specific size with mTileNoise and
  * puts them into vector out.
  *
- * @param[in] in Perlin noise values.
- * @param[in,out] out Tiles to be placed. Does not explicitly set floor values
+ * @param[in,out] tiles Tiles to be placed. Does not explicitly set floor values
  * 						(keeps previous values).
  * @param x Position to check from (top left corner for rectangle).
  * @param y Position to check from (top left corner for rectangle).
@@ -210,31 +193,30 @@ Generator::countWalls(const array& tiles, const sf::IntRect& area) {
  * 			tiles is not walls (tilecount >= longside * shortside - subtract).
  */
 void
-Generator::filterWalls(const array& in, array& out, int x, int y, int longside,
+Generator::filterWalls(array& tiles, int x, int y, int longside,
 		int shortside, int subtract) {
 	// Filter in horizontal direction.
-	if (countWalls(in, sf::IntRect(x, y, longside, shortside)) >=
+	if (countWalls(sf::IntRect(x, y, longside, shortside)) >=
 			shortside * longside - subtract)
-		fill(out, sf::IntRect(x, y, longside, shortside), type::WALL);
+		fill(tiles, sf::IntRect(x, y, longside, shortside), type::WALL);
 	// Filter in vertical direction.
-	if (countWalls(in, sf::IntRect(x, y, shortside, longside)) >=
+	if (countWalls(sf::IntRect(x, y, shortside, longside)) >=
 			shortside * longside - subtract)
-		fill(out, sf::IntRect(x, y, shortside, longside), type::WALL);
+		fill(tiles, sf::IntRect(x, y, shortside, longside), type::WALL);
 }
 
 /**
- * Inserts tile if all values within area are the same, otherwise divides area
- * into four and continues recursively.
+ * Inserts floor tiles into path finder, using a quadtree approach to group
+ * tiles where possible.
  *
- * @param in Array of tile values.
  * @param area The area to generate areas for.
  * @param offset Offset of tiles[0][0] from World coordinate (0, 0).
  */
 void
-Generator::generateAreas(const array& in, const sf::IntRect& area,
-		const sf::Vector2f& offset) const {
+Generator::generateAreas(const sf::IntRect& area,
+		const sf::Vector2f& offset) {
 	assert(area.width > 0 && area.height > 0);
-	int count = countWalls(in, area);
+	int count = countWalls(area);
 	if (count == 0) {
 		mPathfinder.insertArea(sf::IntRect(area));
 	}
@@ -244,15 +226,27 @@ Generator::generateAreas(const array& in, const sf::IntRect& area,
 	else {
 		int halfWidth = area.width / 2.0f;
 		int halfHeight = area.height / 2.0f;
-		generateAreas(in, sf::IntRect(area.left,
+		generateAreas(sf::IntRect(area.left,
 				area.top,             halfWidth, halfHeight), offset);
-		generateAreas(in, sf::IntRect(area.left + halfWidth,
+		generateAreas(sf::IntRect(area.left + halfWidth,
 				area.top,             halfWidth, halfHeight), offset);
-		generateAreas(in, sf::IntRect(area.left,
+		generateAreas(sf::IntRect(area.left,
 				area.top + halfHeight, halfWidth, halfHeight), offset);
-		generateAreas(in, sf::IntRect(area.left + halfWidth,
+		generateAreas(sf::IntRect(area.left + halfWidth,
 				area.top + halfHeight, halfWidth, halfHeight), offset);
 	}
+}
+
+/**
+ * Defines if a perlin noise result value is converted to a wall or floor tile.
+ *
+ * @param value Perlin noise value within [-1, 1]
+ */
+Generator::type
+Generator::getTileType(float value) {
+	return (value < -0.2f)
+			? type::WALL
+			: type::FLOOR;
 }
 
 /**
