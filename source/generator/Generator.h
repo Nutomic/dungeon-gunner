@@ -31,7 +31,7 @@ private:
 	typedef std::map<int, std::map<int, type> > array;
 
 private:
-	void generateAreas(const sf::IntRect& area,	const sf::Vector2f& offset);
+	void generateAreas(const sf::IntRect& area);
 	void generateTiles(const sf::IntRect& area);
 	sf::Vector2i findClosestFloor(const sf::Vector2i& position) const;
 
@@ -44,9 +44,6 @@ private:
 private:
 	static const int GENERATE_AREA_SIZE;
 	static const float GENERATE_AREA_RANGE;
-	static const int MARGIN;
-	static const float LAYER_TILES;
-	static const float LAYER_ENEMIES;
 
 	World& mWorld;
 	Pathfinder& mPathfinder;

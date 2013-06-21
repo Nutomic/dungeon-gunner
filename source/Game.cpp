@@ -32,13 +32,6 @@ Game::Game(sf::RenderWindow& window) :
 	mPlayer = std::shared_ptr<Player>(new Player(mWorld, mPathfinder,
 			mGenerator.getPlayerSpawn()));
 	mWorld.insertCharacter(mPlayer);
-	/*
-	auto enemyPositions = mGenerator.getEnemySpawns(area);
-	for (const auto& position : enemyPositions) {
-		if (thor::length(mPlayer->getPosition() - position) > Character::VISION_DISTANCE)
-			mWorld.insertCharacter(std::shared_ptr<Enemy>(new Enemy(mWorld, mPathfinder, position)));
-	}
-	*/
 }
 
 /**

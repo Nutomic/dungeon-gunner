@@ -142,15 +142,13 @@ Pathfinder::getPath(const sf::Vector2f& start, const sf::Vector2f& end,
  * @parm rect Rectangle the area covers.
  */
 void
-Pathfinder::insertArea(const sf::IntRect& rect) {
+Pathfinder::insertArea(const sf::FloatRect& rect) {
 	Area a;
-	// Not sure why the offset of -50 is required, but with it, areas align
-	// with tiles perfectly.
-	a.area = sf::IntRect(rect.left * Tile::TILE_SIZE.x - 50,
-			rect.top * Tile::TILE_SIZE.y - 50,
+	a.area = sf::FloatRect(rect.left * Tile::TILE_SIZE.x  - Tile::TILE_SIZE.x / 2.0f,
+			rect.top * Tile::TILE_SIZE.y - Tile::TILE_SIZE.y / 2.0f,
 			rect.width * Tile::TILE_SIZE.x,
 			rect.height * Tile::TILE_SIZE.y);
-	a.center = sf::Vector2i(a.area.left + a.area.width / 2,
+	a.center = sf::Vector2f(a.area.left + a.area.width / 2,
 			a.area.top + a.area.height / 2);
 	mAreas.push_back(a);
 }
@@ -176,8 +174,8 @@ Pathfinder::generatePortals() {
 						.getOverlap(Interval::IntervalFromPoints(other.area.top,
 								other.area.top + other.area.height));
 				if (overlap.getLength() > 0) {
-					portal.start = sf::Vector2i(other.area.left, overlap.start);
-					portal.end = sf::Vector2i(other.area.left, overlap.end);
+					portal.start = sf::Vector2f(other.area.left, overlap.start);
+					portal.end = sf::Vector2f(other.area.left, overlap.end);
 					it.portals.push_back(portal);
 				}
 			}
@@ -187,8 +185,8 @@ Pathfinder::generatePortals() {
 						.getOverlap(Interval::IntervalFromPoints(other.area.top,
 								other.area.top + other.area.height));
 				if (overlap.getLength() > 0) {
-					portal.start = sf::Vector2i(it.area.left, overlap.start);
-					portal.end = sf::Vector2i(it.area.left, overlap.end);
+					portal.start = sf::Vector2f(it.area.left, overlap.start);
+					portal.end = sf::Vector2f(it.area.left, overlap.end);
 					it.portals.push_back(portal);
 				}
 			}
@@ -198,8 +196,8 @@ Pathfinder::generatePortals() {
 						.getOverlap(Interval::IntervalFromPoints(other.area.left,
 								other.area.left + other.area.width));
 				if (overlap.getLength() > 0) {
-					portal.start = sf::Vector2i(overlap.start, other.area.top);
-					portal.end = sf::Vector2i(overlap.end, other.area.top);
+					portal.start = sf::Vector2f(overlap.start, other.area.top);
+					portal.end = sf::Vector2f(overlap.end, other.area.top);
 					it.portals.push_back(portal);
 				}
 			}
@@ -209,8 +207,8 @@ Pathfinder::generatePortals() {
 						.getOverlap(Interval::IntervalFromPoints(other.area.left,
 								other.area.left + other.area.width));
 				if (overlap.getLength() > 0) {
-					portal.start = sf::Vector2i(overlap.start, it.area.top);
-					portal.end = sf::Vector2i(overlap.end, it.area.top);
+					portal.start = sf::Vector2f(overlap.start, it.area.top);
+					portal.end = sf::Vector2f(overlap.end, it.area.top);
 					it.portals.push_back(portal);
 				}
 			}
@@ -224,9 +222,24 @@ Pathfinder::generatePortals() {
 Pathfinder::Area*
 Pathfinder::getArea(const sf::Vector2f& point) const {
 	for (auto& area : mAreas) {
-		if (sf::FloatRect(area.area).contains(point))
+		if (area.area.contains(point))
 			// Make the return value non-const for convenience.
 			return &const_cast<Area&>(area);
 	}
 	return nullptr;
 }
+
+/**
+ * Draws areas.
+ */
+#ifndef NDEBUG
+void
+Pathfinder::draw(sf::RenderTarget& target, sf::RenderStates states) const {
+	for (auto& area : mAreas) {
+		sf::RectangleShape rect(sf::Vector2f(area.area.width, area.area.height));
+		rect.setPosition(sf::Vector2f(area.area.left, area.area.top));
+		rect.setFillColor(sf::Color(area.area.width * 30, 127, 0, 96));
+		target.draw(rect);
+	}
+}
+#endif

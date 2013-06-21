@@ -18,23 +18,10 @@
 
 #include "../Pathfinder.h"
 #include "../World.h"
-#include "../util/Log.h"
-
-/// Seed for usage with simplexnoise.h
-uint8_t perm[512];
+#include "../sprites/Enemy.h"
 
 const int Generator::GENERATE_AREA_SIZE = 4;
 const float Generator::GENERATE_AREA_RANGE = 4.0f;
-
-/**
- * Amount of tiles extra to generate, to get consistent walls
- * across multiple generateTiles calls for bordering areas.
- */
-const int Generator::MARGIN = 10;
-
-// Different layers in 3d noise so we don't use the same noise values.
-const float Generator::LAYER_TILES = 0;
-const float Generator::LAYER_ENEMIES = 1.0f;
 
 /**
  * Generates new random seed.
@@ -45,19 +32,19 @@ Generator::Generator(World& world, Pathfinder& pathfinder) :
 }
 
 /**
- * Generates tiles near position (maximum distance is determined by
+ * Generates tiles near player position (maximum distance is determined by
  * GENERATE_AREA_SIZE and GENERATE_AREA_RANGE).
  */
 void
-Generator::generateCurrentAreaIfNeeded(const sf::Vector2f& position) {
+Generator::generateCurrentAreaIfNeeded(const sf::Vector2f& playerPosition) {
 	auto compare = [](const sf::Vector2i& a, const sf::Vector2i& b) {
 		return a.x < b.x || (a.x == b.x && a.y < b.y);
 	};
 	std::map<sf::Vector2i, float, decltype(compare)> open(compare);
 	std::set<sf::Vector2i, decltype(compare)> closed(compare);
 
-	sf::Vector2i start((int) floor(position.x / Tile::TILE_SIZE.x),
-			(int) floor(position.y / Tile::TILE_SIZE.y));
+	sf::Vector2i start((int) floor(playerPosition.x / Tile::TILE_SIZE.x),
+			(int) floor(playerPosition.y / Tile::TILE_SIZE.y));
 	start /= GENERATE_AREA_SIZE;
 	auto makePair = [&start](const sf::Vector2i& point) {
 		return std::make_pair(point, thor::length(sf::Vector2f(point - start)));
@@ -79,8 +66,13 @@ Generator::generateCurrentAreaIfNeeded(const sf::Vector2f& position) {
 			sf::IntRect area(current * GENERATE_AREA_SIZE -
 					sf::Vector2i(GENERATE_AREA_SIZE, GENERATE_AREA_SIZE) / 2,
 					sf::Vector2i(GENERATE_AREA_SIZE, GENERATE_AREA_SIZE));
-			LOG_I("Generating area " << area);
 			generateTiles(area);
+			for (const auto& enemyPosition : getEnemySpawns(area)) {
+				float distance = thor::length(enemyPosition - playerPosition);
+				if (distance > Character::VISION_DISTANCE) {
+					mWorld.insertCharacter(std::shared_ptr<Enemy>(new Enemy(mWorld, mPathfinder, enemyPosition)));
+				}
+			}
 		}
 		if (mGenerated[current.x][current.y] && distance <= GENERATE_AREA_RANGE) {
 			if (closed.find(sf::Vector2i(current.x + 1, current.y)) == closed.end())
@@ -127,10 +119,13 @@ Generator::generateTiles(const sf::IntRect& area) {
 					new Tile(generatedTiles.at(x).at(y), x, y)));
 		}
 
-	generateAreas(area, sf::Vector2f(area.left, area.top));
+	generateAreas(area);
 	mPathfinder.generatePortals();
 }
 
+/**
+ * Returns coordinates where enemies should spawn.
+ */
 std::vector<sf::Vector2f>
 Generator::getEnemySpawns(const sf::IntRect& area) {
 	auto compare = [](const sf::Vector2f& a, const sf::Vector2f& b) {
@@ -139,9 +134,10 @@ Generator::getEnemySpawns(const sf::IntRect& area) {
 	std::set<sf::Vector2f, decltype(compare)> ret(compare);
 	for (int x = area.left; x < area.left + area.width; x++) {
 		for (int y = area.top; y < area.top + area.height; y++) {
-			if (mCharacterNoise.getNoise(x, y) < 0.05f) {
-				ret.insert(sf::Vector2f(thor::cwiseProduct(
-						findClosestFloor(sf::Vector2i(x, y)), Tile::TILE_SIZE)));
+			if (mCharacterNoise.getNoise(x, y) < -0.85f) {
+				sf::Vector2i tilePosition = findClosestFloor(sf::Vector2i(x, y));
+				ret.insert(sf::Vector2f(tilePosition.x * Tile::TILE_SIZE.x,
+						tilePosition.y * Tile::TILE_SIZE.y));
 			}
 		}
 	}
@@ -173,7 +169,7 @@ Generator::countWalls(const sf::IntRect& area) {
 	int count = 0;
 	for (int x = area.left; x < area.left + area.width; x++) {
 		for (int y = area.top; y < area.top + area.height; y++)
-			count += (int) (getTileType(mCharacterNoise.getNoise(x, y)) ==
+			count += (int) (getTileType(mTileNoise.getNoise(x, y)) ==
 					type::WALL);
 	}
 	return count;
@@ -210,30 +206,31 @@ Generator::filterWalls(array& tiles, int x, int y, int longside,
  * tiles where possible.
  *
  * @param area The area to generate areas for.
- * @param offset Offset of tiles[0][0] from World coordinate (0, 0).
  */
 void
-Generator::generateAreas(const sf::IntRect& area,
-		const sf::Vector2f& offset) {
+Generator::generateAreas(const sf::IntRect& area) {
 	assert(area.width > 0 && area.height > 0);
-	int count = countWalls(area);
-	if (count == 0) {
-		mPathfinder.insertArea(sf::IntRect(area));
-	}
-	else if (count == area.width * area.height) {
+
+	int wallCount = 0;
+	for (int x = area.left; x < area.left + area.width; x++)
+		for (int y = area.top; y < area.top + area.height; y++)
+			wallCount += (int) (mTiles[x][y] == type::WALL);
+
+	if (wallCount == 0)
+		mPathfinder.insertArea(sf::FloatRect(area.left, area.top, area.width, area.height));
+	else if (wallCount == area.width * area.height)
 		return;
-	}
 	else {
-		int halfWidth = area.width / 2.0f;
-		int halfHeight = area.height / 2.0f;
+		int halfWidth = area.width / 2;
+		int halfHeight = area.height / 2;
 		generateAreas(sf::IntRect(area.left,
-				area.top,             halfWidth, halfHeight), offset);
+				area.top,             halfWidth, halfHeight));
 		generateAreas(sf::IntRect(area.left + halfWidth,
-				area.top,             halfWidth, halfHeight), offset);
+				area.top,             halfWidth, halfHeight));
 		generateAreas(sf::IntRect(area.left,
-				area.top + halfHeight, halfWidth, halfHeight), offset);
+				area.top + halfHeight, halfWidth, halfHeight));
 		generateAreas(sf::IntRect(area.left + halfWidth,
-				area.top + halfHeight, halfWidth, halfHeight), offset);
+				area.top + halfHeight, halfWidth, halfHeight));
 	}
 }
 
@@ -287,8 +284,9 @@ Generator::findClosestFloor(const sf::Vector2i& position) const {
 		closed.insert(current);
 		if (mTiles.count(current.x) != 0 &&
 				mTiles.at(current.x).count(current.y) != 0 &&
-				mTiles.at(current.x).at(current.y) == Tile::Type::FLOOR)
+				mTiles.at(current.x).at(current.y) == type::FLOOR) {
 			return current;
+		}
 		else {
 			if (closed.find(sf::Vector2i(current.x + 1, current.y)) == closed.end())
 				open.insert(makePair(sf::Vector2i(current.x + 1, current.y)));
