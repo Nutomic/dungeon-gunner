@@ -41,6 +41,8 @@ Enemy::onThink(int elapsed) {
 		else if (!isMoving())
 			setDestination(target->getPosition());
 	}
-	else
+	else {
 		releaseTrigger();
+		setSpeed(sf::Vector2f(), 0);
+	}
 }

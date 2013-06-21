@@ -133,6 +133,10 @@ Sprite::setSpeed(sf::Vector2f direction, float speed) {
 	mSpeed = direction;
 }
 
+/**
+ * Rotates sprite in the direction of the vector. Vector length must not be null,
+ * but is otherwise meaningless.
+ */
 void
 Sprite::setDirection(const sf::Vector2f& direction) {
 	if (direction != sf::Vector2f())

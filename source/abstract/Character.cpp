@@ -17,6 +17,7 @@
 #include "../Pathfinder.h"
 
 const float Character::VISION_DISTANCE = 500.0f;
+const float Character::POINT_REACHED_DISTANCE = 1.0f;
 
 /**
  * Saves pointer to this instance in static var for think().
@@ -118,17 +119,7 @@ Character::releaseTrigger() {
  */
 bool
 Character::setDestination(const sf::Vector2f& destination) {
-	if (destination == getPosition()) {
-		mPath.clear();
-		return true;
-	}
 	mPath = mPathfinder.getPath(getPosition(), destination, getRadius());
-	if (!mPath.empty())
-		setSpeed(mPath.back() - getPosition(), mMovementSpeed);
-	else {
-		setSpeed(sf::Vector2f(), 0);
-		LOG_W("No path found to destination.");
-	}
 	return !mPath.empty();
 }
 
@@ -138,16 +129,15 @@ Character::setDestination(const sf::Vector2f& destination) {
  */
 void
 Character::move() {
-	sf::Vector2f distanceTraveled = mLastPosition - getPosition();
+	if (mPath.empty())
+		return;
 	mLastPosition = getPosition();
-	if (!mPath.empty()) {
-		// Point reached (during next time step).
-		if (thor::length(mPath.back() - getPosition()) < thor::length(distanceTraveled)) {
-			mPath.pop_back();
-			(!mPath.empty())
-				? setSpeed(mPath.back() - getPosition(), mMovementSpeed)
-				: setSpeed(sf::Vector2f(), 0);
-		}
+	setSpeed(mPath.back() - getPosition(), mMovementSpeed);
+	setDirection(mPath.back() - getPosition());
+	if (thor::length(mPath.back() - getPosition()) < POINT_REACHED_DISTANCE) {
+		mPath.pop_back();
+		if (mPath.empty())
+			setSpeed(sf::Vector2f(), 0);
 	}
 }
 

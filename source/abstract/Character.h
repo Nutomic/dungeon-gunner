@@ -52,6 +52,9 @@ private:
 	void move();
 
 private:
+	/// Distance to a path point where it will be considered as reached (to
+	/// avoid floating point equality check).
+	static const float POINT_REACHED_DISTANCE;
 	friend class World;
 	World& mWorld;
 	Pathfinder& mPathfinder;
