@@ -14,7 +14,6 @@
 
 #include <Thor/Time.hpp>
 
-#include "../particle/Emitter.h"
 #include "../util/Yaml.h"
 
 class Character;
@@ -27,7 +26,7 @@ class Yaml;
  * 	- pass enum value and load mapped xml
  * 	- pass xml filename
  */
-class Weapon : public Emitter {
+class Weapon {
 public:
 	explicit Weapon(World& world, Character& holder, const Yaml& config);
 
@@ -38,10 +37,12 @@ public:
 	int getTotalAmmo() const;
 	void reload();
 
-protected:
-	std::shared_ptr<Sprite> createParticle();
+private:
+	void fire();
+	void insertProjectile(float angle);
 
 private:
+	World& mWorld;
 	Character& mHolder;
 
 	thor::Timer mTimer;
@@ -50,13 +51,16 @@ private:
 	const float mProjectileSpeed;
 	const int mFireInterval;
 	const int mReloadTime;
-	bool mFire;
-	bool mAutomatic;
+	bool mFiring;
+	const bool mAutomatic;
 	const int mMagazineSize;
 	int mMagazineAmmo;
 	const int mMaxTotalAmmo;
 	int mTotalAmmo;
 	bool mIsReloading = false;
+	const int mPellets;
+	const float mPelletSpread;
+	const bool mReloadSingle;
 
 };
 

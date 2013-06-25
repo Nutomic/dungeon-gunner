@@ -14,19 +14,22 @@
 #include "../util/Yaml.h"
 
 Weapon::Weapon(World& world, Character& holder, const Yaml& config) :
-		Emitter(world),
+		mWorld(world),
 		mHolder(holder),
 		mProjectile(config.get("bullet", std::string("bullet.yaml"))),
 		mDamage(config.get("damage", 0)),
 		mProjectileSpeed(config.get("projectile_speed", 0.0f)),
 		mFireInterval(config.get("fire_interval", 0)),
 		mReloadTime(config.get("reload_time", 0)),
-		mFire(false),
+		mFiring(false),
 		mAutomatic(config.get("automatic", false)),
 		mMagazineSize(config.get("magazine_size", 0)),
 		mMagazineAmmo(mMagazineSize),
 		mMaxTotalAmmo(config.get("max_total_ammo", 0)),
-		mTotalAmmo(mMaxTotalAmmo) {
+		mTotalAmmo(mMaxTotalAmmo),
+		mPellets(config.get("pellets", 1)),
+		mPelletSpread(config.get("pellet_spread", 0.0f)),
+		mReloadSingle(config.get("reload_single", false)) {
 }
 
 /**
@@ -34,7 +37,7 @@ Weapon::Weapon(World& world, Character& holder, const Yaml& config) :
  */
 void
 Weapon::pullTrigger() {
-	mFire = true;
+	mFiring = true;
 }
 
 /**
@@ -42,7 +45,7 @@ Weapon::pullTrigger() {
  */
 void
 Weapon::releaseTrigger() {
-	mFire = false;
+	mFiring = false;
 }
 
 /**
@@ -54,18 +57,31 @@ void
 Weapon::onThink(int elapsed) {
 	if (!mTimer.isExpired())
 		return;
+
 	if (mIsReloading) {
-		mMagazineAmmo = (mTotalAmmo >= mMagazineSize)
-				? mMagazineSize
-				: mTotalAmmo;
-		mTotalAmmo -= mMagazineAmmo;
-		mIsReloading = false;
+		if (!mReloadSingle) {
+			mMagazineAmmo = (mTotalAmmo >= mMagazineSize)
+					? mMagazineSize
+					: mTotalAmmo;
+			mTotalAmmo -= mMagazineAmmo;
+			mIsReloading = false;
+		}
+		else if (mTotalAmmo > 0) {
+			mMagazineAmmo++;
+			mTotalAmmo--;
+			if (mMagazineAmmo == mMagazineSize)
+				mIsReloading = false;
+			else
+				reload();
+		}
+		else
+			mIsReloading = false;
 	}
 
-	if (mFire && mMagazineAmmo != 0) {
-		emit();
+	if (mFiring && mMagazineAmmo != 0) {
+		fire();
 		if (!mAutomatic)
-			mFire = false;
+			mFiring = false;
 	}
 
 	if (mMagazineAmmo == 0 && mTotalAmmo != 0)
@@ -75,17 +91,17 @@ Weapon::onThink(int elapsed) {
 /**
  * Creates and fires a projectile.
  */
-std::shared_ptr<Sprite>
-Weapon::createParticle() {
+void
+Weapon::fire() {
 	mTimer.restart(sf::milliseconds(mFireInterval));
 	mMagazineAmmo--;
 
-	// Minus to account for positive y-axis going downwards in SFML.
-	sf::Vector2f offset(0, - mHolder.getRadius());
-	thor::rotate(offset, thor::polarAngle(mHolder.getDirection()));
-	return std::shared_ptr<Sprite>(new Bullet(mHolder.getPosition() + offset,
-			mHolder, mHolder.getDirection(), mProjectile, mProjectileSpeed,
-			mDamage));
+
+	if (mPellets == 0) insertProjectile(0.0f);
+	else
+		for (int i = - mPellets / 2; i < mPellets / 2; i++) {
+			insertProjectile(i * mPelletSpread);
+		}
 }
 
 int
@@ -100,6 +116,25 @@ Weapon::getTotalAmmo() const {
 
 void
 Weapon::reload() {
+	if (mMagazineAmmo == mMagazineSize)
+		return;
 	mIsReloading = true;
 	mTimer.restart(sf::milliseconds(mReloadTime));
+}
+
+/**
+ * Creates a new projectile and inserts it into the world.
+ *
+ * @param angle Inaccuracy of the projectile, 0 is straight forward.
+ */
+void
+Weapon::insertProjectile(float angle) {
+	// Minus to account for positive y-axis going downwards in SFML.
+	sf::Vector2f offset(0, - mHolder.getRadius());
+			thor::rotate(offset, thor::polarAngle(mHolder.getDirection()));
+	sf::Vector2f direction(thor::rotatedVector(mHolder.getDirection(), angle));
+	std::shared_ptr<Sprite> projectile(new Bullet(mHolder.getPosition() + offset,
+			mHolder, direction, mProjectile, mProjectileSpeed,
+			mDamage));
+	mWorld.insert(projectile);
 }

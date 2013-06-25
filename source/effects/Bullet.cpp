@@ -23,7 +23,7 @@
 Bullet::Bullet(const sf::Vector2f& position, Character& shooter,
 	sf::Vector2f direction, const Yaml& config, float speed,
 	float damage) :
-		Particle(position, CATEGORY_PARTICLE, ~CATEGORY_PARTICLE,
+		Circle(position, CATEGORY_PARTICLE, ~CATEGORY_PARTICLE,
 				config, thor::rotatedVector(direction, -90.0f)),
 		mShooter(shooter),
 		mDamage(damage),

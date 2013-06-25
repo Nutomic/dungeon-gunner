@@ -8,7 +8,7 @@
 #ifndef DG_BULLET_H_
 #define DG_BULLET_H_
 
-#include "../particle/Particle.h"
+#include "../abstract/Circle.h"
 
 class Character;
 class Yaml;
@@ -16,7 +16,7 @@ class Yaml;
 /**
  * Bullet particle fired by a weapon, may damage actors.
  */
-class Bullet : public Particle {
+class Bullet : public Circle {
 public:
 	explicit Bullet(const sf::Vector2f& position, Character& shooter,
 			sf::Vector2f direction, const Yaml& config,	float speed,

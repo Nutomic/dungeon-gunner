@@ -1,0 +1,13 @@
+name: Shotgun
+
+bullet: bullet.yaml
+projectile_speed: 750
+damage: 5
+pellets: 6
+pellet_spread: 2.0
+fire_interval: 800
+reload_time: 500
+reload_single: true
+automatic: false
+magazine_size: 6
+max_total_ammo: 60

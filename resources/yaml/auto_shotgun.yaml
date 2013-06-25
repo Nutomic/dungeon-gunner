@@ -1,0 +1,13 @@
+name: Automatic Shotgun
+
+bullet: bullet.yaml
+projectile_speed: 750
+damage: 2
+pellets: 6
+pellet_spread: 2.0
+fire_interval: 400
+reload_time: 2000
+reload_single: false
+automatic: true
+magazine_size: 6
+max_total_ammo: 60
