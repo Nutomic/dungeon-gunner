@@ -3,9 +3,10 @@ name: Machine Gun
 bullet: bullet.yaml
 projectile_speed: 1000
 damage: 20
-fire_interval: 100
+fire_interval: 150
 reload_time: 5000
 automatic: true
 magazine_size: 60
 max_total_ammo: 400
 spread: 5.0
+spread_moving: 15.0

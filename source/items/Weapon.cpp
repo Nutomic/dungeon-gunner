@@ -30,7 +30,8 @@ Weapon::Weapon(World& world, Character& holder, const Yaml& config) :
 		mPellets(config.get("pellets", 0)),
 		mPelletSpread(config.get("pellet_spread", 0.0f)),
 		mReloadSingle(config.get("reload_single", false)),
-		mSpread(config.get("spread", 0.0f)) {
+		mSpread(config.get("spread", 0.0f)),
+		mSpreadMoving(config.get("spread_moving", 0.0f)) {
 }
 
 /**
@@ -135,7 +136,10 @@ Weapon::insertProjectile(float angle) {
 	sf::Vector2f offset(0, - mHolder.getRadius());
 			thor::rotate(offset, thor::polarAngle(mHolder.getDirection()));
 
-	std::uniform_real_distribution<float> distribution(- mSpread, mSpread);
+	float spread = (mHolder.getSpeed() == sf::Vector2f())
+			? mSpread
+			: mSpreadMoving;
+	std::uniform_real_distribution<float> distribution(- spread, spread);
 	angle += distribution(mGenerator);
 
 	//float random = ((float) rand()) / (float) RAND_MAX;

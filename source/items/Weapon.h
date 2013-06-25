@@ -58,6 +58,7 @@ private:
 	const float mPelletSpread;
 	const bool mReloadSingle;
 	const float mSpread;
+	const float mSpreadMoving;
 	std::default_random_engine mGenerator;
 
 };
