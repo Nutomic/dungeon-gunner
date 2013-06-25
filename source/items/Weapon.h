@@ -9,6 +9,7 @@
 #define DG_WEAPON_H_
 
 #include <string>
+#include <random>
 
 #include <SFML/System.hpp>
 
@@ -21,11 +22,6 @@ class World;
 class Particle;
 class Yaml;
 
-/**
- * Loading mechanism:
- * 	- pass enum value and load mapped xml
- * 	- pass xml filename
- */
 class Weapon {
 public:
 	explicit Weapon(World& world, Character& holder, const Yaml& config);
@@ -61,6 +57,8 @@ private:
 	const int mPellets;
 	const float mPelletSpread;
 	const bool mReloadSingle;
+	const float mSpread;
+	std::default_random_engine mGenerator;
 
 };
 

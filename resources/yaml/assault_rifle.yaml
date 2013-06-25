@@ -8,3 +8,4 @@ reload_time: 2000
 automatic: true
 magazine_size: 30
 max_total_ammo: 270
+spread: 2.0

@@ -27,9 +27,10 @@ Weapon::Weapon(World& world, Character& holder, const Yaml& config) :
 		mMagazineAmmo(mMagazineSize),
 		mMaxTotalAmmo(config.get("max_total_ammo", 0)),
 		mTotalAmmo(mMaxTotalAmmo),
-		mPellets(config.get("pellets", 1)),
+		mPellets(config.get("pellets", 0)),
 		mPelletSpread(config.get("pellet_spread", 0.0f)),
-		mReloadSingle(config.get("reload_single", false)) {
+		mReloadSingle(config.get("reload_single", false)),
+		mSpread(config.get("spread", 0.0f)) {
 }
 
 /**
@@ -97,7 +98,8 @@ Weapon::fire() {
 	mMagazineAmmo--;
 
 
-	if (mPellets == 0) insertProjectile(0.0f);
+	if (mPellets == 0)
+		insertProjectile(0.0f);
 	else
 		for (int i = - mPellets / 2; i < mPellets / 2; i++) {
 			insertProjectile(i * mPelletSpread);
@@ -132,7 +134,14 @@ Weapon::insertProjectile(float angle) {
 	// Minus to account for positive y-axis going downwards in SFML.
 	sf::Vector2f offset(0, - mHolder.getRadius());
 			thor::rotate(offset, thor::polarAngle(mHolder.getDirection()));
+
+	std::uniform_real_distribution<float> distribution(- mSpread, mSpread);
+	angle += distribution(mGenerator);
+
+	//float random = ((float) rand()) / (float) RAND_MAX;
+    //angle += random * 2 * mSpread - mSpread;
 	sf::Vector2f direction(thor::rotatedVector(mHolder.getDirection(), angle));
+
 	std::shared_ptr<Sprite> projectile(new Bullet(mHolder.getPosition() + offset,
 			mHolder, direction, mProjectile, mProjectileSpeed,
 			mDamage));
