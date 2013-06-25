@@ -19,9 +19,9 @@ const int Game::FPS_GOAL = 60;
 /**
  * Initializes game, including window and objects (sprites).
  */
-Game::Game(sf::RenderWindow& window) :
+Game::Game(tgui::Window& window) :
 		mWindow(window),
-		mView(sf::Vector2f(0, 0), mWindow.getView().getSize()),
+		mWorldView(sf::Vector2f(0, 0), mWindow.getView().getSize()),
 		mGenerator(mWorld, mPathfinder),
 		mQuit(false),
 		mPaused(false) {
@@ -32,6 +32,12 @@ Game::Game(sf::RenderWindow& window) :
 	mPlayer = std::shared_ptr<Player>(new Player(mWorld, mPathfinder,
 			mGenerator.getPlayerSpawn()));
 	mWorld.insertCharacter(mPlayer);
+
+	mAmmo = window.add<tgui::Label>();
+	setAmmoText();
+	mAmmo->setTextSize(20);
+	mAmmo->setPosition(mWindow.getSize().x - mAmmo->getSize().x,
+			mWindow.getSize().y - mAmmo->getSize().y);
 }
 
 /**
@@ -57,10 +63,30 @@ Game::loop() {
 
 		mWorld.step(elapsed);
 
+		setAmmoText();
+
 		render();
 
 		mGenerator.generateCurrentAreaIfNeeded(mPlayer->getPosition());
 	}
+}
+
+/**
+ * Displays current player ammo in the ammo widget.
+ */
+void
+Game::setAmmoText() {
+	int mag = mPlayer->getMagazineAmmo();
+	int total = mPlayer->getTotalAmmo();
+
+	std::string magString = tgui::to_string(mag);
+	if (mag < 10) magString = "0" + magString;
+
+	std::string totalString = tgui::to_string(total);
+	if (total < 100) totalString = "0" + totalString;
+	if (total < 10) totalString = "0" + totalString;
+
+	mAmmo->setText(magString + "/" + totalString);
 }
 
 /**
@@ -143,6 +169,9 @@ Game::keyDown(const sf::Event& event) {
 	case sf::Keyboard::D:
 		mPlayer->setDirection(Player::Direction::RIGHT, false);
 		break;
+	case sf::Keyboard::R:
+		mPlayer->reload();
+		break;
 	default:
 		break;
 	}
@@ -153,7 +182,7 @@ Game::keyDown(const sf::Event& event) {
  */
 sf::Vector2<float>
 Game::convertCoordinates(int x, int y) {
-	return mWindow.mapPixelToCoords(sf::Vector2i(x, y), mView);
+	return mWindow.mapPixelToCoords(sf::Vector2i(x, y), mWorldView);
 }
 
 void
@@ -192,15 +221,15 @@ void
 Game::render() {
 	mWindow.clear();
 
-	mView.setCenter(mPlayer->getPosition());
+	mWorldView.setCenter(mPlayer->getPosition());
 
 	// Render world and dynamic stuff.
-	mWindow.setView(mView);
-
+	mWindow.setView(mWorldView);
 	mWindow.draw(mWorld);
 
 	// Render GUI and static stuff.
 	mWindow.setView(mWindow.getDefaultView());
+	mWindow.drawGUI();
 
 	mWindow.display();
 }

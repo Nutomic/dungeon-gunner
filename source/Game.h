@@ -8,6 +8,8 @@
 #ifndef DG_GAME_H_
 #define DG_GAME_H_
 
+#include <TGUI/TGUI.hpp>
+
 #include "generator/Generator.h"
 #include "Pathfinder.h"
 #include "World.h"
@@ -20,7 +22,7 @@ class Player;
  */
 class Game : private sf::NonCopyable {
 public:
-	explicit Game(sf::RenderWindow& window);
+	explicit Game(tgui::Window& window);
 	~Game();
 
 	void loop();
@@ -35,13 +37,15 @@ private:
 	void mouseUp(const sf::Event& event);
 
 	sf::Vector2<float> convertCoordinates(int x, int y);
+	void setAmmoText();
 
 private:
 	static const int FPS_GOAL;
 
-	sf::RenderWindow& mWindow;
+	tgui::Window& mWindow;
 	sf::Clock mClock;
-	sf::View mView;
+	sf::View mWorldView;
+	tgui::Label* mAmmo;
 
 	World mWorld;
 	Pathfinder mPathfinder;

@@ -12,6 +12,8 @@
 
 #include <SFML/System.hpp>
 
+#include <Thor/Time.hpp>
+
 #include "../particle/Emitter.h"
 
 class Character;
@@ -31,6 +33,9 @@ public:
 	void pullTrigger();
 	void releaseTrigger();
 	void onThink(int elapsed);
+	int getMagazineAmmo() const;
+	int getTotalAmmo() const;
+	void reload();
 
 protected:
 	std::shared_ptr<Sprite> createParticle();
@@ -38,11 +43,17 @@ protected:
 private:
 	Character& mHolder;
 
-	const std::string mBullet; //< Bullet config filename.
-	int mLastShotWaitInterval; //< Remaining time left after firing last bullet before firing next one.
-	const int mFireInterval; //< Time between firing bullets.
-	bool mFire; //< True if the trigger is pulled.
-	bool mAutomatic; //< True if the weapon continues firing after pulling the trigger once.
+	thor::Timer mTimer;
+	const std::string mBullet;
+	const int mFireInterval;
+	const int mReloadTime;
+	bool mFire;
+	bool mAutomatic;
+	const int mMagazineSize;
+	int mMagazineAmmo;
+	const int mMaxTotalAmmo;
+	int mTotalAmmo;
+	bool mIsReloading = false;
 
 };
 

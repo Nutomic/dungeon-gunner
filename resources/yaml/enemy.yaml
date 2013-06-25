@@ -5,5 +5,5 @@ health: 100
 speed: 100
 radius: 25
 size: [50, 50]
-weapon: weapon.yaml
+weapon: assault_rifle.yaml
 faction: 1

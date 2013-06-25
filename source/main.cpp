@@ -8,6 +8,7 @@
 #include "Game.h"
 #include "util/Loader.h"
 #include "util/Yaml.h"
+#include "util/Log.h"
 
 /**
  * Creates Game object.
@@ -18,8 +19,11 @@ int main(int argc, char* argv[]) {
 	Loader::i().setFolder("resources/");
 	Loader::i().setSubFolder<sf::Texture>("textures/");
 
-	sf::RenderWindow window(sf::VideoMode(800, 600, 32), "Dungeon Gunner",
+    tgui::Window window(sf::VideoMode(800, 600, 32), "Dungeon Gunner",
 				sf::Style::Close | sf::Style::Titlebar);
+
+	if (!window.globalFont.loadFromFile("resources/DejaVuSans.ttf"))
+		LOG_W("Failed to load font at 'resources/DejaVuSans.ttf'");
 
     Game game(window);
 

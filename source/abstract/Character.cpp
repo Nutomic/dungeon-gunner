@@ -168,3 +168,18 @@ Character::getCharacters() const {
 			{return c->getFaction() == getFaction();}), characters.end());
 	return characters;
 }
+
+int
+Character::getMagazineAmmo() const {
+	return mWeapon->getMagazineAmmo();
+}
+
+int
+Character::getTotalAmmo() const {
+	return mWeapon->getTotalAmmo();
+}
+
+void
+Character::reload() {
+	mWeapon->reload();
+}

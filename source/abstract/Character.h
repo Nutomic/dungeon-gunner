@@ -47,6 +47,9 @@ protected:
 	bool isMoving() const;
 	bool isVisible(const sf::Vector2f& target) const;
 	std::vector<std::shared_ptr<Character> > getCharacters() const;
+	int getMagazineAmmo() const;
+	int getTotalAmmo() const;
+	void reload();
 
 private:
 	void move();

@@ -34,22 +34,6 @@ Player::setCrosshairPosition(const sf::Vector2f& position) {
 }
 
 /**
- * Pull the trigger on the attached weapon.
- */
-void
-Player::pullTrigger() {
-	Character::pullTrigger();
-}
-
-/**
- * Release the trigger on the attached weapon.
- */
-void
-Player::releaseTrigger() {
-	Character::releaseTrigger();
-}
-
-/**
  * Sets the movement direction. This is destined for input via keys (eg. WASD).
  * Disables any previous commands via Player::move().
  *

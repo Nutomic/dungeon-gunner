@@ -93,11 +93,6 @@ namespace YAML_KEY {
 
 	// Bullet
 	const std::string DAMAGE = "damage";
-
-	// Weapon
-	const std::string BULLET = "bullet";
-	const std::string INTERVAL = "interval";
-	const std::string AUTOMATIC = "automatic";
 }
 
 namespace YAML_DEFAULT {
@@ -105,9 +100,6 @@ namespace YAML_DEFAULT {
 	const float SPEED = 100;
 	const std::string WEAPON = "weapon.yaml";
 	const int DAMAGE = 10;
-	const int INTERVAL = 250;
-	const std::string BULLET = "bullet.yaml";
-	const bool AUTOMATIC = false;
 	const int FACTION = 1;
 }
 

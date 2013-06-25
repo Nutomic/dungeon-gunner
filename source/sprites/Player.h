@@ -32,10 +32,13 @@ public:
 			const sf::Vector2f& position);
 
 	void setCrosshairPosition(const sf::Vector2f& position);
-	void pullTrigger();
-	void releaseTrigger();
+	using Character::pullTrigger;
+	using Character::releaseTrigger;
 	void setDirection(Direction direction, bool unset);
 	void setDestination(const sf::Vector2f& destination);
+	using Character::getMagazineAmmo;
+	using Character::getTotalAmmo;
+	using Character::reload;
 
 private:
 	void onThink(int elapsed);

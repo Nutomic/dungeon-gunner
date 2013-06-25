@@ -16,11 +16,15 @@
 Weapon::Weapon(World& world, Character& holder, const Yaml& config) :
 		Emitter(world),
 		mHolder(holder),
-		mBullet(config.get(YAML_KEY::BULLET, YAML_DEFAULT::BULLET)),
-		mLastShotWaitInterval(0),
-		mFireInterval(config.get(YAML_KEY::INTERVAL, YAML_DEFAULT::INTERVAL)),
+		mBullet(config.get("bullet", std::string("bullet.yaml"))),
+		mFireInterval(config.get("fire_interval", 0)),
+		mReloadTime(config.get("reload_time", 0)),
 		mFire(false),
-		mAutomatic(config.get(YAML_KEY::AUTOMATIC, YAML_DEFAULT::AUTOMATIC)) {
+		mAutomatic(config.get("automatic", false)),
+		mMagazineSize(config.get("magazine_size", 0)),
+		mMagazineAmmo(mMagazineSize),
+		mMaxTotalAmmo(config.get("max_total_ammo", 0)),
+		mTotalAmmo(mMaxTotalAmmo) {
 }
 
 /**
@@ -46,26 +50,53 @@ Weapon::releaseTrigger() {
  */
 void
 Weapon::onThink(int elapsed) {
-	// Waiting for next shot, subtract time since last onThink.
-	if (mLastShotWaitInterval > 0)
-		mLastShotWaitInterval -= elapsed;
-	// Only reset to zero if we didn't recently fire (allow catching up for missed bullets).
-	else
-		mLastShotWaitInterval = 0;
-	// Loop just in case we miss a bullet to fire.
-	while (mFire && mLastShotWaitInterval <= 0) {
-		mLastShotWaitInterval += mFireInterval;
+	if (!mTimer.isExpired())
+		return;
+	if (mIsReloading) {
+		mMagazineAmmo = (mTotalAmmo >= mMagazineSize)
+				? mMagazineSize
+				: mTotalAmmo;
+		mTotalAmmo -= mMagazineAmmo;
+		mIsReloading = false;
+	}
+
+	if (mFire && mMagazineAmmo != 0) {
 		emit();
 		if (!mAutomatic)
 			mFire = false;
 	}
+
+	if (mMagazineAmmo == 0 && mTotalAmmo != 0)
+		reload();
 }
 
+/**
+ * Creates and fires a projectile.
+ */
 std::shared_ptr<Sprite>
 Weapon::createParticle() {
+	mTimer.restart(sf::milliseconds(mFireInterval));
+	mMagazineAmmo--;
+
 	// Minus to account for positive y-axis going downwards in SFML.
 	sf::Vector2f offset(0, - mHolder.getRadius());
 	thor::rotate(offset, thor::polarAngle(mHolder.getDirection()));
 	return std::shared_ptr<Sprite>(new Bullet(mHolder.getPosition() + offset,
 			mHolder, mHolder.getDirection(), Yaml(mBullet)));
+}
+
+int
+Weapon::getMagazineAmmo() const {
+	return mMagazineAmmo;
+}
+
+int
+Weapon::getTotalAmmo() const {
+	return mTotalAmmo;
+}
+
+void
+Weapon::reload() {
+	mIsReloading = true;
+	mTimer.restart(sf::milliseconds(mReloadTime));
 }

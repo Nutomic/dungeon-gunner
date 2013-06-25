@@ -1,0 +1,8 @@
+name: Assault Rifle
+
+bullet: bullet.yaml
+fire_interval: 150
+reload_time: 2000
+automatic: true
+magazine_size: 30
+max_total_ammo: 270
