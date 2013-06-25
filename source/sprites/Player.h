@@ -41,7 +41,7 @@ public:
 	using Character::reload;
 
 private:
-	void onThink(int elapsed);
+	void onThink(int elapsed) override;
 
 private:
 	sf::Vector2f mCrosshairPosition; //< Relative position of the point to fire at (mouse cursor).

@@ -18,7 +18,7 @@ public:
 			const sf::Vector2f& position);
 
 private:
-	virtual void onThink(int elapsed);
+	virtual void onThink(int elapsed) override;
 };
 
 #endif /* DG_ENEMY_H_ */
