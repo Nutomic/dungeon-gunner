@@ -16,7 +16,9 @@
 Weapon::Weapon(World& world, Character& holder, const Yaml& config) :
 		Emitter(world),
 		mHolder(holder),
-		mBullet(config.get("bullet", std::string("bullet.yaml"))),
+		mProjectile(config.get("bullet", std::string("bullet.yaml"))),
+		mDamage(config.get("damage", 0)),
+		mProjectileSpeed(config.get("projectile_speed", 0.0f)),
 		mFireInterval(config.get("fire_interval", 0)),
 		mReloadTime(config.get("reload_time", 0)),
 		mFire(false),
@@ -82,7 +84,8 @@ Weapon::createParticle() {
 	sf::Vector2f offset(0, - mHolder.getRadius());
 	thor::rotate(offset, thor::polarAngle(mHolder.getDirection()));
 	return std::shared_ptr<Sprite>(new Bullet(mHolder.getPosition() + offset,
-			mHolder, mHolder.getDirection(), Yaml(mBullet)));
+			mHolder, mHolder.getDirection(), mProjectile, mProjectileSpeed,
+			mDamage));
 }
 
 int

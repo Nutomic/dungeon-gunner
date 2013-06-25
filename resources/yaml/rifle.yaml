@@ -1,0 +1,10 @@
+name: Rifle
+
+bullet: bullet.yaml
+projectile_speed: 1000
+damage: 25
+fire_interval: 400
+reload_time: 2000
+automatic: false
+magazine_size: 15
+max_total_ammo: 200

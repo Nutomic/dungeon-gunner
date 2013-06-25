@@ -1,0 +1,10 @@
+name: Pistol
+
+bullet: bullet.yaml
+projectile_speed: 1000
+damage: 10
+fire_interval: 200
+reload_time: 1500
+automatic: false
+magazine_size: 9
+max_total_ammo: 150

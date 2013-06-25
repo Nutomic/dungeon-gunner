@@ -1,6 +1,8 @@
 name: Assault Rifle
 
 bullet: bullet.yaml
+projectile_speed: 1000
+damage: 15
 fire_interval: 150
 reload_time: 2000
 automatic: true

@@ -19,7 +19,8 @@ class Yaml;
 class Bullet : public Particle {
 public:
 	explicit Bullet(const sf::Vector2f& position, Character& shooter,
-			sf::Vector2f direction, const Yaml& config);
+			sf::Vector2f direction, const Yaml& config,	float speed,
+			float damage);
 
 	void onCollide(std::shared_ptr<Sprite> other);
 

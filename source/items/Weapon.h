@@ -15,6 +15,7 @@
 #include <Thor/Time.hpp>
 
 #include "../particle/Emitter.h"
+#include "../util/Yaml.h"
 
 class Character;
 class World;
@@ -44,7 +45,9 @@ private:
 	Character& mHolder;
 
 	thor::Timer mTimer;
-	const std::string mBullet;
+	const Yaml mProjectile;
+	const int mDamage;
+	const float mProjectileSpeed;
 	const int mFireInterval;
 	const int mReloadTime;
 	bool mFire;
