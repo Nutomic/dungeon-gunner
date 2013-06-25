@@ -13,9 +13,6 @@
 class Corpse : public Circle {
 public:
 	explicit Corpse(const sf::Vector2f& position);
-
-private:
-	static const std::string CONFIG;
 };
 
 #endif /* DG_CORPSE_H_ */

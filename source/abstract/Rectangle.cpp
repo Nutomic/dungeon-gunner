@@ -13,8 +13,8 @@
 Rectangle::Rectangle(const sf::Vector2f& position, Category category,
 		unsigned short mask, const Yaml& config,
 		const sf::Vector2f& direction) :
-	Sprite(position, category, mask, config.get(YAML_KEY::SIZE, sf::Vector2f()),
-			config.get(YAML_KEY::TEXTURE, std::string()), direction) {
+	Sprite(position, category, mask, config.get("size", sf::Vector2f()),
+			config.get("texture", std::string()), direction) {
 }
 
 /**

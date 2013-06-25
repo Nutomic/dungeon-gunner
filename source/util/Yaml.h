@@ -79,28 +79,4 @@ T Yaml::get(const std::string& key, const T& defaultValue) const {
 	}
 };
 
-namespace YAML_KEY {
-	// Sprite
-	const std::string SIZE = "size";
-	const std::string RADIUS = "radius";
-	const std::string TEXTURE = "texture";
-
-	// Character
-	const std::string HEALTH = "health";
-	const std::string SPEED = "speed";
-	const std::string WEAPON = "weapon";
-	const std::string FACTION = "faction";
-
-	// Bullet
-	const std::string DAMAGE = "damage";
-}
-
-namespace YAML_DEFAULT {
-	const int HEALTH = 100;
-	const float SPEED = 100;
-	const std::string WEAPON = "weapon.yaml";
-	const int DAMAGE = 10;
-	const int FACTION = 1;
-}
-
 #endif /* DG_YAML_H_ */

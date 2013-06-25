@@ -11,14 +11,12 @@
 
 #include "../util/Yaml.h"
 
-const std::string Player::CONFIG = "player.yaml";
-
 /**
  * Initializes Sprite.
  */
 Player::Player(World& world, Pathfinder& pathfinder,
 		const sf::Vector2f& position) :
-	Character(position, CATEGORY_ACTOR, MASK_ALL, Yaml(CONFIG), world,
+	Character(position, CATEGORY_ACTOR, MASK_ALL, Yaml("player.yaml"), world,
 			pathfinder),
 	mDirection(0) {
 }

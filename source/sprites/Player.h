@@ -44,8 +44,6 @@ private:
 	void onThink(int elapsed);
 
 private:
-	static const std::string CONFIG;
-
 	sf::Vector2f mCrosshairPosition; //< Relative position of the point to fire at (mouse cursor).
 	unsigned char mDirection; //< Current movement direction for direct control.
 };

@@ -19,9 +19,6 @@ public:
 
 private:
 	virtual void onThink(int elapsed);
-
-private:
-	static const std::string CONFIG;
 };
 
 #endif /* DG_ENEMY_H_ */

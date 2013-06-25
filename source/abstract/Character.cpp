@@ -28,13 +28,13 @@ Character::Character(const sf::Vector2f& position, Category category,
 		Circle(position, category, mask, config),
 		mWorld(world),
 		mPathfinder(pathfinder),
-		mMaxHealth(config.get(YAML_KEY::HEALTH, YAML_DEFAULT::HEALTH)),
+		mMaxHealth(config.get("health", 100)),
 		mCurrentHealth(mMaxHealth),
-		mMovementSpeed(config.get(YAML_KEY::SPEED, YAML_DEFAULT::SPEED)),
+		mMovementSpeed(config.get("speed", 0.0f)),
 		mWeapon(new Weapon(world, *this,
-				Yaml(config.get(YAML_KEY::WEAPON, YAML_DEFAULT::WEAPON)))),
+				Yaml(config.get("weapon", std::string())))),
 		mLastPosition(getPosition()),
-		mFaction((Faction) config.get(YAML_KEY::FACTION, YAML_DEFAULT::FACTION)) {
+		mFaction((Faction) config.get("faction", 1)) {
 }
 
 Character::~Character() {

@@ -9,9 +9,7 @@
 
 #include "../util/Yaml.h"
 
-const std::string Corpse::CONFIG = "corpse.yaml";
-
 Corpse::Corpse(const sf::Vector2f& position) :
-		Circle(position, CATEGORY_NONSOLID, MASK_NONE, Yaml(CONFIG)) {
+		Circle(position, CATEGORY_NONSOLID, MASK_NONE, Yaml("corpse.yaml")) {
 }
 
