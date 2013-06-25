@@ -116,6 +116,9 @@ Game::input() {
 			mPlayer->setCrosshairPosition(convertCoordinates(event.mouseMove.x,
 					event.mouseMove.y));
 			break;
+		case sf::Event::MouseWheelMoved:
+			mPlayer->toggleWeapon();
+			break;
 		default:
 			break;
 		}
@@ -171,6 +174,12 @@ Game::keyDown(const sf::Event& event) {
 		break;
 	case sf::Keyboard::R:
 		mPlayer->reload();
+		break;
+	case sf::Keyboard::Num1:
+		mPlayer->selectFirstWeapon();
+		break;
+	case sf::Keyboard::Num2:
+		mPlayer->selectSecondWeapon();
 		break;
 	default:
 		break;

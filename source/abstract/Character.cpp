@@ -31,8 +31,11 @@ Character::Character(const sf::Vector2f& position, Category category,
 		mMaxHealth(config.get("health", 100)),
 		mCurrentHealth(mMaxHealth),
 		mMovementSpeed(config.get("speed", 0.0f)),
-		mWeapon(new Weapon(world, *this,
-				Yaml(config.get("weapon", std::string())))),
+		mFirstWeapon(new Weapon(world, *this,
+				Yaml(config.get("first_weapon", std::string())))),
+		mSecondWeapon(new Weapon(world, *this,
+				Yaml(config.get("second_weapon", std::string())))),
+		mActiveWeapon(mFirstWeapon),
 		mLastPosition(getPosition()),
 		mFaction((Faction) config.get("faction", 1)) {
 }
@@ -64,7 +67,7 @@ Character::onDamage(int damage) {
  */
 void
 Character::onThink(int elapsed) {
-	mWeapon->onThink(elapsed);
+	mActiveWeapon->onThink(elapsed);
 	move();
 }
 
@@ -98,7 +101,7 @@ Character::getMovementSpeed() const {
  */
 void
 Character::pullTrigger() {
-	mWeapon->pullTrigger();
+	mActiveWeapon->pullTrigger();
 }
 
 /**
@@ -106,7 +109,7 @@ Character::pullTrigger() {
  */
 void
 Character::releaseTrigger() {
-	mWeapon->releaseTrigger();
+	mActiveWeapon->releaseTrigger();
 }
 
 /**
@@ -171,15 +174,35 @@ Character::getCharacters() const {
 
 int
 Character::getMagazineAmmo() const {
-	return mWeapon->getMagazineAmmo();
+	return mActiveWeapon->getMagazineAmmo();
 }
 
 int
 Character::getTotalAmmo() const {
-	return mWeapon->getTotalAmmo();
+	return mActiveWeapon->getTotalAmmo();
 }
 
 void
 Character::reload() {
-	mWeapon->reload();
+	mActiveWeapon->reload();
+}
+
+void
+Character::toggleWeapon() {
+	mActiveWeapon->cancelReload();
+	mActiveWeapon = (mActiveWeapon == mFirstWeapon)
+		? mSecondWeapon
+		: mFirstWeapon;
+}
+
+void
+Character::selectFirstWeapon() {
+	mActiveWeapon->cancelReload();
+	mActiveWeapon = mFirstWeapon;
+}
+
+void
+Character::selectSecondWeapon() {
+	mActiveWeapon->cancelReload();
+	mActiveWeapon = mSecondWeapon;
 }

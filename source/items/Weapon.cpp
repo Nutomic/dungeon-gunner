@@ -125,6 +125,13 @@ Weapon::reload() {
 	mTimer.restart(sf::milliseconds(mReloadTime));
 }
 
+void
+Weapon::cancelReload() {
+	mIsReloading = false;
+	// To make sure time isn't skipped.
+	mTimer.restart(sf::milliseconds(mFireInterval));
+}
+
 /**
  * Creates a new projectile and inserts it into the world.
  *

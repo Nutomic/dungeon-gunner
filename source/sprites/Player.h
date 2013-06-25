@@ -39,6 +39,9 @@ public:
 	using Character::getMagazineAmmo;
 	using Character::getTotalAmmo;
 	using Character::reload;
+	using Character::toggleWeapon;
+	using Character::selectFirstWeapon;
+	using Character::selectSecondWeapon;
 
 private:
 	void onThink(int elapsed) override;

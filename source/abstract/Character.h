@@ -50,6 +50,9 @@ protected:
 	int getMagazineAmmo() const;
 	int getTotalAmmo() const;
 	void reload();
+	void toggleWeapon();
+	void selectFirstWeapon();
+	void selectSecondWeapon();
 
 private:
 	void move();
@@ -65,7 +68,9 @@ private:
 	const int mMaxHealth;
 	int mCurrentHealth; //< Current health. Between 0 and mMaxHealth.
 	const float mMovementSpeed;
-	std::unique_ptr<Weapon> mWeapon;
+	std::shared_ptr<Weapon> mFirstWeapon;
+	std::shared_ptr<Weapon> mSecondWeapon;
+	std::shared_ptr<Weapon> mActiveWeapon;
 	std::vector<sf::Vector2f> mPath; //< Contains nodes to reach a set destination.
 	sf::Vector2f mLastPosition;
 	Faction mFaction;

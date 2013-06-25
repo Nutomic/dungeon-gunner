@@ -32,6 +32,7 @@ public:
 	int getMagazineAmmo() const;
 	int getTotalAmmo() const;
 	void reload();
+	void cancelReload();
 
 private:
 	void fire();
