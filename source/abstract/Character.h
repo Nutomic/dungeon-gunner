@@ -10,6 +10,8 @@
 
 #include "Circle.h"
 
+#include "../items/Gadget.h"
+
 class Pathfinder;
 class World;
 class Weapon;
@@ -55,6 +57,12 @@ protected:
 	void selectFirstWeapon();
 	void selectSecondWeapon();
 	int getHealth() const;
+	void setLeftGadget(std::shared_ptr<Gadget> gadget);
+	void setRightGadget(std::shared_ptr<Gadget> gadget);
+	void useLeftGadget();
+	void useRightGadget();
+
+protected:
 
 private:
 	void move();
@@ -73,6 +81,8 @@ private:
 	std::shared_ptr<Weapon> mFirstWeapon;
 	std::shared_ptr<Weapon> mSecondWeapon;
 	std::shared_ptr<Weapon> mActiveWeapon;
+	std::shared_ptr<Gadget> mLeftGadget;
+	std::shared_ptr<Gadget> mRightGadget;
 	std::vector<sf::Vector2f> mPath; //< Contains nodes to reach a set destination.
 	sf::Vector2f mLastPosition;
 	Faction mFaction;

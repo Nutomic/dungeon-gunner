@@ -43,6 +43,10 @@ public:
 	using Character::toggleWeapon;
 	using Character::selectFirstWeapon;
 	using Character::selectSecondWeapon;
+	using Character::setLeftGadget;
+	using Character::setRightGadget;
+	using Character::useLeftGadget;
+	using Character::useRightGadget;
 	using Character::getHealth;
 
 private:

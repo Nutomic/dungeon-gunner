@@ -52,6 +52,10 @@ Character::~Character() {
 void
 Character::onDamage(int damage) {
 	mCurrentHealth -= damage;
+
+	if (mCurrentHealth > mMaxHealth)
+		mCurrentHealth = mMaxHealth;
+
 	if (mCurrentHealth <= 0) {
 		mCurrentHealth = 0;
 		onDeath();
@@ -68,6 +72,10 @@ Character::onDamage(int damage) {
 void
 Character::onThink(int elapsed) {
 	mActiveWeapon->onThink(elapsed);
+	if (mLeftGadget)
+		mLeftGadget->onThink(elapsed);
+	if (mRightGadget)
+		mRightGadget->onThink(elapsed);
 	move();
 }
 
@@ -211,6 +219,27 @@ Character::selectSecondWeapon() {
 	mActiveWeapon->cancelReload();
 	mActiveWeapon = mSecondWeapon;
 }
+
+void
+Character::setLeftGadget(std::shared_ptr<Gadget> gadget) {
+	mLeftGadget = gadget;
+}
+
+void
+Character::setRightGadget(std::shared_ptr<Gadget> gadget) {
+	mRightGadget = gadget;
+}
+
+void
+Character::useLeftGadget() {
+	mLeftGadget->use(*this);
+}
+
+void
+Character::useRightGadget() {
+	mRightGadget->use(*this);
+}
+
 int
 Character::getHealth() const {
 	return mCurrentHealth;

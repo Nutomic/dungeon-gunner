@@ -10,6 +10,7 @@
 #include <Thor/Vectors.hpp>
 
 #include "generator/Generator.h"
+#include "items/Heal.h"
 #include "sprites/Enemy.h"
 #include "sprites/Player.h"
 #include "util/Yaml.h"
@@ -31,6 +32,8 @@ Game::Game(tgui::Window& window) :
 	mGenerator.generateCurrentAreaIfNeeded(sf::Vector2f());
 	mPlayer = std::shared_ptr<Player>(new Player(mWorld, mPathfinder,
 			mGenerator.getPlayerSpawn()));
+	mPlayer->setLeftGadget(std::shared_ptr<Gadget>(new Heal()));
+	mPlayer->setRightGadget(std::shared_ptr<Gadget>(new Heal()));
 	mWorld.insertCharacter(mPlayer);
 
 	mHealth = window.add<tgui::Label>();
@@ -180,6 +183,12 @@ Game::keyDown(const sf::Event& event) {
 		break;
 	case sf::Keyboard::D:
 		mPlayer->setDirection(Player::Direction::RIGHT, false);
+		break;
+	case sf::Keyboard::Q:
+		mPlayer->useLeftGadget();
+		break;
+	case sf::Keyboard::E:
+		mPlayer->useRightGadget();
 		break;
 	case sf::Keyboard::R:
 		mPlayer->reload();
