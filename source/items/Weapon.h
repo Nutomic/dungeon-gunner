@@ -31,6 +31,7 @@ public:
 	void onThink(int elapsed);
 	int getMagazineAmmo() const;
 	int getTotalAmmo() const;
+	std::string getName() const;
 	void reload();
 	void cancelReload();
 
@@ -43,6 +44,7 @@ private:
 	Character& mHolder;
 
 	thor::Timer mTimer;
+	const std::string mName;
 	const Yaml mProjectile;
 	const int mDamage;
 	const float mProjectileSpeed;

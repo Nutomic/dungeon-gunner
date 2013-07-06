@@ -34,10 +34,9 @@ Game::Game(tgui::Window& window) :
 	mWorld.insertCharacter(mPlayer);
 
 	mAmmo = window.add<tgui::Label>();
-	setAmmoText();
 	mAmmo->setTextSize(20);
-	mAmmo->setPosition(mWindow.getSize().x - mAmmo->getSize().x,
-			mWindow.getSize().y - mAmmo->getSize().y);
+	mCurrentWeapon = window.add<tgui::Label>();
+	mCurrentWeapon->setTextSize(14);
 }
 
 /**
@@ -63,7 +62,7 @@ Game::loop() {
 
 		mWorld.step(elapsed);
 
-		setAmmoText();
+		updateGui();
 
 		render();
 
@@ -75,7 +74,7 @@ Game::loop() {
  * Displays current player ammo in the ammo widget.
  */
 void
-Game::setAmmoText() {
+Game::updateGui() {
 	int mag = mPlayer->getMagazineAmmo();
 	int total = mPlayer->getTotalAmmo();
 
@@ -87,6 +86,12 @@ Game::setAmmoText() {
 	if (total < 10) totalString = "0" + totalString;
 
 	mAmmo->setText(magString + "/" + totalString);
+	mCurrentWeapon->setText(mPlayer->getWeaponName());
+
+	mAmmo->setPosition(mWindow.getSize().x - mAmmo->getSize().x,
+			mWindow.getSize().y - mAmmo->getSize().y);
+	mCurrentWeapon->setPosition(mWindow.getSize().x - mCurrentWeapon->getSize().x,
+			mAmmo->getPosition().y - mCurrentWeapon->getSize().y);
 }
 
 /**

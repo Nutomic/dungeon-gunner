@@ -182,6 +182,11 @@ Character::getTotalAmmo() const {
 	return mActiveWeapon->getTotalAmmo();
 }
 
+std::string
+Character::getWeaponName() const {
+	return mActiveWeapon->getName();
+}
+
 void
 Character::reload() {
 	mActiveWeapon->reload();

@@ -38,6 +38,7 @@ public:
 	void setDestination(const sf::Vector2f& destination);
 	using Character::getMagazineAmmo;
 	using Character::getTotalAmmo;
+	using Character::getWeaponName;
 	using Character::reload;
 	using Character::toggleWeapon;
 	using Character::selectFirstWeapon;

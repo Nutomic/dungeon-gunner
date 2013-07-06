@@ -49,6 +49,7 @@ protected:
 	std::vector<std::shared_ptr<Character> > getCharacters() const;
 	int getMagazineAmmo() const;
 	int getTotalAmmo() const;
+	std::string getWeaponName() const;
 	void reload();
 	void toggleWeapon();
 	void selectFirstWeapon();

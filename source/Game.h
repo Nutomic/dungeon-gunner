@@ -37,7 +37,7 @@ private:
 	void mouseUp(const sf::Event& event);
 
 	sf::Vector2<float> convertCoordinates(int x, int y);
-	void setAmmoText();
+	void updateGui();
 
 private:
 	static const int FPS_GOAL;
@@ -46,6 +46,7 @@ private:
 	sf::Clock mClock;
 	sf::View mWorldView;
 	tgui::Label* mAmmo;
+	tgui::Label* mCurrentWeapon;
 
 	World mWorld;
 	Pathfinder mPathfinder;

@@ -16,6 +16,7 @@
 Weapon::Weapon(World& world, Character& holder, const Yaml& config) :
 		mWorld(world),
 		mHolder(holder),
+		mName(config.get("name", std::string())),
 		mProjectile(config.get("bullet", std::string("bullet.yaml"))),
 		mDamage(config.get("damage", 0)),
 		mProjectileSpeed(config.get("projectile_speed", 0.0f)),
@@ -118,6 +119,11 @@ Weapon::getMagazineAmmo() const {
 int
 Weapon::getTotalAmmo() const {
 	return mTotalAmmo;
+}
+
+std::string
+Weapon::getName() const {
+	return mName;
 }
 
 void
