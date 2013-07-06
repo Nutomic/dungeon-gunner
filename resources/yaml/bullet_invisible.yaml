@@ -1,0 +1,5 @@
+name: Bullet
+texture: transparent.png
+
+radius: 5
+size: [1, 1]

@@ -31,7 +31,9 @@ Weapon::Weapon(World& world, Character& holder, const Yaml& config) :
 		mPelletSpread(config.get("pellet_spread", 0.0f)),
 		mReloadSingle(config.get("reload_single", false)),
 		mSpread(config.get("spread", 0.0f)),
-		mSpreadMoving(config.get("spread_moving", 0.0f)) {
+		mSpreadMoving(config.get("spread_moving", 0.0f)),
+		mMaxRange(config.get("max_range", 0.0f)),
+		mRequiresAmmo(!config.get("requires_no_ammo", false)) {
 }
 
 /**
@@ -80,13 +82,13 @@ Weapon::onThink(int elapsed) {
 			mIsReloading = false;
 	}
 
-	if (mFiring && mMagazineAmmo != 0) {
+	if (mFiring && (!mRequiresAmmo || mMagazineAmmo != 0)) {
 		fire();
 		if (!mAutomatic)
 			mFiring = false;
 	}
 
-	if (mMagazineAmmo == 0 && mTotalAmmo != 0)
+	if (mRequiresAmmo && mMagazineAmmo == 0 && mTotalAmmo != 0)
 		reload();
 }
 
@@ -96,7 +98,8 @@ Weapon::onThink(int elapsed) {
 void
 Weapon::fire() {
 	mTimer.restart(sf::milliseconds(mFireInterval));
-	mMagazineAmmo--;
+	if (mRequiresAmmo)
+		mMagazineAmmo--;
 
 
 	if (mPellets == 0)
@@ -155,6 +158,6 @@ Weapon::insertProjectile(float angle) {
 
 	std::shared_ptr<Sprite> projectile(new Bullet(mHolder.getPosition() + offset,
 			mHolder, direction, mProjectile, mProjectileSpeed,
-			mDamage));
+			mDamage, mMaxRange));
 	mWorld.insert(projectile);
 }

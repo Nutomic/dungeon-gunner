@@ -20,7 +20,7 @@ class Bullet : public Circle {
 public:
 	explicit Bullet(const sf::Vector2f& position, Character& shooter,
 			sf::Vector2f direction, const Yaml& config,	float speed,
-			float damage);
+			float damage, float maxRange);
 
 	void onCollide(std::shared_ptr<Sprite> other);
 
@@ -28,6 +28,8 @@ private:
 	const Character& mShooter;
 	const int mDamage;
 	const float mSpeed;
+	const float mMaxRangeSquared;
+	sf::Vector2f mStartPoint;
 };
 
 #endif /* DG_BULLET_H_ */

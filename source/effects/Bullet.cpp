@@ -22,12 +22,14 @@
  */
 Bullet::Bullet(const sf::Vector2f& position, Character& shooter,
 	sf::Vector2f direction, const Yaml& config, float speed,
-	float damage) :
+	float damage, float maxRange) :
 		Circle(position, CATEGORY_PARTICLE, ~CATEGORY_PARTICLE,
 				config, thor::rotatedVector(direction, -90.0f)),
 		mShooter(shooter),
 		mDamage(damage),
-		mSpeed(speed) {
+		mSpeed(speed),
+		mMaxRangeSquared((maxRange == 0) ? std::numeric_limits<float>::max() : maxRange * maxRange),
+		mStartPoint(getPosition()) {
 	setSpeed(thor::rotatedVector(direction, -90.0f), mSpeed);
 }
 
@@ -37,9 +39,13 @@ Bullet::Bullet(const sf::Vector2f& position, Character& shooter,
  */
 void
 Bullet::onCollide(std::shared_ptr<Sprite> other) {
+	if (thor::squaredLength(getPosition() - mStartPoint) >= mMaxRangeSquared) {
+		setDelete(true);
+		return;
+	}
+
 	// Make sure we do not damage twice.
 	if (!getDelete() && (&*other != &mShooter)) {
-		// Call onShot on other, with damage as param.
 		if (other->getCategory() == CATEGORY_ACTOR) {
 			std::shared_ptr<Character> character = std::static_pointer_cast<Character>(other);
 			character->onDamage(mDamage);

@@ -60,6 +60,8 @@ private:
 	const bool mReloadSingle;
 	const float mSpread;
 	const float mSpreadMoving;
+	const float mMaxRange;
+	const float mRequiresAmmo;
 	std::default_random_engine mGenerator;
 
 };

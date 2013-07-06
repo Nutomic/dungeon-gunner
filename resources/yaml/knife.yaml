@@ -1,0 +1,11 @@
+name: Knife
+
+bullet: bullet_invisible.yaml
+projectile_speed: 1000
+damage: 10
+fire_interval: 2000
+automatic: false
+spread: 0
+spread_moving: 0
+max_range: 50
+requires_no_ammo: true
