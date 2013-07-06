@@ -33,6 +33,8 @@ Game::Game(tgui::Window& window) :
 			mGenerator.getPlayerSpawn()));
 	mWorld.insertCharacter(mPlayer);
 
+	mHealth = window.add<tgui::Label>();
+	mHealth->setTextSize(20);
 	mAmmo = window.add<tgui::Label>();
 	mAmmo->setTextSize(20);
 	mCurrentWeapon = window.add<tgui::Label>();
@@ -85,9 +87,11 @@ Game::updateGui() {
 	if (total < 100) totalString = "0" + totalString;
 	if (total < 10) totalString = "0" + totalString;
 
+	mHealth->setText(tgui::to_string(mPlayer->getHealth()));
 	mAmmo->setText(magString + "/" + totalString);
 	mCurrentWeapon->setText(mPlayer->getWeaponName());
 
+	mHealth->setPosition(0, mWindow.getSize().y - mHealth->getSize().y);
 	mAmmo->setPosition(mWindow.getSize().x - mAmmo->getSize().x,
 			mWindow.getSize().y - mAmmo->getSize().y);
 	mCurrentWeapon->setPosition(mWindow.getSize().x - mCurrentWeapon->getSize().x,

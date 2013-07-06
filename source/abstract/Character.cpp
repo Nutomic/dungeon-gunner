@@ -211,3 +211,7 @@ Character::selectSecondWeapon() {
 	mActiveWeapon->cancelReload();
 	mActiveWeapon = mSecondWeapon;
 }
+int
+Character::getHealth() const {
+	return mCurrentHealth;
+}

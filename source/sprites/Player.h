@@ -43,6 +43,7 @@ public:
 	using Character::toggleWeapon;
 	using Character::selectFirstWeapon;
 	using Character::selectSecondWeapon;
+	using Character::getHealth;
 
 private:
 	void onThink(int elapsed) override;

@@ -54,6 +54,7 @@ protected:
 	void toggleWeapon();
 	void selectFirstWeapon();
 	void selectSecondWeapon();
+	int getHealth() const;
 
 private:
 	void move();

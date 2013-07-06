@@ -45,6 +45,7 @@ private:
 	tgui::Window& mWindow;
 	sf::Clock mClock;
 	sf::View mWorldView;
+	tgui::Label* mHealth;
 	tgui::Label* mAmmo;
 	tgui::Label* mCurrentWeapon;
 
