@@ -64,6 +64,7 @@ protected:
 	void setPosition(const sf::Vector2f& position);
 
 private:
+	friend class CollisionModel;
 	friend class World;
 
 	sf::RectangleShape mShape;
