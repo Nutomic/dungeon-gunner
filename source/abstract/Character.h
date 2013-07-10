@@ -68,6 +68,8 @@ private:
 	void move();
 
 private:
+	friend class Shield;
+
 	/// Distance to a path point where it will be considered as reached (to
 	/// avoid floating point equality check).
 	static const float POINT_REACHED_DISTANCE;

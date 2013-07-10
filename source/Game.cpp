@@ -11,6 +11,7 @@
 
 #include "generator/Generator.h"
 #include "items/Heal.h"
+#include "items/Shield.h"
 #include "sprites/Enemy.h"
 #include "sprites/Player.h"
 #include "util/Yaml.h"
@@ -33,7 +34,7 @@ Game::Game(tgui::Window& window) :
 	mPlayer = std::shared_ptr<Player>(new Player(mWorld, mPathfinder,
 			mGenerator.getPlayerSpawn()));
 	mPlayer->setLeftGadget(std::shared_ptr<Gadget>(new Heal()));
-	mPlayer->setRightGadget(std::shared_ptr<Gadget>(new Heal()));
+	mPlayer->setRightGadget(std::shared_ptr<Gadget>(new Shield()));
 	mWorld.insertCharacter(mPlayer);
 
 	mHealth = window.add<tgui::Label>();

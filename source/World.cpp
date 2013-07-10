@@ -156,7 +156,7 @@ World::raycast(const sf::Vector2f& lineStart,
 	assert(lineStart != lineEnd);
 	sf::Vector2f lineCenter = lineStart + 0.5f * (lineEnd - lineStart);
 	for (const auto& it : mDrawables.at(Sprite::Category::CATEGORY_WORLD)) {
-		if (dynamic_cast<Tile*>(it.get())->getType() != Tile::Type::WALL)
+		if (!it->collisionEnabled(Sprite::CATEGORY_ACTOR))
 			continue;
 		sf::Vector2f axis = it->getPosition() - lineCenter;
 		if (axis == sf::Vector2f())

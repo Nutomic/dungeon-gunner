@@ -50,7 +50,8 @@ Tile::isSolid(Type type) {
 	switch (type) {
 	case Type::FLOOR:
 		return false;
-	case Type::WALL: // falltrough
+	case Type::WALL:
+		// falltrough
 	default:
 		return true;
 	}

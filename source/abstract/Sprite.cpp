@@ -56,7 +56,7 @@ Sprite::getSpeed() const {
  */
 sf::Vector2f
 Sprite::getDirection() const {
-	return thor::rotatedVector(sf::Vector2f(1, 0), mShape.getRotation());
+	return thor::rotatedVector(sf::Vector2f(0, - 1), mShape.getRotation());
 }
 
 /**

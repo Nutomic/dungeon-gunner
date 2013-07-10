@@ -148,18 +148,14 @@ Weapon::cancelReload() {
  */
 void
 Weapon::insertProjectile(float angle) {
-	// Minus to account for positive y-axis going downwards in SFML.
-	sf::Vector2f offset(0, - mHolder.getRadius());
-			thor::rotate(offset, thor::polarAngle(mHolder.getDirection()));
+	sf::Vector2f offset(mHolder.getDirection() * mHolder.getRadius());
 
 	float spread = (mHolder.getSpeed() == sf::Vector2f())
 			? mSpread
 			: mSpreadMoving;
 	std::uniform_real_distribution<float> distribution(- spread, spread);
-	angle += distribution(mGenerator);
+	angle += distribution(mGenerator) + 90.0f;
 
-	//float random = ((float) rand()) / (float) RAND_MAX;
-    //angle += random * 2 * mSpread - mSpread;
 	sf::Vector2f direction(thor::rotatedVector(mHolder.getDirection(), angle));
 
 	std::shared_ptr<Sprite> projectile(new Bullet(mHolder.getPosition() + offset,
