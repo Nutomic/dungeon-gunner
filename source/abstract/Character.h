@@ -61,6 +61,8 @@ protected:
 	void setRightGadget(std::shared_ptr<Gadget> gadget);
 	void useLeftGadget();
 	void useRightGadget();
+	std::string getLeftGadgetName() const;
+	std::string getRightGadgetName() const;
 
 protected:
 

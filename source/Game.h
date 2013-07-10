@@ -48,6 +48,8 @@ private:
 	tgui::Label* mHealth;
 	tgui::Label* mAmmo;
 	tgui::Label* mCurrentWeapon;
+	tgui::Label* mLeftGadget;
+	tgui::Label* mRightGadget;
 
 	World mWorld;
 	Pathfinder mPathfinder;

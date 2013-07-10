@@ -240,6 +240,16 @@ Character::useRightGadget() {
 	mRightGadget->use(*this);
 }
 
+std::string
+Character::getLeftGadgetName() const {
+	return mLeftGadget->getName();
+}
+
+std::string
+Character::getRightGadgetName() const {
+	return mRightGadget->getName();
+}
+
 int
 Character::getHealth() const {
 	return mCurrentHealth;

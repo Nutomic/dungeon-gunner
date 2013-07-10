@@ -11,6 +11,9 @@
 #include "Gadget.h"
 
 class Heal : public Gadget {
+public:
+	Heal();
+
 protected:
 	void onUse(Character& character) override;
 	void onThink(int elapsed) override;

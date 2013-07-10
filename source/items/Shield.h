@@ -14,6 +14,9 @@ class RotatingShield;
 class Sprite;
 
 class Shield : public Gadget {
+public:
+	Shield();
+
 protected:
 	void onUse(Character& character) override;
 	void onThink(int elapsed) override;

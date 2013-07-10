@@ -43,6 +43,10 @@ Game::Game(tgui::Window& window) :
 	mAmmo->setTextSize(20);
 	mCurrentWeapon = window.add<tgui::Label>();
 	mCurrentWeapon->setTextSize(14);
+	mLeftGadget = window.add<tgui::Label>();
+	mLeftGadget->setTextSize(14);
+	mRightGadget = window.add<tgui::Label>();
+	mRightGadget->setTextSize(14);
 }
 
 /**
@@ -94,12 +98,18 @@ Game::updateGui() {
 	mHealth->setText(tgui::to_string(mPlayer->getHealth()));
 	mAmmo->setText(magString + "/" + totalString);
 	mCurrentWeapon->setText(mPlayer->getWeaponName());
+	mLeftGadget->setText(mPlayer->getLeftGadgetName());
+	mRightGadget->setText(mPlayer->getRightGadgetName());
 
 	mHealth->setPosition(0, mWindow.getSize().y - mHealth->getSize().y);
 	mAmmo->setPosition(mWindow.getSize().x - mAmmo->getSize().x,
 			mWindow.getSize().y - mAmmo->getSize().y);
 	mCurrentWeapon->setPosition(mWindow.getSize().x - mCurrentWeapon->getSize().x,
 			mAmmo->getPosition().y - mCurrentWeapon->getSize().y);
+	mLeftGadget->setPosition(mWindow.getSize().x / 2 - mLeftGadget->getSize().x - 10,
+			mWindow.getSize().y - mLeftGadget->getSize().y);
+	mRightGadget->setPosition(mWindow.getSize().x / 2 + 10,
+			mWindow.getSize().y - mRightGadget->getSize().y);
 }
 
 /**

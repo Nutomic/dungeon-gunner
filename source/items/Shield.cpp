@@ -11,6 +11,10 @@
 #include "../sprites/RotatingShield.h"
 #include "../World.h"
 
+Shield::Shield() :
+		Gadget("Shield") {
+}
+
 void
 Shield::onUse(Character& character) {
 	mCharacter = &character;

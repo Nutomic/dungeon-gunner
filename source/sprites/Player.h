@@ -48,6 +48,8 @@ public:
 	using Character::useLeftGadget;
 	using Character::useRightGadget;
 	using Character::getHealth;
+	using Character::getLeftGadgetName;
+	using Character::getRightGadgetName;
 
 private:
 	void onThink(int elapsed) override;

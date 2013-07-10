@@ -14,8 +14,10 @@ class Character;
 
 class Gadget {
 public:
-	virtual void use(Character& character);
+	Gadget(std::string name);
+	void use(Character& character);
 	virtual void onThink(int elapsed) = 0;
+	std::string getName() const;
 
 protected:
 	virtual void onUse(Character& character) = 0;
@@ -23,6 +25,9 @@ protected:
 
 protected:
 	thor::Timer mCooldownTimer;
+
+private:
+	std::string mName;
 };
 
 #endif /* DG_GADGET_H_ */

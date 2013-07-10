@@ -9,6 +9,10 @@
 
 #include "../abstract/Character.h"
 
+Heal::Heal() :
+		Gadget("Heal") {
+}
+
 void
 Heal::onUse(Character& character) {
 	mCharacter = &character;
