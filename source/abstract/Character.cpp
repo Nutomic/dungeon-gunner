@@ -220,6 +220,12 @@ Character::selectSecondWeapon() {
 	mActiveWeapon = mSecondWeapon;
 }
 
+int
+Character::getHealth() const {
+	return mCurrentHealth;
+}
+
+
 void
 Character::setLeftGadget(std::shared_ptr<Gadget> gadget) {
 	mLeftGadget = gadget;
@@ -250,7 +256,7 @@ Character::getRightGadgetName() const {
 	return mRightGadget->getName();
 }
 
-int
-Character::getHealth() const {
-	return mCurrentHealth;
+void
+Character::swapGadgets() {
+	std::swap(mLeftGadget, mRightGadget);
 }

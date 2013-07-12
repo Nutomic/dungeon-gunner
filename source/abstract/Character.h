@@ -63,6 +63,7 @@ protected:
 	void useRightGadget();
 	std::string getLeftGadgetName() const;
 	std::string getRightGadgetName() const;
+	void swapGadgets();
 
 protected:
 
