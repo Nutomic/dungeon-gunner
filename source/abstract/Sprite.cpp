@@ -17,8 +17,7 @@ Sprite::Sprite(const sf::Vector2f& position, Category category,
 			unsigned short mask, const sf::Vector2f& size,
 			const std::string& texture,	const sf::Vector2f& direction) :
 			mCategory(category),
-			mMask(mask),
-			mDelete(false) {
+			mMask(mask) {
 	mShape.setSize(size);
 	mShape.setOrigin(size / 2.0f);
 	mShape.setTextureRect(sf::IntRect(sf::Vector2i(), sf::Vector2i(size)));
@@ -102,6 +101,7 @@ bool
 Sprite::isInside(const sf::FloatRect& rect) const {
 	return rect.intersects(mShape.getGlobalBounds());
 }
+
 /**
  * Called when a collision with another Sprite occured. Override this method
  * to manage collision events.

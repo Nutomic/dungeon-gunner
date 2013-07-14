@@ -88,12 +88,15 @@ Character::getFaction() const {
 }
 
 /**
- * Called when health reaches zero. Default implementation drops a corpse at
- * the current position.
+ * Called when health reaches zero. Drops corpse and item.
  */
 void
 Character::onDeath() {
 	mWorld.insert(std::shared_ptr<Sprite>(new Corpse(getPosition())));
+
+	mWorld.insert(mActiveWeapon);
+	mActiveWeapon->drop(getPosition());
+
 }
 
 /**

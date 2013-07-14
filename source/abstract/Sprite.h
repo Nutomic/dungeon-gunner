@@ -72,7 +72,7 @@ private:
 	sf::Vector2f mSpeed;
 	Category mCategory;
 	unsigned short mMask;
-	bool mDelete;
+	bool mDelete = false;
 };
 
 #endif /* DG_SPRITE_H_ */

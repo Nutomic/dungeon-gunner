@@ -24,7 +24,7 @@ World::insert(std::shared_ptr<Sprite> drawable) {
 	auto item = std::find(mDrawables[cat].begin(), mDrawables[cat].end(), drawable);
 	assert(item == mDrawables[cat].end());
 #endif
-		mDrawables[drawable->getCategory()].push_back(drawable);
+	mDrawables[drawable->getCategory()].push_back(drawable);
 }
 
 /**
@@ -37,8 +37,8 @@ World::insertCharacter(std::shared_ptr<Character> character) {
 	auto item = std::find(mCharacters.begin(), mCharacters.end(), character);
 	assert(item == mCharacters.end());
 #endif
-		mCharacters.push_back(character);
-		insert(character);
+	mCharacters.push_back(character);
+	insert(character);
 }
 
 /**

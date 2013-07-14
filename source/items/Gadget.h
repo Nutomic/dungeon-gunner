@@ -10,9 +10,11 @@
 
 #include <Thor/Time.hpp>
 
+#include "Item.h"
+
 class Character;
 
-class Gadget {
+class Gadget : public Item {
 public:
 	Gadget(std::string name);
 	void use(Character& character);

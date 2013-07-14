@@ -15,6 +15,7 @@
 
 #include <Thor/Time.hpp>
 
+#include "Item.h"
 #include "../util/Yaml.h"
 
 class Character;
@@ -22,7 +23,7 @@ class World;
 class Particle;
 class Yaml;
 
-class Weapon {
+class Weapon : public Item {
 public:
 	explicit Weapon(World& world, Character& holder, const Yaml& config);
 

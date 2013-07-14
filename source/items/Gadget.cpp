@@ -10,6 +10,7 @@
 #include "../abstract/Character.h"
 
 Gadget::Gadget(std::string name) :
+		Item(sf::Vector2f(40, 40), "gadget.png"),
 		mName(name) {
 }
 
