@@ -16,7 +16,7 @@
 Weapon::Weapon(World& world, Character& holder, const Yaml& config) :
 		Item(sf::Vector2f(80, 30), "weapon.png"),
 		mWorld(world),
-		mHolder(holder),
+		mHolder(&holder),
 		mName(config.get("name", std::string())),
 		mProjectile(config.get("bullet", std::string("bullet.yaml"))),
 		mDamage(config.get("damage", 0)),
@@ -142,6 +142,11 @@ Weapon::cancelReload() {
 	mTimer.restart(sf::milliseconds(mFireInterval));
 }
 
+void
+Weapon::setHolder(Character& holder) {
+    mHolder = &holder;
+}
+
 /**
  * Creates a new projectile and inserts it into the world.
  *
@@ -149,18 +154,18 @@ Weapon::cancelReload() {
  */
 void
 Weapon::insertProjectile(float angle) {
-	sf::Vector2f offset(mHolder.getDirection() * mHolder.getRadius());
+	sf::Vector2f offset(mHolder->getDirection() * mHolder->getRadius());
 
-	float spread = (mHolder.getSpeed() == sf::Vector2f())
+	float spread = (mHolder->getSpeed() == sf::Vector2f())
 			? mSpread
 			: mSpreadMoving;
 	std::uniform_real_distribution<float> distribution(- spread, spread);
 	angle += distribution(mGenerator) + 90.0f;
 
-	sf::Vector2f direction(thor::rotatedVector(mHolder.getDirection(), angle));
+	sf::Vector2f direction(thor::rotatedVector(mHolder->getDirection(), angle));
 
-	std::shared_ptr<Sprite> projectile(new Bullet(mHolder.getPosition() + offset,
-			mHolder, direction, mProjectile, mProjectileSpeed,
+	std::shared_ptr<Sprite> projectile(new Bullet(mHolder->getPosition() + offset,
+			*mHolder, direction, mProjectile, mProjectileSpeed,
 			mDamage, mMaxRange));
 	mWorld.insert(projectile);
 }

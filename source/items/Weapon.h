@@ -35,6 +35,7 @@ public:
 	std::string getName() const;
 	void reload();
 	void cancelReload();
+	void setHolder(Character& holder);
 
 private:
 	void fire();
@@ -42,7 +43,8 @@ private:
 
 private:
 	World& mWorld;
-	Character& mHolder;
+	/// Non-owning pointer instead of reference to allow reassigning.
+	Character* mHolder;
 
 	thor::Timer mTimer;
 	const std::string mName;

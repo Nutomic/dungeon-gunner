@@ -63,7 +63,7 @@ protected:
 	void useRightGadget();
 	std::string getLeftGadgetName() const;
 	std::string getRightGadgetName() const;
-	void swapGadgets();
+	void pickUpItem();
 
 protected:
 
@@ -76,6 +76,8 @@ private:
 	/// Distance to a path point where it will be considered as reached (to
 	/// avoid floating point equality check).
 	static const float POINT_REACHED_DISTANCE;
+	/// Maximum distance from character where an item can be picked up.
+	static const float ITEM_PICKUP_MAX_DISTANCE_SQUARED;
 	friend class World;
 	World& mWorld;
 	Pathfinder& mPathfinder;

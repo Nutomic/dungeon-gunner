@@ -50,7 +50,7 @@ public:
 	using Character::getHealth;
 	using Character::getLeftGadgetName;
 	using Character::getRightGadgetName;
-	using Character::swapGadgets;
+	using Character::pickUpItem;
 
 private:
 	void onThink(int elapsed) override;

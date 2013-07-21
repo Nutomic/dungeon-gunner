@@ -41,13 +41,20 @@ World::insertCharacter(std::shared_ptr<Character> character) {
 	insert(character);
 }
 
+void
+World::remove(std::shared_ptr<Sprite> drawable) {
+	Sprite::Category cat = drawable->getCategory();
+	auto item = std::find(mDrawables[cat].begin(), mDrawables[cat].end(), drawable);
+	mDrawables[cat].erase(item);
+}
+
 /**
  * Returns all characters that are within maxDistance from position.
  */
 std::vector<std::shared_ptr<Character> >
 		World::getCharacters(const sf::Vector2f& position, float maxDistance) const {
 	std::vector<std::shared_ptr<Character> > visible;
-	for (auto it : mCharacters) {
+	for (const auto& it : mCharacters) {
 		if (position == it->getPosition())
 			continue;
 		if (thor::squaredLength(position - it->getPosition()) <=
@@ -88,7 +95,7 @@ void
 World::applyMovement(std::shared_ptr<Sprite> sprite, int elapsed) {
 	sf::Vector2f offset = sprite->getSpeed() * (elapsed / 1000.0f);
 	for (auto w = mDrawables.begin(); w != mDrawables.end(); w++) {
-		for (auto& other : w->second) {
+		for (const auto& other : w->second) {
 			if (sprite == other)
 				continue;
 			// Ignore anything that is filtered by masks.
@@ -135,7 +142,7 @@ World::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 	screen.left += target.getView().getCenter().x - target.getView().getSize().x / 2;
 	screen.top += target.getView().getCenter().y - target.getView().getSize().y / 2;
 	for (auto v = mDrawables.begin(); v != mDrawables.end(); v++) {
-		for (auto item : v->second) {
+		for (const auto& item : v->second) {
 			if (item->isInside(screen))
 				target.draw(static_cast<sf::Drawable&>(*item), states);
 		}
@@ -183,4 +190,22 @@ World::raycast(const sf::Vector2f& lineStart,
 			return false;
 	}
 	return true;
+}
+
+/**
+ * Returns the item closest to position after linear search.
+ */
+std::shared_ptr<Item>
+World::getNearestItem(const sf::Vector2f& position) const {
+	std::shared_ptr<Item> closest;
+	float distance = std::numeric_limits<float>::max();
+	for (const auto& v : mDrawables) {
+		for (const auto& d : v.second) {
+			std::shared_ptr<Item> converted = std::dynamic_pointer_cast<Item>(d);
+			if (converted.get() != nullptr &&
+					thor::squaredLength(converted->getPosition() - position) < distance)
+				closest = converted;
+		}
+	}
+	return closest;
 }

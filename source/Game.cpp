@@ -173,7 +173,7 @@ Game::keyUp(const sf::Event& event) {
 		mPlayer->setDirection(Player::Direction::RIGHT, true);
 		break;
 	case sf::Keyboard::F:
-		mPlayer->swapGadgets();
+		mPlayer->pickUpItem();
 		break;
 	default:
 		break;

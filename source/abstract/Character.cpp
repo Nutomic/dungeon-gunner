@@ -18,6 +18,7 @@
 
 const float Character::VISION_DISTANCE = 500.0f;
 const float Character::POINT_REACHED_DISTANCE = 1.0f;
+const float Character::ITEM_PICKUP_MAX_DISTANCE_SQUARED = 2500.0f;
 
 /**
  * Saves pointer to this instance in static var for think().
@@ -259,7 +260,34 @@ Character::getRightGadgetName() const {
 	return mRightGadget->getName();
 }
 
+/**
+ * Picks up the nearest weapon or gadget, and drops the active weapon (or right gadget).
+ *
+ * If no item is nearby, gadgets are swapped instead.
+ */
 void
-Character::swapGadgets() {
-	std::swap(mLeftGadget, mRightGadget);
+Character::pickUpItem() {
+	std::shared_ptr<Item> item = mWorld.getNearestItem(getPosition());
+	if (item != nullptr && thor::squaredLength(item->getPosition() - getPosition()) <=
+            ITEM_PICKUP_MAX_DISTANCE_SQUARED) {
+		std::shared_ptr<Weapon> weapon = std::dynamic_pointer_cast<Weapon>(item);
+		if (weapon != nullptr) {
+			mWorld.insert(mActiveWeapon);
+			mActiveWeapon->drop(getPosition());
+			mActiveWeapon = weapon;
+			mActiveWeapon->setHolder(*this);
+		}
+		std::shared_ptr<Gadget> gadget = std::dynamic_pointer_cast<Gadget>(item);
+		if (gadget != nullptr) {
+			mWorld.insert(mRightGadget);
+			mRightGadget->drop(getPosition());
+			mRightGadget = mLeftGadget;
+			mLeftGadget = gadget;
+		}
+		// TODO: implement (or just make invisible?)
+		mWorld.remove(item);
+	}
+	else {
+		std::swap(mLeftGadget, mRightGadget);
+	}
 }

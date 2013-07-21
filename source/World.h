@@ -24,12 +24,14 @@ class World : public sf::Drawable {
 public:
 	void insert(std::shared_ptr<Sprite> drawable);
 	void insertCharacter(std::shared_ptr<Character> character);
+	void remove(std::shared_ptr<Sprite> drawable);
 	void step(int elapsed);
 	void think(int elapsed);
 	std::vector<std::shared_ptr<Character> >
 			getCharacters(const sf::Vector2f& position, float maxDistance) const;
 	bool raycast(const sf::Vector2f& lineStart,
 			const sf::Vector2f& lineEnd) const;
+	std::shared_ptr<Item> getNearestItem(const sf::Vector2f& position) const;
 
 private:
 
