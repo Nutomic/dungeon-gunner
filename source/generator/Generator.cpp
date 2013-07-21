@@ -259,6 +259,7 @@ Generator::getPlayerSpawn() const {
 /**
  * Finds the point array index closest to position which has a floor tile.
  *
+ * @warn Will fail if no floor tile has been generated yet.
  * @position Point to start search for a floor tile from.
  */
 sf::Vector2i
@@ -298,6 +299,7 @@ Generator::findClosestFloor(const sf::Vector2i& position) const {
 				open.insert(makePair(sf::Vector2i(current.x, current.y - 1)));
 		}
 	}
+	// No floor tile found in the entire world.
 	assert(false);
 	return sf::Vector2i();
 }
