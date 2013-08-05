@@ -1,7 +1,7 @@
-# Code::Blocks files
-dungeon-gunner.cbp
-dungeon-gunner.depend
-dungeon-gunner.layout
+# Eclipse files
+.settings/
+.cproject
+.project
 
 # Binaries
 Debug/
