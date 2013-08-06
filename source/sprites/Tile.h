@@ -16,8 +16,8 @@
 class Tile : public Rectangle {
 public:
 	enum class Type : char {
-		FLOOR,
-		WALL
+		WALL,
+		FLOOR
 	};
 
 public:

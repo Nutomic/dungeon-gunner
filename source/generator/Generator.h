@@ -27,19 +27,14 @@ public:
 	std::vector<sf::Vector2f> getEnemySpawns(const sf::IntRect& area);
 
 private:
-	typedef Tile::Type type;
-	typedef std::map<int, std::map<int, type> > array;
+	typedef std::map<int, std::map<int, Tile::Type> > array;
 
 private:
 	void generateAreas(const sf::IntRect& area);
 	void generateTiles(const sf::IntRect& area);
 	sf::Vector2i findClosestFloor(const sf::Vector2i& position) const;
-
-	static void fill(array& tiles, const sf::IntRect& area, type value);
-	void filterWalls(array& tiles, int x, int y,	int longside,
-			int shortside, int subtract);
-	int countWalls(const sf::IntRect& area);
-	static type getTileType(float value);
+	std::vector<sf::Vector2i> createMinimalSpanningTree(
+			const sf::Vector2i& start, const float limit);
 
 private:
 	static const int GENERATE_AREA_SIZE;

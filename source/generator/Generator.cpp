@@ -19,6 +19,7 @@
 #include "../Pathfinder.h"
 #include "../World.h"
 #include "../sprites/Enemy.h"
+#include "../util/Log.h"
 
 const int Generator::GENERATE_AREA_SIZE = 4;
 const float Generator::GENERATE_AREA_RANGE = 4.0f;
@@ -88,43 +89,107 @@ Generator::generateCurrentAreaIfNeeded(const sf::Vector2f& playerPosition) {
 }
 
 /**
+ * Generates a minimum spanning tree on mTileNoise, starting from start with
+ * a maximum total node weight of limit.
+ *
+ * FIXME: Some nodes are selected more than once.
+ */
+std::vector<sf::Vector2i>
+Generator::createMinimalSpanningTree(const sf::Vector2i& start,
+		const float limit) {
+	std::vector<sf::Vector2i> open;
+	std::vector<sf::Vector2i> selected;
+	open.push_back(start);
+	float totalWeight = 0.0f;
+
+	while (totalWeight < limit) {
+		sf::Vector2i current;
+		float minValue = std::numeric_limits<float>::max();
+		for (auto& o : open) {
+			if (mTileNoise.getNoise(o.x, o.y) + 1.0f < minValue) {
+				current = o;
+				minValue = mTileNoise.getNoise(o.x, o.y) + 1.0f;
+			}
+		}
+		std::remove(open.begin(), open.end(), current);
+		selected.push_back(current);
+		totalWeight += minValue;
+
+		auto insertOnlyNew = [&open, &selected](const sf::Vector2i& v) {
+			if (std::find(open.begin(), open.end(),	v) == open.end()
+					&& std::find(selected.begin(), selected.end(), v) == selected.end())
+				open.push_back(v);
+		};
+		insertOnlyNew(sf::Vector2i(current.x + 1, current.y));
+		insertOnlyNew(sf::Vector2i(current.x, current.y + 1));
+		insertOnlyNew(sf::Vector2i(current.x - 1, current.y));
+		insertOnlyNew(sf::Vector2i(current.x, current.y - 1));
+	}
+	return selected;
+}
+
+/**
  * Fill world with procedurally generated tiles.
+ *
+ * This is done by generating random (simplex) noise, with a value mapped
+ * to every integer point in area, selecting the lowest value point as start,
+ * and building a minimum spanning tree from there.
  *
  * @param area Size and position of area to generate tiles for. Width and
  * 				height must each be a power of two.
  */
 void
 Generator::generateTiles(const sf::IntRect& area) {
-	// Check if width and height are power of two.
+	// Width and height must be a power of two.
 	assert(area.width && !(area.width & (area.width - 1)));
 	assert(area.height && !(area.height & (area.height - 1)));
 
-	array generatedTiles;
-	fill(generatedTiles, area, type::FLOOR);
+    sf::Vector2i start;
+    float minValue = std::numeric_limits<float>::max();
 
-	for (int x = area.left; x < area.left + area.width; x++) {
-		for (int y = area.top; y < area.top + area.height; y++) {
-			filterWalls(generatedTiles, x, y, 2, 1, 0);
-			filterWalls(generatedTiles, x, y, 6, 1, 2);
-			filterWalls(generatedTiles, x, y, 10, 1, 4);
-		}
-	}
-
+    // Find lowest value for tree start.
 	for (int x = area.left; x < area.left + area.width; x++)
 		for (int y = area.top; y < area.top + area.height; y++) {
-			// Merge map that we just generated with stored map.
-			mTiles[x][y] = generatedTiles[x][y];
-			// Actually generate physical tiles.
-			mWorld.insert(std::shared_ptr<Sprite>(
-					new Tile(generatedTiles.at(x).at(y), x, y)));
+			if (mTileNoise.getNoise(x, y) + 1.0f < minValue) {
+                start = sf::Vector2i(x, y);
+                minValue = mTileNoise.getNoise(x, y) + 1.0f;
+			}
 		}
 
+	std::vector<sf::Vector2i> selected = createMinimalSpanningTree(start, 12.0f);
+
+    // For rooms, take minimum bounding box of spanning tree.
+
+	int left  = start.x;
+	int right = start.x;
+	int down  = start.y;
+	int up    = start.y;
+
+	for (auto& s : selected) {
+		if (s.x < left) left = s.x;
+		if (s.x > right) right = s.x;
+		if (s.y < down) down = s.y;
+		if (s.y > up) up = s.y;
+	}
+
+    // Merge new map into stored map and create tile sprites.
+	for (int x = area.left; x < area.left + area.width; x++)
+		for (int y = area.top; y < area.top + area.height; y++) {
+		    Tile::Type type = ((x >= left && x < right && y >= down && y < up)
+		    		 || (mTiles[x][y] == Tile::Type::FLOOR))
+                    ? Tile::Type::FLOOR
+                    : Tile::Type::WALL;
+			mTiles[x][y] = type;
+			mWorld.insert(std::shared_ptr<Sprite>(new Tile(type, x, y)));
+		}
 	generateAreas(area);
 	mPathfinder.generatePortals();
 }
 
 /**
  * Returns coordinates where enemies should spawn.
+ *
+ * @param area Area for which enemy spawns should be returned.
  */
 std::vector<sf::Vector2f>
 Generator::getEnemySpawns(const sf::IntRect& area) {
@@ -145,63 +210,6 @@ Generator::getEnemySpawns(const sf::IntRect& area) {
 }
 
 /**
- * Fills a rectangular area with the specified value.
- *
- * @param[in,out] Array to set values to.
- * @param area The area to fill.
- * @param value The value to set.
- */
-void
-Generator::fill(array& tiles, const sf::IntRect& area, Tile::Type value) {
-	for (int x = area.left;	x < area.left + area.width; x++) {
-		for (int y = area.top; y < area.top + area.height; y++)
-			tiles[x][y] = value;
-	}
-}
-
-/**
- * Counts and returns the number of walls within the area.
- *
- * @param area The area to count in.
- */
-int
-Generator::countWalls(const sf::IntRect& area) {
-	int count = 0;
-	for (int x = area.left; x < area.left + area.width; x++) {
-		for (int y = area.top; y < area.top + area.height; y++)
-			count += (int) (getTileType(mTileNoise.getNoise(x, y)) ==
-					type::WALL);
-	}
-	return count;
-}
-
-/**
- * Finds rectangles of specific size with mTileNoise and
- * puts them into vector out.
- *
- * @param[in,out] tiles Tiles to be placed. Does not explicitly set floor values
- * 						(keeps previous values).
- * @param x Position to check from (top left corner for rectangle).
- * @param y Position to check from (top left corner for rectangle).
- * @param longside Length of the longer side of the rectangle.
- * @param shortside Length of the shorter side of the rectangle.
- * @param subtract Still accepts rectangle if at least this amount of
- * 			tiles is not walls (tilecount >= longside * shortside - subtract).
- */
-void
-Generator::filterWalls(array& tiles, int x, int y, int longside,
-		int shortside, int subtract) {
-	// Filter in horizontal direction.
-	if (countWalls(sf::IntRect(x, y, longside, shortside)) >=
-			shortside * longside - subtract)
-		fill(tiles, sf::IntRect(x, y, longside, shortside), type::WALL);
-	// Filter in vertical direction.
-	if (countWalls(sf::IntRect(x, y, shortside, longside)) >=
-			shortside * longside - subtract)
-		fill(tiles, sf::IntRect(x, y, shortside, longside), type::WALL);
-}
-
-/**
  * Inserts floor tiles into path finder, using a quadtree approach to group
  * tiles where possible.
  *
@@ -214,7 +222,7 @@ Generator::generateAreas(const sf::IntRect& area) {
 	int wallCount = 0;
 	for (int x = area.left; x < area.left + area.width; x++)
 		for (int y = area.top; y < area.top + area.height; y++)
-			wallCount += (int) (mTiles[x][y] == type::WALL);
+			wallCount += (int) (mTiles[x][y] == Tile::Type::WALL);
 
 	if (wallCount == 0)
 		mPathfinder.insertArea(sf::FloatRect(area.left, area.top, area.width, area.height));
@@ -232,18 +240,6 @@ Generator::generateAreas(const sf::IntRect& area) {
 		generateAreas(sf::IntRect(area.left + halfWidth,
 				area.top + halfHeight, halfWidth, halfHeight));
 	}
-}
-
-/**
- * Defines if a perlin noise result value is converted to a wall or floor tile.
- *
- * @param value Perlin noise value within [-1, 1]
- */
-Generator::type
-Generator::getTileType(float value) {
-	return (value < -0.2f)
-			? type::WALL
-			: type::FLOOR;
 }
 
 /**
@@ -285,7 +281,7 @@ Generator::findClosestFloor(const sf::Vector2i& position) const {
 		closed.insert(current);
 		if (mTiles.count(current.x) != 0 &&
 				mTiles.at(current.x).count(current.y) != 0 &&
-				mTiles.at(current.x).at(current.y) == type::FLOOR) {
+				mTiles.at(current.x).at(current.y) == Tile::Type::FLOOR) {
 			return current;
 		}
 		else {
