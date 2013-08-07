@@ -15,7 +15,7 @@
  * Initializes Sprite.
  */
 Player::Player(World& world, Pathfinder& pathfinder,
-		const sf::Vector2f& position) :
+		const Vector2f& position) :
 	Character(position, CATEGORY_ACTOR, MASK_ALL, Yaml("player.yaml"), world,
 			pathfinder),
 	mDirection(0) {
@@ -27,7 +27,7 @@ Player::Player(World& world, Pathfinder& pathfinder,
  * @param Absolute world coordinates of the crosshair.
  */
 void
-Player::setCrosshairPosition(const sf::Vector2f& position) {
+Player::setCrosshairPosition(const Vector2f& position) {
 	mCrosshairPosition = position - getPosition();
 }
 
@@ -46,7 +46,7 @@ Player::setDirection(Direction direction, bool unset) {
 		mDirection = mDirection | direction;
 		
 	// Convert directions into a vector.
-	sf::Vector2f dirVec(0, 0);
+	Vector2f dirVec(0, 0);
 	if (mDirection & Direction::RIGHT)
 		dirVec.x += 1.0f;
 	if (mDirection & Direction::LEFT)
@@ -59,7 +59,7 @@ Player::setDirection(Direction direction, bool unset) {
 }
 
 void
-Player::setDestination(const sf::Vector2f& destination) {
+Player::setDestination(const Vector2f& destination) {
 	mDirection = 0;
 	Character::setDestination(destination);
 }

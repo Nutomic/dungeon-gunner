@@ -36,7 +36,7 @@ private:
 	void mouseDown(const sf::Event& event);
 	void mouseUp(const sf::Event& event);
 
-	sf::Vector2<float> convertCoordinates(int x, int y);
+	Vector2<float> convertCoordinates(int x, int y);
 	void updateGui();
 
 private:

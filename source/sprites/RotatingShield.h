@@ -12,7 +12,7 @@
 
 class RotatingShield : public Rectangle {
 public:
-	explicit RotatingShield(const sf::Vector2f& position);
+	explicit RotatingShield(const Vector2f& position);
 
 private:
 	using Sprite::setDelete;

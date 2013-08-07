@@ -52,7 +52,7 @@ World::remove(std::shared_ptr<Sprite> drawable) {
  * Returns all characters that are within maxDistance from position.
  */
 std::vector<std::shared_ptr<Character> >
-		World::getCharacters(const sf::Vector2f& position, float maxDistance) const {
+		World::getCharacters(const Vector2f& position, float maxDistance) const {
 	std::vector<std::shared_ptr<Character> > visible;
 	for (const auto& it : mCharacters) {
 		if (position == it->getPosition())
@@ -81,7 +81,7 @@ World::step(int elapsed) {
 				it--;
 			}
 			// Don't run collision tests if sprite is not moving.
-			else if ((*it)->getSpeed() != sf::Vector2f())
+			else if ((*it)->getSpeed() != Vector2f())
 				applyMovement(*it, elapsed);
 		}
 	}
@@ -93,7 +93,7 @@ World::step(int elapsed) {
  */
 void
 World::applyMovement(std::shared_ptr<Sprite> sprite, int elapsed) {
-	sf::Vector2f offset = sprite->getSpeed() * (elapsed / 1000.0f);
+	Vector2f offset = sprite->getSpeed() * (elapsed / 1000.0f);
 	for (auto w = mDrawables.begin(); w != mDrawables.end(); w++) {
 		for (const auto& other : w->second) {
 			if (sprite == other)
@@ -158,19 +158,19 @@ World::draw(sf::RenderTarget& target, sf::RenderStates states) const {
  * @return True if the ray was not blocked.
  */
 bool
-World::raycast(const sf::Vector2f& lineStart,
-		const sf::Vector2f& lineEnd) const {
+World::raycast(const Vector2f& lineStart,
+		const Vector2f& lineEnd) const {
 	assert(lineStart != lineEnd);
-	sf::Vector2f lineCenter = lineStart + 0.5f * (lineEnd - lineStart);
+	Vector2f lineCenter = lineStart + 0.5f * (lineEnd - lineStart);
 	for (const auto& it : mDrawables.at(Sprite::Category::CATEGORY_WORLD)) {
 		if (!it->collisionEnabled(Sprite::CATEGORY_ACTOR))
 			continue;
-		sf::Vector2f axis = it->getPosition() - lineCenter;
-		if (axis == sf::Vector2f())
+		Vector2f axis = it->getPosition() - lineCenter;
+		if (axis == Vector2f())
 			return false;
 
 		axis = thor::unitVector(axis);
-		sf::Vector2f halfsize = it->getSize() / 2.0f;
+		Vector2f halfsize = it->getSize() / 2.0f;
 		float rectPosProjected = thor::dotProduct(axis, it->getPosition());
 		float lineStartProjected = thor::dotProduct(axis, lineStart);
 		float lineEndProjected = thor::dotProduct(axis, lineEnd);
@@ -180,7 +180,7 @@ World::raycast(const sf::Vector2f& lineStart,
 		float rectHalfWidthProjected = std::max(
 				abs(thor::dotProduct(axis, halfsize)),
 				abs(thor::dotProduct(axis,
-						sf::Vector2f(halfsize.x, -halfsize.y))));
+						Vector2f(halfsize.x, -halfsize.y))));
 		Interval line = Interval::IntervalFromPoints(lineStartProjected,
 				lineEndProjected);
 		Interval rect = Interval::IntervalFromRadius(rectPosProjected,
@@ -196,7 +196,7 @@ World::raycast(const sf::Vector2f& lineStart,
  * Returns the item closest to position after linear search.
  */
 std::shared_ptr<Item>
-World::getNearestItem(const sf::Vector2f& position) const {
+World::getNearestItem(const Vector2f& position) const {
 	std::shared_ptr<Item> closest;
 	float distance = std::numeric_limits<float>::max();
 	for (const auto& v : mDrawables) {

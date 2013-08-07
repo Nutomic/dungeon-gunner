@@ -23,7 +23,7 @@ const float Character::ITEM_PICKUP_MAX_DISTANCE_SQUARED = 2500.0f;
 /**
  * Saves pointer to this instance in static var for think().
  */
-Character::Character(const sf::Vector2f& position, Category category,
+Character::Character(const Vector2f& position, Category category,
 		unsigned short mask, const Yaml& config, World& world,
 		Pathfinder& pathfinder) :
 		Circle(position, category, mask, config),
@@ -133,7 +133,7 @@ Character::releaseTrigger() {
  * @return True if a path was found.
  */
 bool
-Character::setDestination(const sf::Vector2f& destination) {
+Character::setDestination(const Vector2f& destination) {
 	mPath = mPathfinder.getPath(getPosition(), destination, getRadius());
 	return !mPath.empty();
 }
@@ -152,7 +152,7 @@ Character::move() {
 	if (thor::length(mPath.back() - getPosition()) < POINT_REACHED_DISTANCE) {
 		mPath.pop_back();
 		if (mPath.empty())
-			setSpeed(sf::Vector2f(), 0);
+			setSpeed(Vector2f(), 0);
 	}
 }
 
@@ -168,7 +168,7 @@ Character::isMoving() const {
  * Tests if a target is visible from the current position.
  */
 bool
-Character::isVisible(const sf::Vector2f& target) const {
+Character::isVisible(const Vector2f& target) const {
 	return mWorld.raycast(getPosition(), target);
 }
 
@@ -284,7 +284,6 @@ Character::pickUpItem() {
 			mRightGadget = mLeftGadget;
 			mLeftGadget = gadget;
 		}
-		// TODO: implement (or just make invisible?)
 		mWorld.remove(item);
 	}
 	else {

@@ -12,7 +12,7 @@
 
 class Corpse : public Circle {
 public:
-	explicit Corpse(const sf::Vector2f& position);
+	explicit Corpse(const Vector2f& position);
 };
 
 #endif /* DG_CORPSE_H_ */

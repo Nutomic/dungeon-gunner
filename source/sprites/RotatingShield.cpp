@@ -9,7 +9,7 @@
 
 #include "../util/Yaml.h"
 
-RotatingShield::RotatingShield(const sf::Vector2f& position) :
+RotatingShield::RotatingShield(const Vector2f& position) :
 		Rectangle(position, CATEGORY_WORLD, MASK_ALL,
 				Yaml("rotating_shield.yaml")) {
 }

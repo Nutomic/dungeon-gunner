@@ -14,7 +14,7 @@
 #include "../util/Yaml.h"
 #include "../World.h"
 
-const sf::Vector2i Tile::TILE_SIZE = sf::Vector2i(75, 75);
+const Vector2i Tile::TILE_SIZE = sf::Vector2i(75, 75);
 
 /**
  * Constructs a tile.
@@ -24,7 +24,7 @@ const sf::Vector2i Tile::TILE_SIZE = sf::Vector2i(75, 75);
  * @param world Box2D world object.
  */
 Tile::Tile(Type type, int x, int y) :
-		Rectangle(sf::Vector2f(x * TILE_SIZE.x, y * TILE_SIZE.y),
+		Rectangle(Vector2f(x * TILE_SIZE.x, y * TILE_SIZE.y),
 				CATEGORY_WORLD, (isSolid(type)) ? 0xffff : 0,
 				Yaml(getConfig(type))),
 		mType(type) {

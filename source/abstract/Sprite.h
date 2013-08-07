@@ -12,6 +12,8 @@
 
 #include <SFML/Graphics.hpp>
 
+#include "../util/Vector.h"
+
 /**
  * An sprite that is rendered in the world.
  */
@@ -38,30 +40,30 @@ public:
 
 // Public functions.
 public:
-	explicit Sprite(const sf::Vector2f& position, Category category,
-			unsigned short mask, const sf::Vector2f& size,
-			const std::string& texture,	const sf::Vector2f& direction);
+	explicit Sprite(const Vector2f& position, Category category,
+			unsigned short mask, const Vector2f& size,
+			const std::string& texture,	const Vector2f& direction);
 	virtual ~Sprite() = default;
 
-	sf::Vector2f getPosition() const;
-	sf::Vector2f getSpeed() const;
-	sf::Vector2f getDirection() const;
+	Vector2f getPosition() const;
+	Vector2f getSpeed() const;
+	Vector2f getDirection() const;
 	bool getDelete() const;
 	Category getCategory() const;
-	sf::Vector2f getSize() const;
+	Vector2f getSize() const;
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 	bool collisionEnabled(Category category) const;
 	bool isInside(const sf::FloatRect& rect) const;
 
 	virtual bool testCollision(std::shared_ptr<Sprite> other,
-			sf::Vector2f& offsetFirst, const sf::Vector2f& offsetSecond) = 0;
+			Vector2f& offsetFirst, const Vector2f& offsetSecond) = 0;
 	virtual void onCollide(std::shared_ptr<Sprite> other);
 
 protected:
 	void setDelete(bool value);
-	void setSpeed(sf::Vector2f direction, float speed);
-	void setDirection(const sf::Vector2f& direction);
-	void setPosition(const sf::Vector2f& position);
+	void setSpeed(Vector2f direction, float speed);
+	void setDirection(const Vector2f& direction);
+	void setPosition(const Vector2f& position);
 
 private:
 	friend class CollisionModel;
@@ -69,7 +71,7 @@ private:
 
 	sf::RectangleShape mShape;
 	std::shared_ptr<sf::Texture> mTexture;
-	sf::Vector2f mSpeed;
+	Vector2f mSpeed;
 	Category mCategory;
 	unsigned short mMask;
 	bool mDelete = false;

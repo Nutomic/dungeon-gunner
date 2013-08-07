@@ -13,9 +13,8 @@
 
 #include <yaml-cpp/yaml.h>
 
-#include <SFML/System.hpp>
-
 #include "Log.h"
+#include "Vector.h"
 
 /**
  * Interface to a YAML file.
@@ -45,12 +44,12 @@ private:
  * Error handling is done in Yaml::get.
  */
 namespace {
-	void operator>>(const YAML::Node& node, sf::Vector2i& vector) {
+	void operator>>(const YAML::Node& node, Vector2i& vector) {
 		node[0] >> vector.x;
 		node[1] >> vector.y;
 	}
 
-	void operator>>(const YAML::Node& node, sf::Vector2f& vector) {
+	void operator>>(const YAML::Node& node, Vector2f& vector) {
 		node[0] >> vector.x;
 		node[1] >> vector.y;
 	}

@@ -9,7 +9,7 @@
 
 #include "../util/Yaml.h"
 
-Corpse::Corpse(const sf::Vector2f& position) :
+Corpse::Corpse(const Vector2f& position) :
 		Circle(position, CATEGORY_NONSOLID, MASK_NONE, Yaml("corpse.yaml")) {
 }
 

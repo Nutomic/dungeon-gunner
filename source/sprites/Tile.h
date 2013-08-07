@@ -26,7 +26,7 @@ public:
 	Type getType() const;
 
 public:
-	static const sf::Vector2i TILE_SIZE; //< Tile size in pixels.
+	static const Vector2i TILE_SIZE; //< Tile size in pixels.
 
 public:
 	static std::string getConfig(Type type);

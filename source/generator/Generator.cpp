@@ -37,27 +37,24 @@ Generator::Generator(World& world, Pathfinder& pathfinder) :
  * GENERATE_AREA_SIZE and GENERATE_AREA_RANGE).
  */
 void
-Generator::generateCurrentAreaIfNeeded(const sf::Vector2f& playerPosition) {
-	auto compare = [](const sf::Vector2i& a, const sf::Vector2i& b) {
-		return a.x < b.x || (a.x == b.x && a.y < b.y);
-	};
-	std::map<sf::Vector2i, float, decltype(compare)> open(compare);
-	std::set<sf::Vector2i, decltype(compare)> closed(compare);
+Generator::generateCurrentAreaIfNeeded(const Vector2f& playerPosition) {
+	std::map<Vector2i, float> open;
+	std::set<Vector2i> closed;
 
-	sf::Vector2i start((int) floor(playerPosition.x / Tile::TILE_SIZE.x),
+	Vector2i start((int) floor(playerPosition.x / Tile::TILE_SIZE.x),
 			(int) floor(playerPosition.y / Tile::TILE_SIZE.y));
 	start /= GENERATE_AREA_SIZE;
-	auto makePair = [&start](const sf::Vector2i& point) {
-		return std::make_pair(point, thor::length(sf::Vector2f(point - start)));
+	auto makePair = [&start](const Vector2i& point) {
+		return std::make_pair(point, thor::length(Vector2f(point - start)));
 	};
 
 	open.insert(makePair(start));
 	while (!open.empty()) {
-		auto intComp = [](const std::pair<sf::Vector2i, float>& left,
-				const std::pair<sf::Vector2i, float>& right) {
+		auto intComp = [](const std::pair<Vector2i, float>& left,
+				const std::pair<Vector2i, float>& right) {
 			return left.second < right.second;
 		};
-		sf::Vector2i current =
+		Vector2i current =
 				std::min_element(open.begin(), open.end(), intComp)->first;
 		float distance = open[current];
 		open.erase(current);
@@ -65,8 +62,8 @@ Generator::generateCurrentAreaIfNeeded(const sf::Vector2f& playerPosition) {
 		if (!mGenerated[current.x][current.y] && distance <= GENERATE_AREA_RANGE) {
 			mGenerated[current.x][current.y] = true;
 			sf::IntRect area(current * GENERATE_AREA_SIZE -
-					sf::Vector2i(GENERATE_AREA_SIZE, GENERATE_AREA_SIZE) / 2,
-					sf::Vector2i(GENERATE_AREA_SIZE, GENERATE_AREA_SIZE));
+					Vector2i(GENERATE_AREA_SIZE, GENERATE_AREA_SIZE) / 2,
+					Vector2i(GENERATE_AREA_SIZE, GENERATE_AREA_SIZE));
 			generateTiles(area);
 			for (const auto& enemyPosition : getEnemySpawns(area)) {
 				float distance = thor::length(enemyPosition - playerPosition);
@@ -76,14 +73,14 @@ Generator::generateCurrentAreaIfNeeded(const sf::Vector2f& playerPosition) {
 			}
 		}
 		if (mGenerated[current.x][current.y] && distance <= GENERATE_AREA_RANGE) {
-			if (closed.find(sf::Vector2i(current.x + 1, current.y)) == closed.end())
-				open.insert(makePair(sf::Vector2i(current.x + 1, current.y)));
-			if (closed.find(sf::Vector2i(current.x, current.y + 1)) == closed.end())
-				open.insert(makePair(sf::Vector2i(current.x, current.y + 1)));
-			if (closed.find(sf::Vector2i(current.x - 1, current.y)) == closed.end())
-				open.insert(makePair(sf::Vector2i(current.x - 1, current.y)));
-			if (closed.find(sf::Vector2i(current.x, current.y - 1)) == closed.end())
-				open.insert(makePair(sf::Vector2i(current.x, current.y - 1)));
+			if (closed.find(Vector2i(current.x + 1, current.y)) == closed.end())
+				open.insert(makePair(Vector2i(current.x + 1, current.y)));
+			if (closed.find(Vector2i(current.x, current.y + 1)) == closed.end())
+				open.insert(makePair(Vector2i(current.x, current.y + 1)));
+			if (closed.find(Vector2i(current.x - 1, current.y)) == closed.end())
+				open.insert(makePair(Vector2i(current.x - 1, current.y)));
+			if (closed.find(Vector2i(current.x, current.y - 1)) == closed.end())
+				open.insert(makePair(Vector2i(current.x, current.y - 1)));
 		}
 	}
 }
@@ -94,16 +91,16 @@ Generator::generateCurrentAreaIfNeeded(const sf::Vector2f& playerPosition) {
  *
  * FIXME: Some nodes are selected more than once.
  */
-std::vector<sf::Vector2i>
-Generator::createMinimalSpanningTree(const sf::Vector2i& start,
+std::vector<Vector2i>
+Generator::createMinimalSpanningTree(const Vector2i& start,
 		const float limit) {
-	std::vector<sf::Vector2i> open;
-	std::vector<sf::Vector2i> selected;
+	std::vector<Vector2i> open;
+	std::vector<Vector2i> selected;
 	open.push_back(start);
 	float totalWeight = 0.0f;
 
 	while (totalWeight < limit) {
-		sf::Vector2i current;
+		Vector2i current;
 		float minValue = std::numeric_limits<float>::max();
 		for (auto& o : open) {
 			if (mTileNoise.getNoise(o.x, o.y) + 1.0f < minValue) {
@@ -115,15 +112,15 @@ Generator::createMinimalSpanningTree(const sf::Vector2i& start,
 		selected.push_back(current);
 		totalWeight += minValue;
 
-		auto insertOnlyNew = [&open, &selected](const sf::Vector2i& v) {
+		auto insertOnlyNew = [&open, &selected](const Vector2i& v) {
 			if (std::find(open.begin(), open.end(),	v) == open.end()
 					&& std::find(selected.begin(), selected.end(), v) == selected.end())
 				open.push_back(v);
 		};
-		insertOnlyNew(sf::Vector2i(current.x + 1, current.y));
-		insertOnlyNew(sf::Vector2i(current.x, current.y + 1));
-		insertOnlyNew(sf::Vector2i(current.x - 1, current.y));
-		insertOnlyNew(sf::Vector2i(current.x, current.y - 1));
+		insertOnlyNew(Vector2i(current.x + 1, current.y));
+		insertOnlyNew(Vector2i(current.x, current.y + 1));
+		insertOnlyNew(Vector2i(current.x - 1, current.y));
+		insertOnlyNew(Vector2i(current.x, current.y - 1));
 	}
 	return selected;
 }
@@ -144,19 +141,19 @@ Generator::generateTiles(const sf::IntRect& area) {
 	assert(area.width && !(area.width & (area.width - 1)));
 	assert(area.height && !(area.height & (area.height - 1)));
 
-    sf::Vector2i start;
+    Vector2i start;
     float minValue = std::numeric_limits<float>::max();
 
     // Find lowest value for tree start.
 	for (int x = area.left; x < area.left + area.width; x++)
 		for (int y = area.top; y < area.top + area.height; y++) {
 			if (mTileNoise.getNoise(x, y) + 1.0f < minValue) {
-                start = sf::Vector2i(x, y);
+                start = Vector2i(x, y);
                 minValue = mTileNoise.getNoise(x, y) + 1.0f;
 			}
 		}
 
-	std::vector<sf::Vector2i> selected = createMinimalSpanningTree(start, 12.0f);
+	std::vector<Vector2i> selected = createMinimalSpanningTree(start, 12.0f);
 
     // For rooms, take minimum bounding box of spanning tree.
 
@@ -191,22 +188,22 @@ Generator::generateTiles(const sf::IntRect& area) {
  *
  * @param area Area for which enemy spawns should be returned.
  */
-std::vector<sf::Vector2f>
+std::vector<Vector2f>
 Generator::getEnemySpawns(const sf::IntRect& area) {
-	auto compare = [](const sf::Vector2f& a, const sf::Vector2f& b) {
+	auto compare = [](const Vector2f& a, const Vector2f& b) {
 		return a.x < b.x || (a.x == b.x && a.y < b.y);
 	};
-	std::set<sf::Vector2f, decltype(compare)> ret(compare);
+	std::set<Vector2f, decltype(compare)> ret(compare);
 	for (int x = area.left; x < area.left + area.width; x++) {
 		for (int y = area.top; y < area.top + area.height; y++) {
 			if (mCharacterNoise.getNoise(x, y) < -0.85f) {
-				sf::Vector2i tilePosition = findClosestFloor(sf::Vector2i(x, y));
-				ret.insert(sf::Vector2f(tilePosition.x * Tile::TILE_SIZE.x,
+				Vector2i tilePosition = findClosestFloor(Vector2i(x, y));
+				ret.insert(Vector2f(tilePosition.x * Tile::TILE_SIZE.x,
 						tilePosition.y * Tile::TILE_SIZE.y));
 			}
 		}
 	}
-	return std::vector<sf::Vector2f>(ret.begin(), ret.end());
+	return std::vector<Vector2f>(ret.begin(), ret.end());
 }
 
 /**
@@ -245,10 +242,10 @@ Generator::generateAreas(const sf::IntRect& area) {
 /**
  * Returns a valid position (floor) for the player to spawn at.
  */
-sf::Vector2f
+Vector2f
 Generator::getPlayerSpawn() const {
-	sf::Vector2i spawn = findClosestFloor(sf::Vector2i(0, 0));
-	return sf::Vector2f(spawn.x * Tile::TILE_SIZE.x,
+	Vector2i spawn = findClosestFloor(Vector2i(0, 0));
+	return Vector2f(spawn.x * Tile::TILE_SIZE.x,
 						spawn.y * Tile::TILE_SIZE.y);
 }
 
@@ -258,25 +255,22 @@ Generator::getPlayerSpawn() const {
  * @warn Will fail if no floor tile has been generated yet.
  * @position Point to start search for a floor tile from.
  */
-sf::Vector2i
-Generator::findClosestFloor(const sf::Vector2i& position) const {
-	auto compare = [](const sf::Vector2i& a, const sf::Vector2i& b) {
-		return a.x < b.x || (a.x == b.x && a.y < b.y);
-	};
-	std::map<sf::Vector2i, float, decltype(compare)> open(compare);
-	std::set<sf::Vector2i, decltype(compare)> closed(compare);
-	sf::Vector2i start = position;
-	auto makePair = [&start](const sf::Vector2i& point) {
-		return std::make_pair(point, thor::length(sf::Vector2f(point - start)));
+Vector2i
+Generator::findClosestFloor(const Vector2i& position) const {
+	std::map<Vector2i, float> open;
+	std::set<Vector2i> closed;
+	Vector2i start = position;
+	auto makePair = [&start](const Vector2i& point) {
+		return std::make_pair(point, thor::length(Vector2f(point - start)));
 	};
 
 	open.insert(makePair(start));
 	while (!open.empty()) {
-		auto intComp = [](const std::pair<sf::Vector2i, float>& left,
-				const std::pair<sf::Vector2i, float>& right) {
+		auto intComp = [](const std::pair<Vector2i, float>& left,
+				const std::pair<Vector2i, float>& right) {
 			return left.second < right.second;
 		};
-		sf::Vector2i current = std::min_element(open.begin(), open.end(), intComp)->first;
+		Vector2i current = std::min_element(open.begin(), open.end(), intComp)->first;
 		open.erase(current);
 		closed.insert(current);
 		if (mTiles.count(current.x) != 0 &&
@@ -285,17 +279,17 @@ Generator::findClosestFloor(const sf::Vector2i& position) const {
 			return current;
 		}
 		else {
-			if (closed.find(sf::Vector2i(current.x + 1, current.y)) == closed.end())
-				open.insert(makePair(sf::Vector2i(current.x + 1, current.y)));
-			if (closed.find(sf::Vector2i(current.x, current.y + 1)) == closed.end())
-				open.insert(makePair(sf::Vector2i(current.x, current.y + 1)));
-			if (closed.find(sf::Vector2i(current.x - 1, current.y)) == closed.end())
-				open.insert(makePair(sf::Vector2i(current.x - 1, current.y)));
-			if (closed.find(sf::Vector2i(current.x, current.y - 1)) == closed.end())
-				open.insert(makePair(sf::Vector2i(current.x, current.y - 1)));
+			if (closed.find(Vector2i(current.x + 1, current.y)) == closed.end())
+				open.insert(makePair(Vector2i(current.x + 1, current.y)));
+			if (closed.find(Vector2i(current.x, current.y + 1)) == closed.end())
+				open.insert(makePair(Vector2i(current.x, current.y + 1)));
+			if (closed.find(Vector2i(current.x - 1, current.y)) == closed.end())
+				open.insert(makePair(Vector2i(current.x - 1, current.y)));
+			if (closed.find(Vector2i(current.x, current.y - 1)) == closed.end())
+				open.insert(makePair(Vector2i(current.x, current.y - 1)));
 		}
 	}
 	// No floor tile found in the entire world.
 	assert(false);
-	return sf::Vector2i();
+	return Vector2i();
 }

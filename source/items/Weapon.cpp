@@ -14,7 +14,7 @@
 #include "../util/Yaml.h"
 
 Weapon::Weapon(World& world, Character& holder, const Yaml& config) :
-		Item(sf::Vector2f(80, 30), "weapon.png"),
+		Item(Vector2f(80, 30), "weapon.png"),
 		mWorld(world),
 		mHolder(&holder),
 		mName(config.get("name", std::string())),
@@ -154,15 +154,15 @@ Weapon::setHolder(Character& holder) {
  */
 void
 Weapon::insertProjectile(float angle) {
-	sf::Vector2f offset(mHolder->getDirection() * mHolder->getRadius());
+	Vector2f offset(mHolder->getDirection() * mHolder->getRadius());
 
-	float spread = (mHolder->getSpeed() == sf::Vector2f())
+	float spread = (mHolder->getSpeed() == Vector2f())
 			? mSpread
 			: mSpreadMoving;
 	std::uniform_real_distribution<float> distribution(- spread, spread);
 	angle += distribution(mGenerator) + 90.0f;
 
-	sf::Vector2f direction(thor::rotatedVector(mHolder->getDirection(), angle));
+	Vector2f direction(thor::rotatedVector(mHolder->getDirection(), angle));
 
 	std::shared_ptr<Sprite> projectile(new Bullet(mHolder->getPosition() + offset,
 			*mHolder, direction, mProjectile, mProjectileSpeed,

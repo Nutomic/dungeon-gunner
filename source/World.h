@@ -28,10 +28,10 @@ public:
 	void step(int elapsed);
 	void think(int elapsed);
 	std::vector<std::shared_ptr<Character> >
-			getCharacters(const sf::Vector2f& position, float maxDistance) const;
-	bool raycast(const sf::Vector2f& lineStart,
-			const sf::Vector2f& lineEnd) const;
-	std::shared_ptr<Item> getNearestItem(const sf::Vector2f& position) const;
+			getCharacters(const Vector2f& position, float maxDistance) const;
+	bool raycast(const Vector2f& lineStart,
+			const Vector2f& lineEnd) const;
+	std::shared_ptr<Item> getNearestItem(const Vector2f& position) const;
 
 private:
 

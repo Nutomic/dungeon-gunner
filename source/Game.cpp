@@ -23,14 +23,14 @@ const int Game::FPS_GOAL = 60;
  */
 Game::Game(tgui::Window& window) :
 		mWindow(window),
-		mWorldView(sf::Vector2f(0, 0), mWindow.getView().getSize()),
+		mWorldView(Vector2f(0, 0), mWindow.getView().getSize()),
 		mGenerator(mWorld, mPathfinder),
 		mQuit(false),
 		mPaused(false) {
 	mWindow.setFramerateLimit(FPS_GOAL);
 	mWindow.setKeyRepeatEnabled(false);
 
-	mGenerator.generateCurrentAreaIfNeeded(sf::Vector2f());
+	mGenerator.generateCurrentAreaIfNeeded(Vector2f());
 	mPlayer = std::shared_ptr<Player>(new Player(mWorld, mPathfinder,
 			mGenerator.getPlayerSpawn()));
 	mPlayer->setLeftGadget(std::shared_ptr<Gadget>(new Heal()));
@@ -221,9 +221,9 @@ Game::keyDown(const sf::Event& event) {
 /**
  * Converts a screen coordinate to a world coordinate.
  */
-sf::Vector2<float>
+Vector2<float>
 Game::convertCoordinates(int x, int y) {
-	return mWindow.mapPixelToCoords(sf::Vector2i(x, y), mWorldView);
+	return mWindow.mapPixelToCoords(Vector2i(x, y), mWorldView);
 }
 
 void

@@ -11,6 +11,8 @@
 #include <SFML/System.hpp>
 #include <SFML/Graphics.hpp>
 
+#include "util/Vector.h"
+
 /**
  * Used to find paths between points in the world.
  *
@@ -25,11 +27,11 @@ private:
 public:
 	void insertArea(const sf::FloatRect& rect);
 	void generatePortals();
-	std::vector<sf::Vector2f> getPath(const sf::Vector2f& start,
-			const sf::Vector2f& end, float radius) const;
+	std::vector<Vector2f> getPath(const Vector2f& start,
+			const Vector2f& end, float radius) const;
 
 private:
-    Area* getArea(const sf::Vector2f& point) const;
+    Area* getArea(const Vector2f& point) const;
     std::vector<Portal*> astarArea(Area* start, Area* end) const;
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
@@ -44,8 +46,8 @@ private:
  * Redundant data as portals are saved twice.
  */
 struct Pathfinder::Portal {
-	sf::Vector2f start;
-	sf::Vector2f end;
+	Vector2f start;
+	Vector2f end;
 	Area* area;
 };
 
@@ -54,7 +56,7 @@ struct Pathfinder::Portal {
  */
 struct Pathfinder::Area {
 	sf::FloatRect area;
-	sf::Vector2f center;
+	Vector2f center;
 	std::vector<Portal> portals;
 };
 

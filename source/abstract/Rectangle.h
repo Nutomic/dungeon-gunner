@@ -18,13 +18,13 @@ class Yaml;
  */
 class Rectangle : public CollisionModel, public Sprite {
 public:
-	explicit Rectangle(const sf::Vector2f& position, Category category,
+	explicit Rectangle(const Vector2f& position, Category category,
 			unsigned short mask, const Yaml& config,
-			const sf::Vector2f& direction = sf::Vector2f(0, 0));
+			const Vector2f& direction = sf::Vector2f(0, 0));
 	virtual ~Rectangle() = default;
 
 	bool testCollision(std::shared_ptr<Sprite> other,
-			sf::Vector2f& offsetFirst, const sf::Vector2f& offsetSecond);
+			Vector2f& offsetFirst, const Vector2f& offsetSecond);
 };
 
 #endif /* DG_RECTANGLE_H_ */

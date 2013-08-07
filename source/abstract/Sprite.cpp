@@ -13,14 +13,14 @@
 #include "../util/Log.h"
 #include "../util/ResourceManager.h"
 
-Sprite::Sprite(const sf::Vector2f& position, Category category,
-			unsigned short mask, const sf::Vector2f& size,
-			const std::string& texture,	const sf::Vector2f& direction) :
+Sprite::Sprite(const Vector2f& position, Category category,
+			unsigned short mask, const Vector2f& size,
+			const std::string& texture,	const Vector2f& direction) :
 			mCategory(category),
 			mMask(mask) {
 	mShape.setSize(size);
 	mShape.setOrigin(size / 2.0f);
-	mShape.setTextureRect(sf::IntRect(sf::Vector2i(), sf::Vector2i(size)));
+	mShape.setTextureRect(sf::IntRect(Vector2i(), Vector2i(size)));
 	setPosition(position);
 	setDirection(direction);
 	try {
@@ -37,7 +37,7 @@ Sprite::Sprite(const sf::Vector2f& position, Category category,
 /**
  * Returns the position of the sprite (center).
  */
-sf::Vector2f
+Vector2f
 Sprite::getPosition() const {
 	return mShape.getPosition();
 }
@@ -45,7 +45,7 @@ Sprite::getPosition() const {
 /**
  * Returns the movement speed of the sprite.
  */
-sf::Vector2f
+Vector2f
 Sprite::getSpeed() const {
 	return mSpeed;
 }
@@ -53,9 +53,9 @@ Sprite::getSpeed() const {
 /**
  * Returns the angle of the sprite.
  */
-sf::Vector2f
+Vector2f
 Sprite::getDirection() const {
-	return thor::rotatedVector(sf::Vector2f(0, - 1), mShape.getRotation());
+	return thor::rotatedVector(Vector2f(0, - 1), mShape.getRotation());
 }
 
 /**
@@ -78,10 +78,10 @@ Sprite::getCategory() const {
  * Returns the size of the sprite as a vector (bottom left to top right),
  * does not consider rotation.
  */
-sf::Vector2f
+Vector2f
 Sprite::getSize() const {
 	sf::FloatRect bounds = mShape.getLocalBounds();
-	return sf::Vector2f(bounds.width, bounds.height);
+	return Vector2f(bounds.width, bounds.height);
 }
 
 void
@@ -127,8 +127,8 @@ Sprite::setDelete(bool value) {
  * @param speed Movement speed in pixels per second.
  */
 void
-Sprite::setSpeed(sf::Vector2f direction, float speed) {
-	if (direction != sf::Vector2f()) 
+Sprite::setSpeed(Vector2f direction, float speed) {
+	if (direction != Vector2f())
 		thor::setLength(direction, speed);
 	mSpeed = direction;
 }
@@ -138,8 +138,8 @@ Sprite::setSpeed(sf::Vector2f direction, float speed) {
  * but is otherwise meaningless.
  */
 void
-Sprite::setDirection(const sf::Vector2f& direction) {
-	if (direction != sf::Vector2f())
+Sprite::setDirection(const Vector2f& direction) {
+	if (direction != Vector2f())
 		mShape.setRotation(thor::polarAngle(direction) + 90);
 }
 
@@ -147,6 +147,6 @@ Sprite::setDirection(const sf::Vector2f& direction) {
  * Sets the position of thr Sprite.
  */
 void
-Sprite::setPosition(const sf::Vector2f& position) {
+Sprite::setPosition(const Vector2f& position) {
 	mShape.setPosition(position);
 }

@@ -32,7 +32,7 @@ Pathfinder::astarArea(Area* start, Area* end) const {
 	assert(start);
 	assert(end);
 	auto heuristic_cost_estimate = [](Area* start, Area* end) {
-		return thor::length(sf::Vector2f(end->center - start->center));
+		return thor::length(Vector2f(end->center - start->center));
 	};
 
 	std::set<Area*> closed;
@@ -91,37 +91,37 @@ Pathfinder::astarArea(Area* start, Area* end) const {
  * @param radius Radius of the moving object.
  * @return Path from end to start (path from start to end in reverse order).
  */
-std::vector<sf::Vector2f>
-Pathfinder::getPath(const sf::Vector2f& start, const sf::Vector2f& end,
+std::vector<Vector2f>
+Pathfinder::getPath(const Vector2f& start, const Vector2f& end,
 		float radius) const {
 	if (!getArea(end))
-		return std::vector<sf::Vector2f>();
+		return std::vector<Vector2f>();
 	std::vector<Portal*> portals = astarArea(getArea(start), getArea(end));
 	if (portals.empty())
-		return std::vector<sf::Vector2f>();
-	std::vector<sf::Vector2f> path;
+		return std::vector<Vector2f>();
+	std::vector<Vector2f> path;
 
 	path.push_back(end);
 	for (auto p : portals) {
 		// Find the point on the line of the portal closest to the previous point.
-		sf::Vector2f startToEnd = sf::Vector2f(p->end - p->start);
-		float percentage = thor::dotProduct(startToEnd, path.back() - sf::Vector2f(p->start)) /
+		Vector2f startToEnd = Vector2f(p->end - p->start);
+		float percentage = thor::dotProduct(startToEnd, path.back() - Vector2f(p->start)) /
 				thor::squaredLength(startToEnd);
-		sf::Vector2f point;
+		Vector2f point;
 
 		if (percentage < 0 || percentage > 1.0f) {
-			if (thor::squaredLength(sf::Vector2f(p->start) - path.back()) <
-					thor::squaredLength(sf::Vector2f(p->end) - path.back())) {
+			if (thor::squaredLength(Vector2f(p->start) - path.back()) <
+					thor::squaredLength(Vector2f(p->end) - path.back())) {
 				thor::setLength(startToEnd, WALL_DISTANCE_MULTIPLIER * radius);
-				point = sf::Vector2f(p->start) + startToEnd;
+				point = Vector2f(p->start) + startToEnd;
 			}
 			else {
 				thor::setLength(startToEnd, WALL_DISTANCE_MULTIPLIER * radius);
-				point = sf::Vector2f(p->end) - startToEnd;
+				point = Vector2f(p->end) - startToEnd;
 			}
 		}
 		else
-			point = sf::Vector2f(p->start) + startToEnd * percentage;
+			point = Vector2f(p->start) + startToEnd * percentage;
 
 		// Take two points on a line orthogonal to the portal.
 		thor::setLength(startToEnd, radius);
@@ -148,7 +148,7 @@ Pathfinder::insertArea(const sf::FloatRect& rect) {
 			rect.top * Tile::TILE_SIZE.y - Tile::TILE_SIZE.y / 2.0f,
 			rect.width * Tile::TILE_SIZE.x,
 			rect.height * Tile::TILE_SIZE.y);
-	a.center = sf::Vector2f(a.area.left + a.area.width / 2,
+	a.center = Vector2f(a.area.left + a.area.width / 2,
 			a.area.top + a.area.height / 2);
 	mAreas.push_back(a);
 }
@@ -174,8 +174,8 @@ Pathfinder::generatePortals() {
 						.getOverlap(Interval::IntervalFromPoints(other.area.top,
 								other.area.top + other.area.height));
 				if (overlap.getLength() > 0) {
-					portal.start = sf::Vector2f(other.area.left, overlap.start);
-					portal.end = sf::Vector2f(other.area.left, overlap.end);
+					portal.start = Vector2f(other.area.left, overlap.start);
+					portal.end = Vector2f(other.area.left, overlap.end);
 					it.portals.push_back(portal);
 				}
 			}
@@ -185,8 +185,8 @@ Pathfinder::generatePortals() {
 						.getOverlap(Interval::IntervalFromPoints(other.area.top,
 								other.area.top + other.area.height));
 				if (overlap.getLength() > 0) {
-					portal.start = sf::Vector2f(it.area.left, overlap.start);
-					portal.end = sf::Vector2f(it.area.left, overlap.end);
+					portal.start = Vector2f(it.area.left, overlap.start);
+					portal.end = Vector2f(it.area.left, overlap.end);
 					it.portals.push_back(portal);
 				}
 			}
@@ -196,8 +196,8 @@ Pathfinder::generatePortals() {
 						.getOverlap(Interval::IntervalFromPoints(other.area.left,
 								other.area.left + other.area.width));
 				if (overlap.getLength() > 0) {
-					portal.start = sf::Vector2f(overlap.start, other.area.top);
-					portal.end = sf::Vector2f(overlap.end, other.area.top);
+					portal.start = Vector2f(overlap.start, other.area.top);
+					portal.end = Vector2f(overlap.end, other.area.top);
 					it.portals.push_back(portal);
 				}
 			}
@@ -207,8 +207,8 @@ Pathfinder::generatePortals() {
 						.getOverlap(Interval::IntervalFromPoints(other.area.left,
 								other.area.left + other.area.width));
 				if (overlap.getLength() > 0) {
-					portal.start = sf::Vector2f(overlap.start, it.area.top);
-					portal.end = sf::Vector2f(overlap.end, it.area.top);
+					portal.start = Vector2f(overlap.start, it.area.top);
+					portal.end = Vector2f(overlap.end, it.area.top);
 					it.portals.push_back(portal);
 				}
 			}
@@ -220,7 +220,7 @@ Pathfinder::generatePortals() {
  * Returns the area where point is in.
  */
 Pathfinder::Area*
-Pathfinder::getArea(const sf::Vector2f& point) const {
+Pathfinder::getArea(const Vector2f& point) const {
 	for (auto& area : mAreas) {
 		if (area.area.contains(point))
 			// Make the return value non-const for convenience.
@@ -236,8 +236,8 @@ Pathfinder::getArea(const sf::Vector2f& point) const {
 void
 Pathfinder::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 	for (auto& area : mAreas) {
-		sf::RectangleShape rect(sf::Vector2f(area.area.width, area.area.height));
-		rect.setPosition(sf::Vector2f(area.area.left, area.area.top));
+		sf::RectangleShape rect(Vector2f(area.area.width, area.area.height));
+		rect.setPosition(Vector2f(area.area.left, area.area.top));
 		rect.setFillColor(sf::Color(area.area.width * 30, 127, 0, 96));
 		target.draw(rect);
 	}

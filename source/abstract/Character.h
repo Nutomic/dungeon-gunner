@@ -31,7 +31,7 @@ public:
 	static const float VISION_DISTANCE;
 
 public:
-	explicit Character(const sf::Vector2f& position, Category category,
+	explicit Character(const Vector2f& position, Category category,
 			unsigned short mask, const Yaml& config, World& world,
 			Pathfinder& pathfinder);
 	virtual ~Character() = 0;
@@ -45,9 +45,9 @@ protected:
 	float getMovementSpeed() const;
 	void pullTrigger();
 	void releaseTrigger();
-	bool setDestination(const sf::Vector2f& destination);
+	bool setDestination(const Vector2f& destination);
 	bool isMoving() const;
-	bool isVisible(const sf::Vector2f& target) const;
+	bool isVisible(const Vector2f& target) const;
 	std::vector<std::shared_ptr<Character> > getCharacters() const;
 	int getMagazineAmmo() const;
 	int getTotalAmmo() const;
@@ -90,8 +90,8 @@ private:
 	std::shared_ptr<Weapon> mActiveWeapon;
 	std::shared_ptr<Gadget> mLeftGadget;
 	std::shared_ptr<Gadget> mRightGadget;
-	std::vector<sf::Vector2f> mPath; //< Contains nodes to reach a set destination.
-	sf::Vector2f mLastPosition;
+	std::vector<Vector2f> mPath; //< Contains nodes to reach a set destination.
+	Vector2f mLastPosition;
 	Faction mFaction;
 };
 

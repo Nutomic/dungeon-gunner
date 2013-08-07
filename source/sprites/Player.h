@@ -29,13 +29,13 @@ public:
 
 public:
 	explicit Player(World& world, Pathfinder& pathfinder,
-			const sf::Vector2f& position);
+			const Vector2f& position);
 
-	void setCrosshairPosition(const sf::Vector2f& position);
+	void setCrosshairPosition(const Vector2f& position);
 	using Character::pullTrigger;
 	using Character::releaseTrigger;
 	void setDirection(Direction direction, bool unset);
-	void setDestination(const sf::Vector2f& destination);
+	void setDestination(const Vector2f& destination);
 	using Character::getMagazineAmmo;
 	using Character::getTotalAmmo;
 	using Character::getWeaponName;
@@ -56,7 +56,7 @@ private:
 	void onThink(int elapsed) override;
 
 private:
-	sf::Vector2f mCrosshairPosition; //< Relative position of the point to fire at (mouse cursor).
+	Vector2f mCrosshairPosition; //< Relative position of the point to fire at (mouse cursor).
 	unsigned char mDirection; //< Current movement direction for direct control.
 };
 

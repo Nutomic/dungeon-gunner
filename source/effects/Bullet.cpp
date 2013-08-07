@@ -20,8 +20,8 @@
  * @param world Box2d world.
  * @param texture Texture to display for bullet.
  */
-Bullet::Bullet(const sf::Vector2f& position, Character& shooter,
-	sf::Vector2f direction, const Yaml& config, float speed,
+Bullet::Bullet(const Vector2f& position, Character& shooter,
+	Vector2f direction, const Yaml& config, float speed,
 	float damage, float maxRange) :
 		Circle(position, CATEGORY_PARTICLE, ~CATEGORY_PARTICLE,
 				config, thor::rotatedVector(direction, -90.0f)),

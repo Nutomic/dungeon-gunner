@@ -15,7 +15,7 @@ class World;
 class Enemy : public Character {
 public:
 	explicit Enemy(World& world, Pathfinder& pathfinder,
-			const sf::Vector2f& position);
+			const Vector2f& position);
 
 private:
 	virtual void onThink(int elapsed) override;

@@ -12,7 +12,7 @@
 #include "../util/Yaml.h"
 
 Enemy::Enemy(World& world, Pathfinder& pathfinder,
-		const sf::Vector2f& position) :
+		const Vector2f& position) :
 		Character(position, CATEGORY_ACTOR, MASK_ALL, Yaml("enemy.yaml"), world,
 				pathfinder) {
 }
@@ -41,6 +41,6 @@ Enemy::onThink(int elapsed) {
 	}
 	else {
 		releaseTrigger();
-		setSpeed(sf::Vector2f(), 0);
+		setSpeed(Vector2f(), 0);
 	}
 }

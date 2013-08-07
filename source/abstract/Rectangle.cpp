@@ -10,10 +10,10 @@
 #include "Circle.h"
 #include "../util/Yaml.h"
 
-Rectangle::Rectangle(const sf::Vector2f& position, Category category,
+Rectangle::Rectangle(const Vector2f& position, Category category,
 		unsigned short mask, const Yaml& config,
-		const sf::Vector2f& direction) :
-	Sprite(position, category, mask, config.get("size", sf::Vector2f()),
+		const Vector2f& direction) :
+	Sprite(position, category, mask, config.get("size", Vector2f()),
 			config.get("texture", std::string()), direction) {
 }
 
@@ -23,7 +23,7 @@ Rectangle::Rectangle(const sf::Vector2f& position, Category category,
  */
 bool
 Rectangle::testCollision(std::shared_ptr<Sprite> other,
-		sf::Vector2f& offsetFirst, const sf::Vector2f& offsetSecond) {
+		Vector2f& offsetFirst, const Vector2f& offsetSecond) {
 	Rectangle* rect = dynamic_cast<Rectangle*>(other.get());
 	Circle* circle = dynamic_cast<Circle*>(other.get());
 	if (circle != nullptr)

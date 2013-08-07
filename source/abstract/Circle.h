@@ -18,13 +18,13 @@ class Yaml;
  */
 class Circle : public CollisionModel, public Sprite {
 public:
-	explicit Circle(const sf::Vector2f& position, Category category,
+	explicit Circle(const Vector2f& position, Category category,
 			unsigned short mask, const Yaml& config,
-			const sf::Vector2f& direction = sf::Vector2f(0, 0));
+			const Vector2f& direction = Vector2f(0, 0));
 	virtual ~Circle() = default;
 
 	bool testCollision(std::shared_ptr<Sprite> other,
-			sf::Vector2f& offsetFirst, const sf::Vector2f& offsetSecond);
+			Vector2f& offsetFirst, const Vector2f& offsetSecond);
 	float getRadius() const;
 };
 

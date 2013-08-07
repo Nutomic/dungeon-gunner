@@ -12,6 +12,7 @@
 
 #include "../sprites/Tile.h"
 #include "SimplexNoise.h"
+#include "../util/Vector.h"
 
 class World;
 class Pathfinder;
@@ -22,9 +23,9 @@ class Pathfinder;
 class Generator {
 public:
 	explicit Generator(World& world, Pathfinder& pathfinder);
-	void generateCurrentAreaIfNeeded(const sf::Vector2f& position);
-	sf::Vector2f getPlayerSpawn() const;
-	std::vector<sf::Vector2f> getEnemySpawns(const sf::IntRect& area);
+	void generateCurrentAreaIfNeeded(const Vector2f& position);
+	Vector2f getPlayerSpawn() const;
+	std::vector<Vector2f> getEnemySpawns(const sf::IntRect& area);
 
 private:
 	typedef std::map<int, std::map<int, Tile::Type> > array;
@@ -32,9 +33,9 @@ private:
 private:
 	void generateAreas(const sf::IntRect& area);
 	void generateTiles(const sf::IntRect& area);
-	sf::Vector2i findClosestFloor(const sf::Vector2i& position) const;
-	std::vector<sf::Vector2i> createMinimalSpanningTree(
-			const sf::Vector2i& start, const float limit);
+	Vector2i findClosestFloor(const Vector2i& position) const;
+	std::vector<Vector2i> createMinimalSpanningTree(
+			const Vector2i& start, const float limit);
 
 private:
 	static const int GENERATE_AREA_SIZE;
