@@ -31,7 +31,8 @@ public:
 			getCharacters(const Vector2f& position, float maxDistance) const;
 	bool raycast(const Vector2f& lineStart,
 			const Vector2f& lineEnd) const;
-	std::shared_ptr<Item> getNearestItem(const Vector2f& position) const;
+	std::vector<std::shared_ptr<Sprite> > getNearbySprites(
+			const Vector2f& position, float radius) const;
 
 private:
 

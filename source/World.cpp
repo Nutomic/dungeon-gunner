@@ -193,19 +193,14 @@ World::raycast(const Vector2f& lineStart,
 }
 
 /**
- * Returns the item closest to position after linear search.
+ * Returns all sprites that are at most distance pixels away from position.
  */
-std::shared_ptr<Item>
-World::getNearestItem(const Vector2f& position) const {
-	std::shared_ptr<Item> closest;
-	float distance = std::numeric_limits<float>::max();
-	for (const auto& v : mDrawables) {
-		for (const auto& d : v.second) {
-			std::shared_ptr<Item> converted = std::dynamic_pointer_cast<Item>(d);
-			if (converted.get() != nullptr &&
-					thor::squaredLength(converted->getPosition() - position) < distance)
-				closest = converted;
-		}
-	}
-	return closest;
+std::vector<std::shared_ptr<Sprite> >
+World::getNearbySprites(const Vector2f& position, float distance) const {
+	std::vector<std::shared_ptr<Sprite> > ret;
+	for (const auto& v : mDrawables)
+		for (const auto& d : v.second)
+			if (thor::squaredLength(d->getPosition() - position) <= distance * distance)
+				ret.push_back(d);
+	return ret;
 }

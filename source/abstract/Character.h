@@ -77,7 +77,7 @@ private:
 	/// avoid floating point equality check).
 	static const float POINT_REACHED_DISTANCE;
 	/// Maximum distance from character where an item can be picked up.
-	static const float ITEM_PICKUP_MAX_DISTANCE_SQUARED;
+	static const float ITEM_PICKUP_MAX_DISTANCE;
 	friend class World;
 	World& mWorld;
 	Pathfinder& mPathfinder;

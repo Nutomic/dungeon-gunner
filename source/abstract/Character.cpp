@@ -18,7 +18,7 @@
 
 const float Character::VISION_DISTANCE = 500.0f;
 const float Character::POINT_REACHED_DISTANCE = 1.0f;
-const float Character::ITEM_PICKUP_MAX_DISTANCE_SQUARED = 2500.0f;
+const float Character::ITEM_PICKUP_MAX_DISTANCE = 50.0f;
 
 /**
  * Saves pointer to this instance in static var for think().
@@ -267,26 +267,37 @@ Character::getRightGadgetName() const {
  */
 void
 Character::pickUpItem() {
-	std::shared_ptr<Item> item = mWorld.getNearestItem(getPosition());
-	if (item != nullptr && thor::squaredLength(item->getPosition() - getPosition()) <=
-            ITEM_PICKUP_MAX_DISTANCE_SQUARED) {
-		std::shared_ptr<Weapon> weapon = std::dynamic_pointer_cast<Weapon>(item);
-		if (weapon != nullptr) {
-			mWorld.insert(mActiveWeapon);
-			mActiveWeapon->drop(getPosition());
-			mActiveWeapon = weapon;
-			mActiveWeapon->setHolder(*this);
+	auto sprites = mWorld.getNearbySprites(getPosition(),
+			ITEM_PICKUP_MAX_DISTANCE);
+	float distance = std::numeric_limits<float>::max();
+	std::shared_ptr<Item> closest;
+	for (auto& s : sprites) {
+		std::shared_ptr<Item> converted = std::dynamic_pointer_cast<Item>(s);
+		if (converted.get() != nullptr &&
+				thor::squaredLength(getPosition() - converted->getPosition()) < distance) {
+			closest = converted;
+			distance = thor::squaredLength(getPosition() - converted->getPosition());
 		}
-		std::shared_ptr<Gadget> gadget = std::dynamic_pointer_cast<Gadget>(item);
-		if (gadget != nullptr) {
-			mWorld.insert(mRightGadget);
-			mRightGadget->drop(getPosition());
-			mRightGadget = mLeftGadget;
-			mLeftGadget = gadget;
-		}
-		mWorld.remove(item);
 	}
-	else {
+
+	if (closest == nullptr) {
 		std::swap(mLeftGadget, mRightGadget);
+		return;
 	}
+
+	std::shared_ptr<Weapon> weapon = std::dynamic_pointer_cast<Weapon>(closest);
+	if (weapon != nullptr) {
+		mWorld.insert(mActiveWeapon);
+		mActiveWeapon->drop(getPosition());
+		mActiveWeapon = weapon;
+		mActiveWeapon->setHolder(*this);
+	}
+	std::shared_ptr<Gadget> gadget = std::dynamic_pointer_cast<Gadget>(closest);
+	if (gadget != nullptr) {
+		mWorld.insert(mRightGadget);
+		mRightGadget->drop(getPosition());
+		mRightGadget = mLeftGadget;
+		mLeftGadget = gadget;
+	}
+	mWorld.remove(closest);
 }
