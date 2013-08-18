@@ -21,6 +21,11 @@ Player::Player(World& world, Pathfinder& pathfinder,
 	mDirection(0) {
 }
 
+Vector2f
+Player::getCrosshairPosition() const {
+	return mCrosshairPosition;
+}
+
 /**
  * Sets the point where to look and shoot at.
  *

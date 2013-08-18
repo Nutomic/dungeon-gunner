@@ -31,6 +31,7 @@ public:
 	explicit Player(World& world, Pathfinder& pathfinder,
 			const Vector2f& position);
 
+	Vector2f getCrosshairPosition() const;
 	void setCrosshairPosition(const Vector2f& position);
 	using Character::pullTrigger;
 	using Character::releaseTrigger;
