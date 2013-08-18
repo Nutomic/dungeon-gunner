@@ -125,7 +125,7 @@ Game::updateGui() {
 
 	auto item = mWorld.getClosestItem(mPlayer->getPosition());
 	if (item.get() != nullptr) {
-		mPickupInstruction->setText("Press F to pick up " + item->getName());
+		mPickupInstruction->setText("F - pick up " + item->getName());
 		mPickupInstruction->setPosition(
 				mWindow.getSize().x / 2 - mPickupInstruction->getSize().x / 2,
 				mWindow.getSize().y * 0.66f);

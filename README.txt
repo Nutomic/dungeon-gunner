@@ -21,3 +21,4 @@ Space: pause
 ## Texture used
 Player/Enemy (modified): http://opengameart.org/content/top-down-runner
 Tiles (modified): http://opengameart.org/content/metalstone-textures
+Item: http://opengameart.org/content/random-adventure-kit

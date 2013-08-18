@@ -14,7 +14,7 @@
 #include "../util/Yaml.h"
 
 Weapon::Weapon(World& world, Character& holder, const Yaml& config) :
-		Item(Vector2f(80, 30), "weapon.png"),
+		Item(Vector2f(32, 32), "item.png"),
 		mWorld(world),
 		mHolder(&holder),
 		mName(config.get("name", std::string())),
