@@ -46,7 +46,7 @@ protected:
 	void pullTrigger();
 	void releaseTrigger();
 	bool setDestination(const Vector2f& destination);
-	bool isMoving() const;
+	bool isPathEmpty() const;
 	bool isVisible(const Vector2f& target) const;
 	std::vector<std::shared_ptr<Character> > getCharacters() const;
 	int getMagazineAmmo() const;

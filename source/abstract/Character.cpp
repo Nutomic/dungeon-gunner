@@ -160,11 +160,11 @@ Character::move() {
 }
 
 /**
- * Returns true if the character is currently moving.
+ * Returns true if the path is empty.
  */
 bool
-Character::isMoving() const {
-	return !mPath.empty();
+Character::isPathEmpty() const {
+	return mPath.empty();
 }
 
 /**
