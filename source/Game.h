@@ -52,6 +52,8 @@ private:
 	tgui::Label* mLeftGadget;
 	tgui::Label* mRightGadget;
 	tgui::Label* mPickupInstruction;
+	std::shared_ptr<sf::Texture> mCrosshairTexture;
+	sf::Sprite mCrosshair;
 
 	World mWorld;
 	Pathfinder mPathfinder;

@@ -14,17 +14,11 @@
 #include "items/Shield.h"
 #include "sprites/Enemy.h"
 #include "sprites/Player.h"
+#include "util/Loader.h"
+#include "util/ResourceManager.h"
 #include "util/Yaml.h"
 
 const int Game::FPS_GOAL = 60;
-
-void Game::initPlayer() {
-	mPlayer = std::shared_ptr < Player
-			> (new Player(mWorld, mPathfinder, mGenerator.getPlayerSpawn()));
-	mPlayer->setLeftGadget(std::shared_ptr < Gadget > (new Heal()));
-	mPlayer->setRightGadget(std::shared_ptr < Gadget > (new Shield()));
-	mWorld.insertCharacter(mPlayer);
-}
 
 /**
  * Initializes game, including window and objects (sprites).
@@ -41,6 +35,11 @@ Game::Game(tgui::Window& window) :
 	mGenerator.generateCurrentAreaIfNeeded(Vector2f());
 	initPlayer();
 
+	mCrosshairTexture = ResourceManager::i().acquire(Loader::i()
+			.fromFile<sf::Texture>("crosshair.png"));
+	mCrosshair.setTexture(*mCrosshairTexture, true);
+	mWindow.setMouseCursorVisible(false);
+
 	mHealth = window.add<tgui::Label>();
 	mHealth->setTextSize(20);
 	mAmmo = window.add<tgui::Label>();
@@ -53,6 +52,14 @@ Game::Game(tgui::Window& window) :
 	mRightGadget->setTextSize(14);
 	mPickupInstruction = window.add<tgui::Label>();
 	mPickupInstruction->setTextSize(14);
+}
+
+void Game::initPlayer() {
+	mPlayer = std::shared_ptr < Player
+			> (new Player(mWorld, mPathfinder, mGenerator.getPlayerSpawn()));
+	mPlayer->setLeftGadget(std::shared_ptr < Gadget > (new Heal()));
+	mPlayer->setRightGadget(std::shared_ptr < Gadget > (new Shield()));
+	mWorld.insertCharacter(mPlayer);
 }
 
 /**
@@ -161,6 +168,7 @@ Game::input() {
 		case sf::Event::MouseMoved:
 			mPlayer->setCrosshairPosition(convertCoordinates(event.mouseMove.x,
 					event.mouseMove.y));
+			mCrosshair.setPosition(Vector2f(sf::Mouse::getPosition(mWindow) - Vector2i(mCrosshair.getTextureRect().width, mCrosshair.getTextureRect().height) / 2));
 			break;
 		case sf::Event::MouseWheelMoved:
 			mPlayer->toggleWeapon();
@@ -294,6 +302,7 @@ Game::render() {
 	// Render GUI and static stuff.
 	mWindow.setView(mWindow.getDefaultView());
 	mWindow.drawGUI();
+	mWindow.draw(mCrosshair);
 
 	mWindow.display();
 }

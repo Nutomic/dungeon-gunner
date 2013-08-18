@@ -22,3 +22,4 @@ Space: pause
 Player/Enemy (modified): http://opengameart.org/content/top-down-runner
 Tiles (modified): http://opengameart.org/content/metalstone-textures
 Item: http://opengameart.org/content/random-adventure-kit
+Crosshair: http://opengameart.org/content/20-crosshairs-for-re
