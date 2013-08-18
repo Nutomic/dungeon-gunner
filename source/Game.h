@@ -38,6 +38,7 @@ private:
 
 	Vector2<float> convertCoordinates(int x, int y);
 	void updateGui();
+	void initPlayer();
 
 private:
 	static const int FPS_GOAL;

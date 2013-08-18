@@ -18,6 +18,14 @@
 
 const int Game::FPS_GOAL = 60;
 
+void Game::initPlayer() {
+	mPlayer = std::shared_ptr < Player
+			> (new Player(mWorld, mPathfinder, mGenerator.getPlayerSpawn()));
+	mPlayer->setLeftGadget(std::shared_ptr < Gadget > (new Heal()));
+	mPlayer->setRightGadget(std::shared_ptr < Gadget > (new Shield()));
+	mWorld.insertCharacter(mPlayer);
+}
+
 /**
  * Initializes game, including window and objects (sprites).
  */
@@ -31,11 +39,7 @@ Game::Game(tgui::Window& window) :
 	mWindow.setKeyRepeatEnabled(false);
 
 	mGenerator.generateCurrentAreaIfNeeded(Vector2f());
-	mPlayer = std::shared_ptr<Player>(new Player(mWorld, mPathfinder,
-			mGenerator.getPlayerSpawn()));
-	mPlayer->setLeftGadget(std::shared_ptr<Gadget>(new Heal()));
-	mPlayer->setRightGadget(std::shared_ptr<Gadget>(new Shield()));
-	mWorld.insertCharacter(mPlayer);
+	initPlayer();
 
 	mHealth = window.add<tgui::Label>();
 	mHealth->setTextSize(20);
@@ -69,6 +73,10 @@ Game::loop() {
 			elapsed = 0;
 
 		mWorld.think(elapsed);
+		if (mPlayer->getHealth() == 0) {
+			mWorld.remove(mPlayer);
+			initPlayer();
+		}
 
 		mWorld.step(elapsed);
 

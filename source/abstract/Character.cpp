@@ -72,6 +72,9 @@ Character::onDamage(int damage) {
  */
 void
 Character::onThink(int elapsed) {
+	if (mCurrentHealth == 0)
+		return;
+
 	mActiveWeapon->onThink(elapsed);
 	if (mLeftGadget)
 		mLeftGadget->onThink(elapsed);
