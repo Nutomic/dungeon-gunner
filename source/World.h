@@ -33,6 +33,7 @@ public:
 			const Vector2f& lineEnd) const;
 	std::vector<std::shared_ptr<Sprite> > getNearbySprites(
 			const Vector2f& position, float radius) const;
+	std::shared_ptr<Item> getClosestItem(const Vector2f& position) const;
 
 private:
 

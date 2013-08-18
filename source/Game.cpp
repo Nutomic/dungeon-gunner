@@ -51,6 +51,8 @@ Game::Game(tgui::Window& window) :
 	mLeftGadget->setTextSize(14);
 	mRightGadget = window.add<tgui::Label>();
 	mRightGadget->setTextSize(14);
+	mPickupInstruction = window.add<tgui::Label>();
+	mPickupInstruction->setTextSize(14);
 }
 
 /**
@@ -120,6 +122,17 @@ Game::updateGui() {
 			mWindow.getSize().y - mLeftGadget->getSize().y);
 	mRightGadget->setPosition(mWindow.getSize().x / 2 + 10,
 			mWindow.getSize().y - mRightGadget->getSize().y);
+
+	auto item = mWorld.getClosestItem(mPlayer->getPosition());
+	if (item.get() != nullptr) {
+		mPickupInstruction->setText("Press F to pick up " + item->getName());
+		mPickupInstruction->setPosition(
+				mWindow.getSize().x / 2 - mPickupInstruction->getSize().x / 2,
+				mWindow.getSize().y * 0.66f);
+		mPickupInstruction->show();
+	}
+	else
+		mPickupInstruction->hide();
 }
 
 /**

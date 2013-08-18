@@ -204,3 +204,24 @@ World::getNearbySprites(const Vector2f& position, float distance) const {
 				ret.push_back(d);
 	return ret;
 }
+
+/**
+ * Returns the item closest to position, or null if it is further than
+ * Character::ITEM_PICKUP_MAX_DISTANCE away.
+ */
+std::shared_ptr<Item>
+World::getClosestItem(const Vector2f& position) const {
+	float distance = std::numeric_limits<float>::max();
+	std::shared_ptr<Item> closest;
+	for (auto& s : getNearbySprites(position, Character::ITEM_PICKUP_MAX_DISTANCE)) {
+		std::shared_ptr<Item> converted = std::dynamic_pointer_cast<Item>(s);
+		if (converted.get() != nullptr &&
+				thor::squaredLength(position - converted->getPosition()) < distance * distance) {
+			closest = converted;
+			distance = thor::squaredLength(position - converted->getPosition());
+		}
+	}
+	return (distance <= Character::ITEM_PICKUP_MAX_DISTANCE * Character::ITEM_PICKUP_MAX_DISTANCE)
+			? closest
+			: std::shared_ptr<Item>();
+}

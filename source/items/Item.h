@@ -17,6 +17,7 @@ public:
 	Item(const Vector2f& size, const std::string& texture);
 	virtual ~Item() {};
 
+	virtual std::string getName() const = 0;
 	void drop(const Vector2f& position);
 	bool testCollision(std::shared_ptr<Sprite> other,
 			Vector2f& offsetFirst, const Vector2f& offsetSecond);

@@ -51,6 +51,7 @@ private:
 	tgui::Label* mCurrentWeapon;
 	tgui::Label* mLeftGadget;
 	tgui::Label* mRightGadget;
+	tgui::Label* mPickupInstruction;
 
 	World mWorld;
 	Pathfinder mPathfinder;

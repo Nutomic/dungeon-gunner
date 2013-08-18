@@ -270,18 +270,7 @@ Character::getRightGadgetName() const {
  */
 void
 Character::pickUpItem() {
-	auto sprites = mWorld.getNearbySprites(getPosition(),
-			ITEM_PICKUP_MAX_DISTANCE);
-	float distance = std::numeric_limits<float>::max();
-	std::shared_ptr<Item> closest;
-	for (auto& s : sprites) {
-		std::shared_ptr<Item> converted = std::dynamic_pointer_cast<Item>(s);
-		if (converted.get() != nullptr &&
-				thor::squaredLength(getPosition() - converted->getPosition()) < distance) {
-			closest = converted;
-			distance = thor::squaredLength(getPosition() - converted->getPosition());
-		}
-	}
+	std::shared_ptr<Item> closest = mWorld.getClosestItem(getPosition());
 
 	if (closest == nullptr) {
 		std::swap(mLeftGadget, mRightGadget);
