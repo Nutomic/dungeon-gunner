@@ -10,6 +10,8 @@
 
 #include "../abstract/Rectangle.h"
 
+class World;
+
 /**
  * Holds information about a single tile.
  */
@@ -19,19 +21,15 @@ public:
 		WALL,
 		FLOOR
 	};
-
-public:
-	explicit Tile(Type type, int x, int y);
-
-	Type getType() const;
-
-public:
 	static const Vector2i TILE_SIZE; //< Tile size in pixels.
 
 public:
+	explicit Tile(const Vector2i& position, Type type);
+	Type getType() const;
+
+	static void setTile(const Vector2i& position, Type type, World& world);
 	static std::string getConfig(Type type);
 	static bool isSolid(Type type);
-
 
 private:
 	Type mType;

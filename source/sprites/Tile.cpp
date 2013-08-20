@@ -14,20 +14,42 @@
 #include "../util/Yaml.h"
 #include "../World.h"
 
-const Vector2i Tile::TILE_SIZE = sf::Vector2i(75, 75);
+const Vector2i Tile::TILE_SIZE = Vector2i(75, 75);
 
 /**
- * Constructs a tile.
+ * Constructs a tile. Use this over setTile if a tile has not been generated
+ * for the position yet.
  *
  * @param pType Type of the tile to create.
- * @param pPosition Position of the tile in tile coordinates.
- * @param world Box2D world object.
  */
-Tile::Tile(Type type, int x, int y) :
-		Rectangle(Vector2f(x * TILE_SIZE.x, y * TILE_SIZE.y),
-				CATEGORY_WORLD, (isSolid(type)) ? 0xffff : 0,
-				Yaml(getConfig(type))),
-		mType(type) {
+Tile::Tile(const Vector2i& position, Type type) :
+		Rectangle(Vector2f(thor::cwiseProduct(position, TILE_SIZE)),
+				CATEGORY_WORLD,	(isSolid(type)) ? 0xffff : 0,
+				Yaml(getConfig(type))),	mType(type) {
+}
+
+/**
+ * Places a tile of type at position, removing an old tile of different type
+ * if one exists.
+ *
+ * Highly inefficient as World::getNearbySprites has to be searched for every call.
+ */
+void
+Tile::setTile(const Vector2i& position, Type type, World& world) {
+	Vector2f worldPosition(thor::cwiseProduct(position, TILE_SIZE));
+	auto candidates = world.getNearbySprites(worldPosition, 1.0f);
+	for (auto& c : candidates) {
+		std::shared_ptr<Tile> converted = std::dynamic_pointer_cast<Tile>(c);
+		// Direct comparison of floats as both are from the same generation
+		// on the same CPU.
+		if (converted.get() != nullptr &&
+				converted->getPosition() == worldPosition &&
+				converted->getType() != type) {
+			world.remove(converted);
+			break;
+		}
+	}
+	world.insert(std::shared_ptr<Sprite>(new Tile(position, type)));
 }
 
 /**
@@ -41,7 +63,6 @@ Tile::getConfig(Type type) {
 	case Type::WALL:
 		return "tile_wall.yaml";
 	default:
-		assert(false);
 		return "";
 	}
 }

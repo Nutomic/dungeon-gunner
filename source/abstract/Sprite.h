@@ -64,6 +64,7 @@ protected:
 	void setSpeed(Vector2f direction, float speed);
 	void setDirection(const Vector2f& direction);
 	void setPosition(const Vector2f& position);
+	void setTexture(const std::string& texture);
 
 private:
 	friend class CollisionModel;

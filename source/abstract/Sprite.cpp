@@ -23,15 +23,7 @@ Sprite::Sprite(const Vector2f& position, Category category,
 	mShape.setTextureRect(sf::IntRect(Vector2i(), Vector2i(size)));
 	setPosition(position);
 	setDirection(direction);
-	try {
-		mTexture = ResourceManager::i().acquire(Loader::i()
-				.fromFile<sf::Texture>(texture));
-		mShape.setTexture(&*mTexture, false);
-	}
-	catch (thor::ResourceLoadingException&) {
-		LOG_W("Failed to load texture " << texture << ", coloring red.");
-		mShape.setFillColor(sf::Color(255, 0, 0));
-	}
+	setTexture(texture);
 }
 
 /**
@@ -149,4 +141,22 @@ Sprite::setDirection(const Vector2f& direction) {
 void
 Sprite::setPosition(const Vector2f& position) {
 	mShape.setPosition(position);
+}
+
+
+/**
+ * Sets a new texture. The old one is discarded through smart pointers if
+ * it isn't used any more.
+ */
+void
+Sprite::setTexture(const std::string& texture) {
+	try {
+		mTexture = ResourceManager::i().acquire(Loader::i()
+				.fromFile<sf::Texture>(texture));
+		mShape.setTexture(&*mTexture, false);
+	}
+	catch (thor::ResourceLoadingException&) {
+		LOG_W("Failed to load texture " << texture << ", coloring red.");
+		mShape.setFillColor(sf::Color(255, 0, 0));
+	}
 }
