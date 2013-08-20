@@ -35,6 +35,11 @@ SimplexNoise::getNoise(int x, int y) {
 	return mCache.at(x).at(y);
 }
 
+float
+SimplexNoise::getNoise(const Vector2i& v) {
+	return getNoise(v.x, v.y);
+}
+
 /**
  * Floor implementation that is faster than std implementation by
  * ignoring some checks and does not consider some border conditions.

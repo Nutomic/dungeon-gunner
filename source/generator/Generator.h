@@ -20,7 +20,7 @@ class Pathfinder;
 /**
  * Procedurally generates tiles, chooses player and enemy spawn positions.
  */
-class Generator {
+class Generator : public sf::Drawable {
 public:
 	explicit Generator(World& world, Pathfinder& pathfinder);
 	void generateCurrentAreaIfNeeded(const Vector2f& position);
@@ -33,9 +33,11 @@ private:
 private:
 	void generateAreas(const sf::IntRect& area);
 	void generateTiles(const sf::IntRect& area);
-	Vector2i findClosestFloor(const Vector2i& position) const;
+	Vector2i findClosestFloor(const Vector2i& start) const;
 	std::vector<Vector2i> createMinimalSpanningTree(
 			const Vector2i& start, const float limit);
+	void connectRooms(const Vector2i& start, float limit);
+	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
 private:
 	static const int GENERATE_AREA_SIZE;
@@ -51,6 +53,8 @@ private:
 	SimplexNoise mTileNoise;
 	/// Perlin noise used for character placement.
 	SimplexNoise mCharacterNoise;
+	/// Used only for debug drawing.
+	std::vector<std::vector<Vector2i> > mPaths;
 };
 
 #endif /* DG_GENERATOR_H_ */

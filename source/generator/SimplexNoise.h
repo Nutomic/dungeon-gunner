@@ -11,6 +11,8 @@
 #include <array>
 #include <map>
 
+#include "../util/Vector.h"
+
 /**
  * Caching simplex noise generator.
  *
@@ -22,6 +24,7 @@ class SimplexNoise {
 public:
     SimplexNoise();
     float getNoise(int x, int y);
+    float getNoise(const Vector2i& v);
 
 
 private:

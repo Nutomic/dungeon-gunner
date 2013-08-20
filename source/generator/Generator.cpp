@@ -67,9 +67,8 @@ Generator::generateCurrentAreaIfNeeded(const Vector2f& playerPosition) {
 			generateTiles(area);
 			for (const auto& enemyPosition : getEnemySpawns(area)) {
 				float distance = thor::length(enemyPosition - playerPosition);
-				if (distance > Character::VISION_DISTANCE) {
+				if (distance > Character::VISION_DISTANCE)
 					mWorld.insertCharacter(std::shared_ptr<Enemy>(new Enemy(mWorld, mPathfinder, enemyPosition)));
-				}
 			}
 		}
 		if (mGenerated[current.x][current.y] && distance <= GENERATE_AREA_RANGE) {
@@ -88,8 +87,6 @@ Generator::generateCurrentAreaIfNeeded(const Vector2f& playerPosition) {
 /**
  * Generates a minimum spanning tree on mTileNoise, starting from start with
  * a maximum total node weight of limit.
- *
- * FIXME: Some nodes are selected more than once.
  */
 std::vector<Vector2i>
 Generator::createMinimalSpanningTree(const Vector2i& start,
@@ -103,9 +100,9 @@ Generator::createMinimalSpanningTree(const Vector2i& start,
 		Vector2i current;
 		float minValue = std::numeric_limits<float>::max();
 		for (auto& o : open) {
-			if (mTileNoise.getNoise(o.x, o.y) + 1.0f < minValue) {
+			if (mTileNoise.getNoise(o) + 1.0f < minValue) {
 				current = o;
-				minValue = mTileNoise.getNoise(o.x, o.y) + 1.0f;
+				minValue = mTileNoise.getNoise(o) + 1.0f;
 			}
 		}
 		std::remove(open.begin(), open.end(), current);
@@ -123,6 +120,79 @@ Generator::createMinimalSpanningTree(const Vector2i& start,
 		insertOnlyNew(Vector2i(current.x, current.y - 1));
 	}
 	return selected;
+}
+
+/**
+ * Generates paths that connect different rooms.
+ *
+ * Using basically Dijkstra on infinite graph/A* without destination node.
+ *
+ * @param start Tile to start path generation from (must be floor).
+ * @param limit Maximum weight of each path.
+ */
+void
+Generator::connectRooms(const Vector2i& start, float limit) {
+	std::set<Vector2i> open;
+	std::set<Vector2i> closed;
+	std::map<Vector2i, Vector2i> previous;
+	std::set<Vector2i> destinations;
+	std::map<Vector2i, float> distance;
+	// Compares vectors using distance values.
+	auto comp = [&distance](const Vector2i& lhs, const Vector2i& rhs) {
+		return distance[lhs] < distance[rhs];
+	};
+	auto process = [&open, &closed, &previous, &distance, this](const Vector2i& point, const Vector2i& current) {
+		// Update previous nodes if shorter path is found.
+		if (distance.count(point) == 0) {
+			distance[point] = distance[current] + mTileNoise.getNoise(point) + 1;
+			previous[point] = current;
+		}
+
+		// Insert into open
+		if (closed.count(point) == 0)
+			open.insert(point);
+	};
+
+	open.insert(start);
+	distance[start] = 0;
+	while (!open.empty()) {
+		// Select node with lowest distance that is in open
+		Vector2i current = *std::min_element(open.begin(), open.end(), comp);
+		open.erase(current);
+		closed.insert(current);
+		// Take all floors right after wall tiles.
+		if (mTiles[previous[current].x][previous[current].y] == Tile::Type::WALL &&
+				mTiles[current.x][current.y] == Tile::Type::FLOOR) {
+			destinations.insert(current);
+			break;
+		}
+		else if (distance.at(current) < limit) {
+			process(Vector2i(current.x + 1, current.y), current);
+			process(Vector2i(current.x,     current.y + 1), current);
+			process(Vector2i(current.x - 1, current.y), current);
+			process(Vector2i(current.x,     current.y - 1), current);
+		}
+	}
+
+	// take min length paths and set tiles
+	float totalValue = 0.0f;
+	while (totalValue < limit && !destinations.empty()) {
+		std::vector<Vector2i> path;
+		float pathValue = 0;
+		Vector2i current = *destinations.begin();
+		destinations.erase(destinations.begin());
+		while (current != start) {
+			path.push_back(previous[current]);
+			pathValue += mTileNoise.getNoise(current);
+			current = previous[current];
+		};
+		path.push_back(start);
+		mPaths.push_back(path);
+		for (const auto& p : path) {
+			mTiles[p.x][p.y] = Tile::Type::FLOOR;
+			Tile::setTile(p, Tile::Type::FLOOR, mWorld);
+		}
+	}
 }
 
 /**
@@ -170,15 +240,16 @@ Generator::generateTiles(const sf::IntRect& area) {
 	}
 
     // Merge new map into stored map and create tile sprites.
+	for (int x = left; x < right; x++)
+		for (int y = down; y < up; y++)
+			mTiles[x][y] = Tile::Type::FLOOR;
+	connectRooms(start, 5.0f);
+
 	for (int x = area.left; x < area.left + area.width; x++)
-		for (int y = area.top; y < area.top + area.height; y++) {
-		    Tile::Type type = ((x >= left && x < right && y >= down && y < up)
-		    		 || (mTiles[x][y] == Tile::Type::FLOOR))
-                    ? Tile::Type::FLOOR
-                    : Tile::Type::WALL;
-			mTiles[x][y] = type;
-			mWorld.insert(std::shared_ptr<Sprite>(new Tile(type, x, y)));
-		}
+		for (int y = area.top; y < area.top + area.height; y++)
+			mWorld.insert(std::shared_ptr<Sprite>(
+					new Tile(Vector2i(x, y), mTiles[x][y])));
+
 	generateAreas(area);
 	mPathfinder.generatePortals();
 }
@@ -256,21 +327,16 @@ Generator::getPlayerSpawn() const {
  * @position Point to start search for a floor tile from.
  */
 Vector2i
-Generator::findClosestFloor(const Vector2i& position) const {
+Generator::findClosestFloor(const Vector2i& start) const {
 	std::map<Vector2i, float> open;
 	std::set<Vector2i> closed;
-	Vector2i start = position;
 	auto makePair = [&start](const Vector2i& point) {
 		return std::make_pair(point, thor::length(Vector2f(point - start)));
 	};
 
 	open.insert(makePair(start));
 	while (!open.empty()) {
-		auto intComp = [](const std::pair<Vector2i, float>& left,
-				const std::pair<Vector2i, float>& right) {
-			return left.second < right.second;
-		};
-		Vector2i current = std::min_element(open.begin(), open.end(), intComp)->first;
+		Vector2i current = std::min_element(open.begin(), open.end())->first;
 		open.erase(current);
 		closed.insert(current);
 		if (mTiles.count(current.x) != 0 &&
@@ -293,3 +359,22 @@ Generator::findClosestFloor(const Vector2i& position) const {
 	assert(false);
 	return Vector2i();
 }
+
+#ifndef NDEBUG
+/**
+ * Debug only: Draws paths generated by connectRooms.
+ *
+ * mPaths is only required for this function.
+ */
+void
+Generator::draw(sf::RenderTarget& target, sf::RenderStates states) const {
+	for (auto& p : mPaths) {
+		for (auto&q : p) {
+			sf::RectangleShape rect(Vector2f(Tile::TILE_SIZE));
+			rect.setPosition(Vector2f(q.x * Tile::TILE_SIZE.x, q.y * Tile::TILE_SIZE.y) - Vector2f(Tile::TILE_SIZE / 2));
+			rect.setFillColor(sf::Color(150, 127, 0, 96));
+			target.draw(rect);
+		}
+	}
+}
+#endif /* NDEBUG */
