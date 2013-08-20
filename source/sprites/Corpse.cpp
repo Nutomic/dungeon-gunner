@@ -10,6 +10,6 @@
 #include "../util/Yaml.h"
 
 Corpse::Corpse(const Vector2f& position) :
-		Circle(position, CATEGORY_NONSOLID, MASK_NONE, Yaml("corpse.yaml")) {
+		Circle(position, CATEGORY_DECORATION, MASK_NONE, Yaml("corpse.yaml")) {
 }
 

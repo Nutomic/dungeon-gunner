@@ -24,7 +24,8 @@ public:
 	 * The order of categories is also used for render order (higher number on top).
 	 */
 	enum Category {
-		CATEGORY_WORLD = 1 << 1,
+		CATEGORY_WORLD = 1 << 0,
+		CATEGORY_DECORATION = 1 << 1,
 		CATEGORY_NONSOLID = 1 << 2,
 		CATEGORY_PARTICLE = 1 << 3,
 		CATEGORY_ACTOR = 1 << 4
