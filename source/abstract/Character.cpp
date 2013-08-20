@@ -100,6 +100,8 @@ Character::onDeath() {
 
 	mWorld.insert(mActiveWeapon);
 	mActiveWeapon->drop(getPosition());
+	// To avoid the weapon continuing to fire after pickup.
+	mActiveWeapon->releaseTrigger();
 
 }
 
