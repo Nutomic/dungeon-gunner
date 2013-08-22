@@ -14,16 +14,16 @@
  * Creates Game object.
  */
 int main(int argc, char* argv[]) {
-	Yaml::setFolder("resources/yaml/");
+	Yaml::setFolder("res/yaml/");
 
-	Loader::i().setFolder("resources/");
+	Loader::i().setFolder("res/");
 	Loader::i().setSubFolder<sf::Texture>("textures/");
 
     tgui::Window window(sf::VideoMode(800, 600, 32), "Dungeon Gunner",
 				sf::Style::Close | sf::Style::Titlebar);
 
-	if (!window.globalFont.loadFromFile("resources/DejaVuSans.ttf"))
-		LOG_W("Failed to load font at 'resources/DejaVuSans.ttf'");
+	if (!window.globalFont.loadFromFile("res/DejaVuSans.ttf"))
+		LOG_W("Failed to load font at 'res/DejaVuSans.ttf'");
 
     Game game(window);
 
