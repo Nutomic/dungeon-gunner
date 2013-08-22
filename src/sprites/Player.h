@@ -8,7 +8,7 @@
 #ifndef DG_PLAYER_H_
 #define DG_PLAYER_H_
 
-#include "../abstract/Character.h"
+#include "abstract/Character.h"
 
 class World;
 

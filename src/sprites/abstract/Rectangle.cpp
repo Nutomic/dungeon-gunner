@@ -1,18 +1,18 @@
 /*
- * Circle.cpp
+ * Rectangle.cpp
  *
  *  Created on: 04.05.2013
  *      Author: Felix
  */
 
-#include "Circle.h"
-
 #include "Rectangle.h"
-#include "../util/Yaml.h"
 
-Circle::Circle(const Vector2f& position, Category category,
-			unsigned short mask, const Yaml& config,
-			const Vector2f& direction) :
+#include "Circle.h"
+#include "../../util/Yaml.h"
+
+Rectangle::Rectangle(const Vector2f& position, Category category,
+		unsigned short mask, const Yaml& config,
+		const Vector2f& direction) :
 	Sprite(position, category, mask, config.get("size", Vector2f()),
 			config.get("texture", std::string()), direction) {
 }
@@ -22,15 +22,15 @@ Circle::Circle(const Vector2f& position, Category category,
  * matter which object is this or other.
  */
 bool
-Circle::testCollision(std::shared_ptr<Sprite> other,
+Rectangle::testCollision(std::shared_ptr<Sprite> other,
 		Vector2f& offsetFirst, const Vector2f& offsetSecond) {
 	Rectangle* rect = dynamic_cast<Rectangle*>(other.get());
 	Circle* circle = dynamic_cast<Circle*>(other.get());
 	if (circle != nullptr)
-		return CollisionModel::testCollision(*this, *circle,
+		return CollisionModel::testCollision(*circle, *this,
 				offsetFirst, offsetSecond);
 	else if (rect != nullptr)
-		return CollisionModel::testCollision(*this, *rect,
+		return CollisionModel::testCollision(*rect, *this,
 				offsetFirst, offsetSecond);
 	else {
 		assert(false);
@@ -38,10 +38,3 @@ Circle::testCollision(std::shared_ptr<Sprite> other,
 	}
 }
 
-/**
- * Returns the radius of the circle used as a collision model for this object.
- */
-float
-Circle::getRadius() const {
-	return getSize().x / 2;
-}

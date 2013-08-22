@@ -13,7 +13,7 @@
 
 #include "Circle.h"
 #include "Rectangle.h"
-#include "../util/Interval.h"
+#include "../../util/Interval.h"
 
 CollisionModel::~CollisionModel() {
 }

@@ -16,7 +16,7 @@
 #include <Thor/Time.hpp>
 
 #include "Item.h"
-#include "../util/Yaml.h"
+#include "../../util/Yaml.h"
 
 class Character;
 class World;

@@ -10,8 +10,8 @@
 #include <Thor/Vectors.hpp>
 
 #include "generator/Generator.h"
-#include "items/Heal.h"
-#include "items/Shield.h"
+#include "sprites/items/Heal.h"
+#include "sprites/items/Shield.h"
 #include "sprites/Enemy.h"
 #include "sprites/Player.h"
 #include "util/Loader.h"

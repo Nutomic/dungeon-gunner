@@ -12,7 +12,7 @@
 
 #include <SFML/Graphics.hpp>
 
-#include "../util/Vector.h"
+#include "../../util/Vector.h"
 
 /**
  * An sprite that is rendered in the world.

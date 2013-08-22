@@ -10,7 +10,7 @@
 #include <Thor/Vectors.hpp>
 
 #include "../abstract/Character.h"
-#include "../util/Yaml.h"
+#include "../../util/Yaml.h"
 
 
 /**

@@ -8,7 +8,7 @@
 #ifndef DG_ENEMY_H_
 #define DG_ENEMY_H
 
-#include "../abstract/Character.h"
+#include "../sprites/abstract/Character.h"
 
 class World;
 

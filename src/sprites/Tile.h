@@ -8,7 +8,7 @@
 #ifndef DG_TILE_H_
 #define DG_TILE_H_
 
-#include "../abstract/Rectangle.h"
+#include "abstract/Rectangle.h"
 
 class World;
 

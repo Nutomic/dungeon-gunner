@@ -8,8 +8,8 @@
 #include "Shield.h"
 
 #include "../abstract/Character.h"
-#include "../sprites/RotatingShield.h"
-#include "../World.h"
+#include "../RotatingShield.h"
+#include "../../World.h"
 
 Shield::Shield() :
 		Gadget("Shield") {

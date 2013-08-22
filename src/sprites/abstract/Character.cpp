@@ -10,11 +10,11 @@
 #include <Thor/Vectors.hpp>
 
 #include "../items/Weapon.h"
-#include "../sprites/Corpse.h"
-#include "../util/Log.h"
-#include "../util/Yaml.h"
-#include "../World.h"
-#include "../Pathfinder.h"
+#include "../Corpse.h"
+#include "../../util/Log.h"
+#include "../../util/Yaml.h"
+#include "../../World.h"
+#include "../../Pathfinder.h"
 
 const float Character::VISION_DISTANCE = 500.0f;
 const float Character::POINT_REACHED_DISTANCE = 1.0f;

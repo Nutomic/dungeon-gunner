@@ -8,7 +8,7 @@
 #ifndef DG_ROTATINGSHIELD_H_
 #define DG_ROTATINGSHIELD_H_
 
-#include "../abstract/Rectangle.h"
+#include "abstract/Rectangle.h"
 
 class RotatingShield : public Rectangle {
 public:

@@ -7,7 +7,7 @@
 
 #include "Item.h"
 
-#include "../World.h"
+#include "../../World.h"
 
 Item::Item(const Vector2f& size, const std::string& texture) :
 		Sprite(Vector2f(), CATEGORY_NONSOLID, MASK_NONE, size, texture,

@@ -9,9 +9,9 @@
 
 #include <Thor/Vectors.hpp>
 
-#include "../World.h"
+#include "../../World.h"
 #include "../effects/Bullet.h"
-#include "../util/Yaml.h"
+#include "../../util/Yaml.h"
 
 Weapon::Weapon(World& world, Character& holder, const Yaml& config) :
 		Item(Vector2f(32, 32), "item.png"),

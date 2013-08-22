@@ -11,7 +11,7 @@
 class Circle;
 class Rectangle;
 
-#include "../util/Vector.h"
+#include "../../util/Vector.h"
 
 /**
  * Abstract class providing helper functions to test for collisions between shapes.

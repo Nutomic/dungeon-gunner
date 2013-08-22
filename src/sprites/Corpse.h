@@ -8,7 +8,7 @@
 #ifndef DG_CORPSE_H_
 #define DG_CORPSE_H_
 
-#include "../abstract/Circle.h"
+#include "abstract/Circle.h"
 
 class Corpse : public Circle {
 public:

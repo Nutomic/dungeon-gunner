@@ -9,9 +9,9 @@
 
 #include <Thor/Vectors.hpp>
 
-#include "../util/Loader.h"
-#include "../util/Log.h"
-#include "../util/ResourceManager.h"
+#include "../../util/Loader.h"
+#include "../../util/Log.h"
+#include "../../util/ResourceManager.h"
 
 Sprite::Sprite(const Vector2f& position, Category category,
 			unsigned short mask, const Vector2f& size,

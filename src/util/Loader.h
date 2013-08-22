@@ -10,7 +10,7 @@
 
 #include <Thor/Resources.hpp>
 
-#include "../abstract/Singleton.h"
+#include "../util/Singleton.h"
 
 /**
  * This class allows to set default resource folders and subfolders, which means that these
