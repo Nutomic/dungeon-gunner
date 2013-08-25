@@ -93,6 +93,7 @@ private:
 	std::vector<Vector2f> mPath; //< Contains nodes to reach a set destination.
 	Vector2f mLastPosition;
 	Faction mFaction;
+	bool mIsDead = false;
 };
 
 #endif /* DG_ACTOR_H_ */

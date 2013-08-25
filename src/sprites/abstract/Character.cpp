@@ -58,8 +58,11 @@ Character::onDamage(int damage) {
 		mCurrentHealth = mMaxHealth;
 
 	if (mCurrentHealth <= 0) {
+		// Seperated to avoid firing multiple times (when damaged multiple times).
+		if (!mIsDead)
+			onDeath();
+		mIsDead = true;
 		mCurrentHealth = 0;
-		onDeath();
 		setDelete(true);
 	}
 }
