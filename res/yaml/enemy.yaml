@@ -5,6 +5,4 @@ health: 100
 speed: 100
 radius: 25
 size: [50, 50]
-first_weapon: pistol.yaml
-second_weapon: knife.yaml
 faction: 1

@@ -9,6 +9,7 @@
 
 #include <Thor/Vectors.hpp>
 
+#include "items/Weapon.h"
 #include "../util/Yaml.h"
 
 /**
@@ -19,6 +20,8 @@ Player::Player(World& world, Pathfinder& pathfinder,
 	Character(position, CATEGORY_ACTOR, MASK_ALL, Yaml("player.yaml"), world,
 			pathfinder),
 	mDirection(0) {
+	setFirstWeapon(Weapon::getWeapon(world, *this, Weapon::WeaponType::PISTOL));
+	setSecondWeapon(Weapon::getWeapon(world, *this, Weapon::WeaponType::KNIFE));
 }
 
 Vector2f

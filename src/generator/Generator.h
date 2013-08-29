@@ -25,7 +25,7 @@ public:
 	explicit Generator(World& world, Pathfinder& pathfinder);
 	void generateCurrentAreaIfNeeded(const Vector2f& position);
 	Vector2f getPlayerSpawn() const;
-	std::vector<Vector2f> getEnemySpawns(const sf::IntRect& area);
+	std::vector<std::pair<Vector2f, float> > getEnemySpawns(const sf::IntRect& area);
 
 private:
 	typedef std::map<int, std::map<int, Tile::Type> > array;

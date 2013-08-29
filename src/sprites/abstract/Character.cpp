@@ -32,10 +32,6 @@ Character::Character(const Vector2f& position, Category category,
 		mMaxHealth(config.get("health", 100)),
 		mCurrentHealth(mMaxHealth),
 		mMovementSpeed(config.get("speed", 0.0f)),
-		mFirstWeapon(new Weapon(world, *this,
-				Yaml(config.get("first_weapon", std::string())))),
-		mSecondWeapon(new Weapon(world, *this,
-				Yaml(config.get("second_weapon", std::string())))),
 		mActiveWeapon(mFirstWeapon),
 		mLastPosition(getPosition()),
 		mFaction((Faction) config.get("faction", 1)) {
@@ -48,11 +44,12 @@ Character::~Character() {
  * Subtracts health from Actor. Calls onDeath() when health reaches zero and marks
  * object for deletion.
  *
- * @param damage Amount of health to subtract.
+ * @param damage Amount of damage taken.
  */
 void
 Character::onDamage(int damage) {
 	mCurrentHealth -= damage;
+
 
 	if (mCurrentHealth > mMaxHealth)
 		mCurrentHealth = mMaxHealth;
@@ -232,11 +229,35 @@ Character::selectSecondWeapon() {
 	mActiveWeapon = mSecondWeapon;
 }
 
+/**
+ * Returns current player health.
+ */
 int
 Character::getHealth() const {
 	return mCurrentHealth;
 }
 
+/**
+ * Sets first weapon to weapon, also replacing active weapon if first weapon
+ * is active.
+ */
+void
+Character::setFirstWeapon(std::shared_ptr<Weapon> weapon) {
+	if (mFirstWeapon == mActiveWeapon)
+		mActiveWeapon = weapon;
+	mFirstWeapon = weapon;
+}
+
+/**
+ * Sets second weapon to weapon, also replacing active weapon if second weapon
+ * is active.
+ */
+void
+Character::setSecondWeapon(std::shared_ptr<Weapon> weapon) {
+	if (mSecondWeapon == mActiveWeapon)
+		mActiveWeapon = weapon;
+	mSecondWeapon = weapon;
+}
 
 void
 Character::setLeftGadget(std::shared_ptr<Gadget> gadget) {

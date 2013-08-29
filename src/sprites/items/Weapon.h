@@ -25,7 +25,19 @@ class Yaml;
 
 class Weapon : public Item {
 public:
+	enum class WeaponType {
+		KNIFE,
+		PISTOL,
+		ASSAULT_RIFLE,
+		SHOTGUN,
+		AUTO_SHOTGUN,
+		RIFLE,
+		HMG
+	};
+
+public:
 	explicit Weapon(World& world, Character& holder, const Yaml& config);
+	static std::shared_ptr<Weapon> getWeapon(World& world, Character& holder, WeaponType type);
 
 	void pullTrigger();
 	void releaseTrigger();

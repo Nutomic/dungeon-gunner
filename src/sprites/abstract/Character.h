@@ -59,6 +59,8 @@ protected:
 	void selectFirstWeapon();
 	void selectSecondWeapon();
 	int getHealth() const;
+	void setFirstWeapon(std::shared_ptr<Weapon> weapon);
+	void setSecondWeapon(std::shared_ptr<Weapon> weapon);
 	void setLeftGadget(std::shared_ptr<Gadget> gadget);
 	void setRightGadget(std::shared_ptr<Gadget> gadget);
 	void useLeftGadget();

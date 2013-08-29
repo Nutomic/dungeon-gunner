@@ -8,7 +8,7 @@
 #ifndef DG_RESOURCEMANAGER_H_
 #define DG_RESOURCEMANAGER_H_
 
-#include "../util/Singleton.h"
+#include "Singleton.h"
 
 /**
  * Loads and manages all resources by providing Singleton access to

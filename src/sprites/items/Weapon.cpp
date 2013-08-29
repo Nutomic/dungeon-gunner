@@ -39,6 +39,31 @@ Weapon::Weapon(World& world, Character& holder, const Yaml& config) :
 }
 
 /**
+ * Constructs a new instance of the given weapon type and returns it as a
+ * smart pointer.
+ */
+std::shared_ptr<Weapon>
+Weapon::getWeapon(World& world, Character& holder, WeaponType type) {
+	switch (type) {
+	case WeaponType::KNIFE:
+		return std::shared_ptr<Weapon>(new Weapon(world, holder, Yaml("knife.yaml")));
+	case WeaponType::PISTOL:
+		return std::shared_ptr<Weapon>(new Weapon(world, holder, Yaml("pistol.yaml")));
+	case WeaponType::ASSAULT_RIFLE:
+		return std::shared_ptr<Weapon>(new Weapon(world, holder, Yaml("assault_rifle.yaml")));
+	case WeaponType::SHOTGUN:
+		return std::shared_ptr<Weapon>(new Weapon(world, holder, Yaml("shotgun.yaml")));
+	case WeaponType::AUTO_SHOTGUN:
+		return std::shared_ptr<Weapon>(new Weapon(world, holder, Yaml("auto_shotgun.yaml")));
+	case WeaponType::RIFLE:
+		return std::shared_ptr<Weapon>(new Weapon(world, holder, Yaml("rifle.yaml")));
+	case WeaponType::HMG:
+		return std::shared_ptr<Weapon>(new Weapon(world, holder, Yaml("hmg.yaml")));
+	default:			return std::shared_ptr<Weapon>();
+	}
+}
+
+/**
  * Pull the trigger.
  */
 void

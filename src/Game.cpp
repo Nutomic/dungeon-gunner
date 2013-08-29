@@ -55,8 +55,8 @@ Game::Game(tgui::Window& window) :
 }
 
 void Game::initPlayer() {
-	mPlayer = std::shared_ptr < Player
-			> (new Player(mWorld, mPathfinder, mGenerator.getPlayerSpawn()));
+	mPlayer = std::shared_ptr<Player>(new Player(mWorld, mPathfinder,
+			mGenerator.getPlayerSpawn()));
 	mPlayer->setLeftGadget(std::shared_ptr < Gadget > (new Heal()));
 	mPlayer->setRightGadget(std::shared_ptr < Gadget > (new Shield()));
 	mWorld.insertCharacter(mPlayer);

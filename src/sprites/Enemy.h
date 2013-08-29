@@ -8,14 +8,14 @@
 #ifndef DG_ENEMY_H_
 #define DG_ENEMY_H
 
-#include "../sprites/abstract/Character.h"
+#include "abstract/Character.h"
 
 class World;
 
 class Enemy : public Character {
 public:
 	explicit Enemy(World& world, Pathfinder& pathfinder,
-			const Vector2f& position);
+			const Vector2f& position, float seed);
 
 private:
 	virtual void onThink(int elapsed) override;

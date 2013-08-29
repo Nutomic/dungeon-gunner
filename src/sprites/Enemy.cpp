@@ -9,12 +9,43 @@
 
 #include <Thor/Vectors.hpp>
 
+#include "items/Heal.h"
+#include "items/Shield.h"
+#include "items/Weapon.h"
 #include "../util/Yaml.h"
 
+/**
+ * Determines items used by this enemy using seed.
+ *
+ * @param seed Random value to seed random number generator.
+ */
 Enemy::Enemy(World& world, Pathfinder& pathfinder,
-		const Vector2f& position) :
+		const Vector2f& position, float seed) :
 		Character(position, CATEGORY_ACTOR, MASK_ALL, Yaml("enemy.yaml"), world,
 				pathfinder) {
+	std::ranlux24_base generator(seed);
+
+	// Select primary weapon.
+	switch (std::uniform_int_distribution<int>(0, 4)(generator)) {
+	case 0: setFirstWeapon(Weapon::getWeapon(world, *this, Weapon::WeaponType::ASSAULT_RIFLE));	break;
+	case 1:	setFirstWeapon(Weapon::getWeapon(world, *this, Weapon::WeaponType::AUTO_SHOTGUN));	break;
+	case 2: setFirstWeapon(Weapon::getWeapon(world, *this, Weapon::WeaponType::HMG));			break;
+	case 3: setFirstWeapon(Weapon::getWeapon(world, *this, Weapon::WeaponType::RIFLE));			break;
+	case 4: setFirstWeapon(Weapon::getWeapon(world, *this, Weapon::WeaponType::SHOTGUN));		break;
+	}
+
+	// Select secondary weapon.
+	switch (std::uniform_int_distribution<int>(0, 1)(generator)) {
+	case 0: setSecondWeapon(Weapon::getWeapon(world, *this, Weapon::WeaponType::PISTOL));
+	case 1: setSecondWeapon(Weapon::getWeapon(world, *this, Weapon::WeaponType::KNIFE));
+	}
+
+	// Select gadget.
+	switch (std::uniform_int_distribution<int>(0, 1)(generator)) {
+	case 0: setLeftGadget(std::shared_ptr<Gadget>(new Heal()));
+	case 1: setLeftGadget(std::shared_ptr<Gadget>(new Shield()));
+	}
+
 }
 
 void

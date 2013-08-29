@@ -65,10 +65,11 @@ Generator::generateCurrentAreaIfNeeded(const Vector2f& playerPosition) {
 					Vector2i(GENERATE_AREA_SIZE, GENERATE_AREA_SIZE) / 2,
 					Vector2i(GENERATE_AREA_SIZE, GENERATE_AREA_SIZE));
 			generateTiles(area);
-			for (const auto& enemyPosition : getEnemySpawns(area)) {
-				float distance = thor::length(enemyPosition - playerPosition);
+			for (const auto& enemy : getEnemySpawns(area)) {
+				float distance = thor::length(enemy.first - playerPosition);
 				if (distance > Character::VISION_DISTANCE)
-					mWorld.insertCharacter(std::shared_ptr<Enemy>(new Enemy(mWorld, mPathfinder, enemyPosition)));
+					mWorld.insertCharacter(std::shared_ptr<Enemy>(new Enemy(
+							mWorld, mPathfinder, enemy.first, enemy.second)));
 			}
 		}
 		if (mGenerated[current.x][current.y] && distance <= GENERATE_AREA_RANGE) {
@@ -258,23 +259,25 @@ Generator::generateTiles(const sf::IntRect& area) {
  * Returns coordinates where enemies should spawn.
  *
  * @param area Area for which enemy spawns should be returned.
+ * @return Pairs of spawn points together with seeds.
  */
-std::vector<Vector2f>
+std::vector<std::pair<Vector2f, float> >
 Generator::getEnemySpawns(const sf::IntRect& area) {
-	auto compare = [](const Vector2f& a, const Vector2f& b) {
-		return a.x < b.x || (a.x == b.x && a.y < b.y);
-	};
-	std::set<Vector2f, decltype(compare)> ret(compare);
+	std::vector<std::pair<Vector2f, float> > spawns;
 	for (int x = area.left; x < area.left + area.width; x++) {
 		for (int y = area.top; y < area.top + area.height; y++) {
-			if (mCharacterNoise.getNoise(x, y) < -0.85f) {
+			float noise = mCharacterNoise.getNoise(x, y);
+			if (noise <= -0.85f) {
 				Vector2i tilePosition = findClosestFloor(Vector2i(x, y));
-				ret.insert(Vector2f(tilePosition.x * Tile::TILE_SIZE.x,
-						tilePosition.y * Tile::TILE_SIZE.y));
+				// Bad way to get a pseudo random, but deterministic value.
+				// Just using noise would be better, but that is not uniformly distributed.
+				int seed = ((int) noise * 100000) xor x xor y;
+				spawns.push_back(std::make_pair(Vector2f(tilePosition.x * Tile::TILE_SIZE.x,
+						tilePosition.y * Tile::TILE_SIZE.y), seed));
 			}
 		}
 	}
-	return std::vector<Vector2f>(ret.begin(), ret.end());
+	return spawns;
 }
 
 /**
