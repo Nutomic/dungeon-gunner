@@ -31,6 +31,7 @@ Game::Game(tgui::Window& window) :
 		mPaused(false) {
 	mWindow.setFramerateLimit(FPS_GOAL);
 	mWindow.setKeyRepeatEnabled(false);
+	srand(time(nullptr));
 
 	mGenerator.generateCurrentAreaIfNeeded(Vector2f());
 	initPlayer();

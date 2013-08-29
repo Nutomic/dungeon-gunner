@@ -91,17 +91,34 @@ Character::getFaction() const {
 	return mFaction;
 }
 
+void Character::dropItem(std::shared_ptr<Item> item) {
+	mWorld.insert(item);
+	item->drop(getPosition());
+}
+
 /**
- * Called when health reaches zero. Drops corpse and item.
+ * Called when health reaches zero, drops corpse and a random item.
  */
 void
 Character::onDeath() {
 	mWorld.insert(std::shared_ptr<Sprite>(new Corpse(getPosition())));
 
-	mWorld.insert(mActiveWeapon);
-	mActiveWeapon->drop(getPosition());
-	// To avoid the weapon continuing to fire after pickup.
-	mActiveWeapon->releaseTrigger();
+	switch (rand() % 3) {
+	case 0:
+		dropItem(mFirstWeapon);
+		break;
+	case 1:
+		dropItem(mSecondWeapon);
+		break;
+	case 2:
+		if (mLeftGadget.get() != nullptr)
+			dropItem(mLeftGadget);
+		else if (mRightGadget.get() != nullptr)
+			dropItem(mRightGadget);
+	}
+	// To avoid weapons continuing to fire after drop and pickup.
+	mFirstWeapon->releaseTrigger();
+	mSecondWeapon->releaseTrigger();
 
 }
 

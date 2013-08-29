@@ -73,6 +73,7 @@ protected:
 
 private:
 	void move();
+	void dropItem(std::shared_ptr<Item> item);
 
 private:
 	friend class Shield;
