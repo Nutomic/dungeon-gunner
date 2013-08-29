@@ -111,9 +111,9 @@ Character::onDeath() {
 		dropItem(mSecondWeapon);
 		break;
 	case 2:
-		if (mLeftGadget.get() != nullptr)
+		if (mLeftGadget)
 			dropItem(mLeftGadget);
-		else if (mRightGadget.get() != nullptr)
+		else if (mRightGadget)
 			dropItem(mRightGadget);
 	}
 	// To avoid weapons continuing to fire after drop and pickup.
@@ -228,10 +228,9 @@ Character::reload() {
 
 void
 Character::toggleWeapon() {
-	mActiveWeapon->cancelReload();
-	mActiveWeapon = (mActiveWeapon == mFirstWeapon)
-		? mSecondWeapon
-		: mFirstWeapon;
+	(mActiveWeapon == mFirstWeapon)
+		? selectSecondWeapon()
+		: selectFirstWeapon();
 }
 
 void
@@ -263,6 +262,7 @@ Character::setFirstWeapon(std::shared_ptr<Weapon> weapon) {
 	if (mFirstWeapon == mActiveWeapon)
 		mActiveWeapon = weapon;
 	mFirstWeapon = weapon;
+	mFirstWeapon->setHolder(*this);
 }
 
 /**
@@ -274,6 +274,7 @@ Character::setSecondWeapon(std::shared_ptr<Weapon> weapon) {
 	if (mSecondWeapon == mActiveWeapon)
 		mActiveWeapon = weapon;
 	mSecondWeapon = weapon;
+	mSecondWeapon->setHolder(*this);
 }
 
 void
@@ -315,20 +316,21 @@ void
 Character::pickUpItem() {
 	std::shared_ptr<Item> closest = mWorld.getClosestItem(getPosition());
 
-	if (closest == nullptr) {
+	if (!closest) {
 		std::swap(mLeftGadget, mRightGadget);
 		return;
 	}
 
 	std::shared_ptr<Weapon> weapon = std::dynamic_pointer_cast<Weapon>(closest);
-	if (weapon != nullptr) {
+	if (weapon) {
 		mWorld.insert(mActiveWeapon);
 		mActiveWeapon->drop(getPosition());
-		mActiveWeapon = weapon;
-		mActiveWeapon->setHolder(*this);
+		(mActiveWeapon == mFirstWeapon)
+				? setFirstWeapon(weapon)
+				: setSecondWeapon(weapon);
 	}
 	std::shared_ptr<Gadget> gadget = std::dynamic_pointer_cast<Gadget>(closest);
-	if (gadget != nullptr) {
+	if (gadget) {
 		mWorld.insert(mRightGadget);
 		mRightGadget->drop(getPosition());
 		mRightGadget = mLeftGadget;
