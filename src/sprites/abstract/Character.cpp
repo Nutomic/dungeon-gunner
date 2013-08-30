@@ -289,22 +289,28 @@ Character::setRightGadget(std::shared_ptr<Gadget> gadget) {
 
 void
 Character::useLeftGadget() {
-	mLeftGadget->use(*this);
+	if (mLeftGadget)
+		mLeftGadget->use(*this);
 }
 
 void
 Character::useRightGadget() {
-	mRightGadget->use(*this);
+	if (mRightGadget)
+		mRightGadget->use(*this);
 }
 
 std::string
 Character::getLeftGadgetName() const {
-	return mLeftGadget->getName();
+	return (mLeftGadget)
+			? mLeftGadget->getName()
+			: "";
 }
 
 std::string
 Character::getRightGadgetName() const {
-	return mRightGadget->getName();
+	return (mRightGadget)
+			? mRightGadget->getName()
+			: "";
 }
 
 /**
@@ -331,8 +337,10 @@ Character::pickUpItem() {
 	}
 	std::shared_ptr<Gadget> gadget = std::dynamic_pointer_cast<Gadget>(closest);
 	if (gadget) {
-		mWorld.insert(mRightGadget);
-		mRightGadget->drop(getPosition());
+		if (mRightGadget) {
+			mWorld.insert(mRightGadget);
+			mRightGadget->drop(getPosition());
+		}
 		mRightGadget = mLeftGadget;
 		mLeftGadget = gadget;
 	}
