@@ -10,6 +10,7 @@
 #include <Thor/Vectors.hpp>
 
 #include "items/Heal.h"
+#include "items/RingOfFire.h"
 #include "items/Shield.h"
 #include "items/Weapon.h"
 #include "../util/Yaml.h"
@@ -36,14 +37,15 @@ Enemy::Enemy(World& world, Pathfinder& pathfinder,
 
 	// Select secondary weapon.
 	switch (std::uniform_int_distribution<int>(0, 1)(generator)) {
-	case 0: setSecondWeapon(Weapon::getWeapon(world, *this, Weapon::WeaponType::PISTOL));
-	case 1: setSecondWeapon(Weapon::getWeapon(world, *this, Weapon::WeaponType::KNIFE));
+	case 0: setSecondWeapon(Weapon::getWeapon(world, *this, Weapon::WeaponType::PISTOL));	break;
+	case 1: setSecondWeapon(Weapon::getWeapon(world, *this, Weapon::WeaponType::KNIFE));	break;
 	}
 
 	// Select gadget.
-	switch (std::uniform_int_distribution<int>(0, 1)(generator)) {
-	case 0: setLeftGadget(std::shared_ptr<Gadget>(new Heal()));
-	case 1: setLeftGadget(std::shared_ptr<Gadget>(new Shield()));
+	switch (std::uniform_int_distribution<int>(0, 2)(generator)) {
+	case 0: setLeftGadget(std::shared_ptr<Gadget>(new Heal()));				break;
+	case 1: setLeftGadget(std::shared_ptr<Gadget>(new Shield()));			break;
+	case 2: setLeftGadget(std::shared_ptr<Gadget>(new RingOfFire(world)));	break;
 	}
 
 }

@@ -11,7 +11,7 @@
 
 #include "generator/Generator.h"
 #include "sprites/items/Heal.h"
-#include "sprites/items/Shield.h"
+#include "sprites/items/RingOfFire.h"
 #include "sprites/Enemy.h"
 #include "sprites/Player.h"
 #include "util/Loader.h"
@@ -58,8 +58,8 @@ Game::Game(tgui::Window& window) :
 void Game::initPlayer() {
 	mPlayer = std::shared_ptr<Player>(new Player(mWorld, mPathfinder,
 			mGenerator.getPlayerSpawn()));
-	mPlayer->setLeftGadget(std::shared_ptr < Gadget > (new Heal()));
-	mPlayer->setRightGadget(std::shared_ptr < Gadget > (new Shield()));
+	mPlayer->setLeftGadget(std::shared_ptr<Gadget>(new Heal()));
+	mPlayer->setRightGadget(std::shared_ptr<Gadget>(new RingOfFire(mWorld)));
 	mWorld.insertCharacter(mPlayer);
 }
 
