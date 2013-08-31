@@ -19,7 +19,7 @@ int main(int argc, char* argv[]) {
 	Loader::i().setFolder("res/");
 	Loader::i().setSubFolder<sf::Texture>("textures/");
 
-    tgui::Window window(sf::VideoMode(800, 600, 32), "Dungeon Gunner",
+    tgui::Window window(sf::VideoMode(1024, 768, 32), "Dungeon Gunner",
 				sf::Style::Close | sf::Style::Titlebar);
 
 	if (!window.globalFont.loadFromFile("res/DejaVuSans.ttf"))
