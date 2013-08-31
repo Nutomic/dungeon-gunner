@@ -10,6 +10,7 @@
 
 #include <SFML/Graphics.hpp>
 
+#include "../sprites/abstract/Character.h"
 #include "../sprites/Tile.h"
 #include "SimplexNoise.h"
 #include "../util/Vector.h"
@@ -23,9 +24,10 @@ class Pathfinder;
 class Generator : public sf::Drawable {
 public:
 	explicit Generator(World& world, Pathfinder& pathfinder);
-	void generateCurrentAreaIfNeeded(const Vector2f& position);
+	void generateCurrentAreaIfNeeded(const Vector2f& position,
+			const Character::EquippedItems& playerItems);
 	Vector2f getPlayerSpawn() const;
-	std::vector<std::pair<Vector2f, float> > getEnemySpawns(const sf::IntRect& area);
+	std::vector<Vector2f> getEnemySpawns(const sf::IntRect& area);
 
 private:
 	typedef std::map<int, std::map<int, Tile::Type> > array;

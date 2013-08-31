@@ -31,7 +31,6 @@ Game::Game(tgui::Window& window) :
 	mWindow.setKeyRepeatEnabled(false);
 	srand(time(nullptr));
 
-	mGenerator.generateCurrentAreaIfNeeded(Vector2f());
 	initPlayer();
 
 	mCrosshairTexture = ResourceManager::i().acquire(Loader::i()
@@ -54,8 +53,13 @@ Game::Game(tgui::Window& window) :
 }
 
 void Game::initPlayer() {
+	Character::EquippedItems playerItems = {
+			Weapon::WeaponType::PISTOL,	Weapon::WeaponType::KNIFE,
+			Gadget::GadgetType::NONE, Gadget::GadgetType::NONE
+	};
+	mGenerator.generateCurrentAreaIfNeeded(Vector2f(), playerItems);
 	mPlayer = std::shared_ptr<Player>(new Player(mWorld, mPathfinder,
-			mGenerator.getPlayerSpawn()));
+			mGenerator.getPlayerSpawn(), playerItems));
 	mWorld.insertCharacter(mPlayer);
 }
 
@@ -92,7 +96,7 @@ Game::loop() {
 
 		render();
 
-		mGenerator.generateCurrentAreaIfNeeded(mPlayer->getPosition());
+		mGenerator.generateCurrentAreaIfNeeded(mPlayer->getPosition(), mPlayer->getEquippedItems());
 	}
 }
 

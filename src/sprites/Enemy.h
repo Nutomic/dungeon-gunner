@@ -15,10 +15,11 @@ class World;
 class Enemy : public Character {
 public:
 	explicit Enemy(World& world, Pathfinder& pathfinder,
-			const Vector2f& position, float seed);
+			const Vector2f& position, const EquippedItems& playerItems);
 
 private:
 	virtual void onThink(int elapsed) override;
+	static EquippedItems generateItems(EquippedItems playerItems);
 };
 
 #endif /* DG_ENEMY_H_ */

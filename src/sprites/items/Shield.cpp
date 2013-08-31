@@ -35,6 +35,11 @@ Shield::onThink(int elapsed) {
 }
 
 sf::Time
-Shield::getCooldownTime() {
+Shield::getCooldownTime() const {
 	return sf::seconds(10);
+}
+
+Shield::GadgetType
+Shield::getType() const {
+	return GadgetType::SHIELD;
 }

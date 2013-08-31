@@ -29,7 +29,12 @@ Heal::onThink(int elapsed) {
 }
 
 sf::Time
-Heal::getCooldownTime() {
+Heal::getCooldownTime() const {
 	return sf::seconds(5);
+}
+
+Gadget::GadgetType
+Heal::getType() const {
+	return GadgetType::HEAL;
 }
 

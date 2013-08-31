@@ -11,10 +11,10 @@
 #include "Circle.h"
 
 #include "../items/Gadget.h"
+#include "../items/Weapon.h"
 
 class Pathfinder;
 class World;
-class Weapon;
 class Yaml;
 
 /**
@@ -27,6 +27,14 @@ public:
 		FACTION_ENEMIES = 2
 	};
 
+	struct EquippedItems {
+	public:
+		Weapon::WeaponType primary;
+		Weapon::WeaponType secondary;
+		Gadget::GadgetType left;
+		Gadget::GadgetType right;
+	};
+
 	/// Maximum distance where an enemy will be detected.
 	static const float VISION_DISTANCE;
 	/// Maximum distance from character where an item can be picked up.
@@ -35,11 +43,12 @@ public:
 public:
 	explicit Character(const Vector2f& position, Category category,
 			unsigned short mask, const Yaml& config, World& world,
-			Pathfinder& pathfinder);
+			Pathfinder& pathfinder, const EquippedItems& items);
 	virtual ~Character() = 0;
 
 	void onDamage(int damage);
 	Faction getFaction() const;
+	EquippedItems getEquippedItems() const;
 
 protected:
 	virtual void onThink(int elapsed);
@@ -68,8 +77,6 @@ protected:
 	std::string getLeftGadgetName() const;
 	std::string getRightGadgetName() const;
 	void pickUpItem();
-
-protected:
 
 private:
 	void move();

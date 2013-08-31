@@ -21,33 +21,46 @@
  * @param seed Random value to seed random number generator.
  */
 Enemy::Enemy(World& world, Pathfinder& pathfinder,
-		const Vector2f& position, float seed) :
+		const Vector2f& position, const EquippedItems& playerItems) :
 		Character(position, CATEGORY_ACTOR, MASK_ALL, Yaml("enemy.yaml"), world,
-				pathfinder) {
-	std::ranlux24_base generator(seed);
+				pathfinder, generateItems(playerItems)) {
+}
 
-	// Select primary weapon.
-	switch (std::uniform_int_distribution<int>(0, 4)(generator)) {
-	case 0: setFirstWeapon(Weapon::getWeapon(world, *this, Weapon::WeaponType::ASSAULT_RIFLE));	break;
-	case 1:	setFirstWeapon(Weapon::getWeapon(world, *this, Weapon::WeaponType::AUTO_SHOTGUN));	break;
-	case 2: setFirstWeapon(Weapon::getWeapon(world, *this, Weapon::WeaponType::HMG));			break;
-	case 3: setFirstWeapon(Weapon::getWeapon(world, *this, Weapon::WeaponType::RIFLE));			break;
-	case 4: setFirstWeapon(Weapon::getWeapon(world, *this, Weapon::WeaponType::SHOTGUN));		break;
+/**
+ * Returns the items this enemy has equipped, based on items equipped by player.
+ *
+ * To do this, a random item is replaced by a slightly better one.
+ */
+Character::EquippedItems
+Enemy::generateItems(EquippedItems playerItems) {
+	// Uses cast from enum to int to enum in order to increment enum values.
+	switch (rand() % 4) {
+	case 0:
+		if (playerItems.primary + 1 != Weapon::WeaponType::_LAST)
+			playerItems.primary =
+					(Weapon::WeaponType) (((int) (playerItems.primary) + 1));
+
+		break;
+	case 1:
+		if (playerItems.secondary + 1 != Weapon::WeaponType::_LAST)
+			playerItems.secondary =
+					(Weapon::WeaponType) (((int) (playerItems.secondary) + 1));
+
+		break;
+	case 2:
+		if (playerItems.left + 1 != Gadget::GadgetType::_LAST)
+			playerItems.left = (Gadget::GadgetType) (((int) (playerItems.left)
+					+ 1));
+
+		break;
+	case 3:
+		if (playerItems.right + 1 != Gadget::GadgetType::_LAST)
+			playerItems.left = (Gadget::GadgetType) (((int) (playerItems.left)
+					+ 1));
+
+		break;
 	}
-
-	// Select secondary weapon.
-	switch (std::uniform_int_distribution<int>(0, 1)(generator)) {
-	case 0: setSecondWeapon(Weapon::getWeapon(world, *this, Weapon::WeaponType::PISTOL));	break;
-	case 1: setSecondWeapon(Weapon::getWeapon(world, *this, Weapon::WeaponType::KNIFE));	break;
-	}
-
-	// Select gadget.
-	switch (std::uniform_int_distribution<int>(0, 2)(generator)) {
-	case 0: setLeftGadget(std::shared_ptr<Gadget>(new Heal()));				break;
-	case 1: setLeftGadget(std::shared_ptr<Gadget>(new Shield()));			break;
-	case 2: setLeftGadget(std::shared_ptr<Gadget>(new RingOfFire(world)));	break;
-	}
-
+	return playerItems;
 }
 
 void

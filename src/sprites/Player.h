@@ -29,7 +29,7 @@ public:
 
 public:
 	explicit Player(World& world, Pathfinder& pathfinder,
-			const Vector2f& position);
+			const Vector2f& position, const EquippedItems& items);
 
 	Vector2f getCrosshairPosition() const;
 	void setCrosshairPosition(const Vector2f& position);

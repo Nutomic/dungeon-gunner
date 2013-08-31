@@ -25,18 +25,23 @@ class Yaml;
 
 class Weapon : public Item {
 public:
-	enum class WeaponType {
+	/**
+	 * Weapons, ordered by strength.
+	 */
+	enum WeaponType {
+		NONE,
 		KNIFE,
 		PISTOL,
+		RIFLE,
 		ASSAULT_RIFLE,
 		SHOTGUN,
 		AUTO_SHOTGUN,
-		RIFLE,
-		HMG
+		HMG,
+		_LAST
 	};
 
 public:
-	explicit Weapon(World& world, Character& holder, const Yaml& config);
+	explicit Weapon(World& world, Character& holder, const Yaml& config, WeaponType type);
 	static std::shared_ptr<Weapon> getWeapon(World& world, Character& holder, WeaponType type);
 
 	void pullTrigger();
@@ -48,6 +53,7 @@ public:
 	void reload();
 	void cancelReload();
 	void setHolder(Character& holder);
+	WeaponType getType() const;
 
 private:
 	void fire();
@@ -80,6 +86,7 @@ private:
 	const float mMaxRange;
 	const float mRequiresAmmo;
 	std::default_random_engine mGenerator;
+	WeaponType mType;
 
 };
 

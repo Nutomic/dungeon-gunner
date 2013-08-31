@@ -16,12 +16,10 @@
  * Initializes Sprite.
  */
 Player::Player(World& world, Pathfinder& pathfinder,
-		const Vector2f& position) :
+		const Vector2f& position, const EquippedItems& items) :
 	Character(position, CATEGORY_ACTOR, MASK_ALL, Yaml("player.yaml"), world,
-			pathfinder),
+			pathfinder, items),
 	mDirection(0) {
-	setFirstWeapon(Weapon::getWeapon(world, *this, Weapon::WeaponType::PISTOL));
-	setSecondWeapon(Weapon::getWeapon(world, *this, Weapon::WeaponType::KNIFE));
 }
 
 Vector2f

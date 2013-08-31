@@ -42,7 +42,12 @@ RingOfFire::onThink(int elapsed) {
 }
 
 sf::Time
-RingOfFire::getCooldownTime() {
+RingOfFire::getCooldownTime() const {
 	return sf::seconds(5);
+}
+
+Gadget::GadgetType
+RingOfFire::getType() const {
+	return GadgetType::RINGOFFIRE;
 }
 

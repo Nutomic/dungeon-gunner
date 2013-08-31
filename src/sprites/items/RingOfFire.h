@@ -22,7 +22,8 @@ public:
 protected:
 	void onUse(Character& character) override;
 	void onThink(int elapsed) override;
-	sf::Time getCooldownTime() override;
+	sf::Time getCooldownTime() const override;
+	GadgetType getType() const override;
 
 private:
 	static const int WAVES_PER_USE = 3;

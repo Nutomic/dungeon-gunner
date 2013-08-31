@@ -13,7 +13,7 @@
 #include "../effects/Bullet.h"
 #include "../../util/Yaml.h"
 
-Weapon::Weapon(World& world, Character& holder, const Yaml& config) :
+Weapon::Weapon(World& world, Character& holder, const Yaml& config, WeaponType type) :
 		Item(Vector2f(32, 32), "item.png"),
 		mWorld(world),
 		mHolder(&holder),
@@ -35,7 +35,8 @@ Weapon::Weapon(World& world, Character& holder, const Yaml& config) :
 		mSpread(config.get("spread", 0.0f)),
 		mSpreadMoving(config.get("spread_moving", 0.0f)),
 		mMaxRange(config.get("max_range", 0.0f)),
-		mRequiresAmmo(!config.get("requires_no_ammo", false)) {
+		mRequiresAmmo(!config.get("requires_no_ammo", false)),
+		mType(type) {
 }
 
 /**
@@ -46,20 +47,21 @@ std::shared_ptr<Weapon>
 Weapon::getWeapon(World& world, Character& holder, WeaponType type) {
 	switch (type) {
 	case WeaponType::KNIFE:
-		return std::shared_ptr<Weapon>(new Weapon(world, holder, Yaml("knife.yaml")));
+		return std::shared_ptr<Weapon>(new Weapon(world, holder, Yaml("knife.yaml"), type));
 	case WeaponType::PISTOL:
-		return std::shared_ptr<Weapon>(new Weapon(world, holder, Yaml("pistol.yaml")));
+		return std::shared_ptr<Weapon>(new Weapon(world, holder, Yaml("pistol.yaml"), type));
 	case WeaponType::ASSAULT_RIFLE:
-		return std::shared_ptr<Weapon>(new Weapon(world, holder, Yaml("assault_rifle.yaml")));
+		return std::shared_ptr<Weapon>(new Weapon(world, holder, Yaml("assault_rifle.yaml"), type));
 	case WeaponType::SHOTGUN:
-		return std::shared_ptr<Weapon>(new Weapon(world, holder, Yaml("shotgun.yaml")));
+		return std::shared_ptr<Weapon>(new Weapon(world, holder, Yaml("shotgun.yaml"), type));
 	case WeaponType::AUTO_SHOTGUN:
-		return std::shared_ptr<Weapon>(new Weapon(world, holder, Yaml("auto_shotgun.yaml")));
+		return std::shared_ptr<Weapon>(new Weapon(world, holder, Yaml("auto_shotgun.yaml"), type));
 	case WeaponType::RIFLE:
-		return std::shared_ptr<Weapon>(new Weapon(world, holder, Yaml("rifle.yaml")));
+		return std::shared_ptr<Weapon>(new Weapon(world, holder, Yaml("rifle.yaml"), type));
 	case WeaponType::HMG:
-		return std::shared_ptr<Weapon>(new Weapon(world, holder, Yaml("hmg.yaml")));
-	default:			return std::shared_ptr<Weapon>();
+		return std::shared_ptr<Weapon>(new Weapon(world, holder, Yaml("hmg.yaml"), type));
+	default:
+		return std::shared_ptr<Weapon>();
 	}
 }
 
@@ -193,4 +195,9 @@ Weapon::insertProjectile(float angle) {
 			*mHolder, direction, mProjectile, mProjectileSpeed,
 			mDamage, mMaxRange));
 	mWorld.insert(projectile);
+}
+
+Weapon::WeaponType
+Weapon::getType() const {
+	return mType;
 }

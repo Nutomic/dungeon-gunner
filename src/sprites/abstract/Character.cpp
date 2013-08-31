@@ -25,7 +25,7 @@ const float Character::ITEM_PICKUP_MAX_DISTANCE = 50.0f;
  */
 Character::Character(const Vector2f& position, Category category,
 		unsigned short mask, const Yaml& config, World& world,
-		Pathfinder& pathfinder) :
+		Pathfinder& pathfinder, const EquippedItems& items) :
 		Circle(position, category, mask, config),
 		mWorld(world),
 		mPathfinder(pathfinder),
@@ -35,6 +35,10 @@ Character::Character(const Vector2f& position, Category category,
 		mActiveWeapon(mFirstWeapon),
 		mLastPosition(getPosition()),
 		mFaction((Faction) config.get("faction", 1)) {
+	 setFirstWeapon(Weapon::getWeapon(world, *this, items.primary));
+	 setSecondWeapon(Weapon::getWeapon(world, *this, items.secondary));
+	 setLeftGadget(Gadget::getGadget(world, items.left));
+	 setRightGadget(Gadget::getGadget(world, items.right));
 }
 
 Character::~Character() {
@@ -345,4 +349,14 @@ Character::pickUpItem() {
 		mLeftGadget = gadget;
 	}
 	mWorld.remove(closest);
+}
+
+Character::EquippedItems
+Character::getEquippedItems() const {
+	return {
+		(mFirstWeapon) ? mFirstWeapon->getType() : Weapon::WeaponType::NONE,
+		(mSecondWeapon) ? mSecondWeapon->getType() : Weapon::WeaponType::NONE,
+		(mLeftGadget) ? mLeftGadget->getType() : Gadget::GadgetType::NONE,
+		(mRightGadget) ? mRightGadget->getType() : Gadget::GadgetType::NONE
+	};
 }
