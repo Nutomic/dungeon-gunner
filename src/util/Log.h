@@ -13,6 +13,15 @@
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Graphics/Rect.hpp>
 
+#ifdef RELEASE
+
+#define LOG_E(str)
+#define LOG_W(str)
+#define LOG_D(str)
+#define LOG_I(str)
+
+#else
+
 /**
  * Logging functions for different levels.
  *
@@ -83,5 +92,7 @@ operator<<(std::ostream& os, const sf::IntRect& rect) {
     		rect.width << ", h: " << rect.height << ")";
     return os;
 }
+
+#endif
 
 #endif /* DG_LOG_H_ */

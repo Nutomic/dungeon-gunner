@@ -232,7 +232,7 @@ Pathfinder::getArea(const Vector2f& point) const {
 /**
  * Draws areas.
  */
-#ifndef NDEBUG
+#ifndef RELEASE
 void
 Pathfinder::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 	for (auto& area : mAreas) {
