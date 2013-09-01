@@ -51,12 +51,7 @@ Generator::generateCurrentAreaIfNeeded(const Vector2f& playerPosition,
 
 	open.insert(makePair(start));
 	while (!open.empty()) {
-		auto intComp = [](const std::pair<Vector2i, float>& left,
-				const std::pair<Vector2i, float>& right) {
-			return left.second < right.second;
-		};
-		Vector2i current =
-				std::min_element(open.begin(), open.end(), intComp)->first;
+		Vector2i current = std::min_element(open.begin(), open.end())->first;
 		float distance = open[current];
 		open.erase(current);
 		closed.insert(current);
@@ -111,15 +106,15 @@ Generator::createMinimalSpanningTree(const Vector2i& start,
 		selected.push_back(current);
 		totalWeight += minValue;
 
-		auto insertOnlyNew = [&open, &selected](const Vector2i& v) {
+		auto insertNew = [&open, &selected](const Vector2i& v) {
 			if (std::find(open.begin(), open.end(),	v) == open.end()
 					&& std::find(selected.begin(), selected.end(), v) == selected.end())
 				open.push_back(v);
 		};
-		insertOnlyNew(Vector2i(current.x + 1, current.y));
-		insertOnlyNew(Vector2i(current.x, current.y + 1));
-		insertOnlyNew(Vector2i(current.x - 1, current.y));
-		insertOnlyNew(Vector2i(current.x, current.y - 1));
+		insertNew(Vector2i(current.x + 1, current.y));
+		insertNew(Vector2i(current.x, current.y + 1));
+		insertNew(Vector2i(current.x - 1, current.y));
+		insertNew(Vector2i(current.x, current.y - 1));
 	}
 	return selected;
 }
@@ -244,7 +239,11 @@ Generator::generateTiles(const sf::IntRect& area) {
     // Merge new map into stored map and create tile sprites.
 	for (int x = left; x < right; x++)
 		for (int y = down; y < up; y++)
-			mTiles[x][y] = Tile::Type::FLOOR;
+			// Make sure tiles are not set twice (which would get values in
+			// mTiles out of sync with actual world).
+			if (mTiles[x].count(y) == 0)
+				mTiles[x][y] = Tile::Type::FLOOR;
+
 	connectRooms(start, 5.0f);
 
 	for (int x = area.left; x < area.left + area.width; x++)
@@ -316,7 +315,7 @@ Generator::generateAreas(const sf::IntRect& area) {
  */
 Vector2f
 Generator::getPlayerSpawn() const {
-	Vector2i spawn = findClosestFloor(Vector2i(0, 0));
+	Vector2i spawn = findClosestFloor(Vector2i());
 	return Vector2f(spawn.x * Tile::TILE_SIZE.x,
 						spawn.y * Tile::TILE_SIZE.y);
 }
@@ -331,29 +330,23 @@ Vector2i
 Generator::findClosestFloor(const Vector2i& start) const {
 	std::map<Vector2i, float> open;
 	std::set<Vector2i> closed;
-	auto makePair = [&start](const Vector2i& point) {
-		return std::make_pair(point, thor::length(Vector2f(point - start)));
+	auto insertNew = [&open, &closed, &start](const Vector2i& point) {
+		if (closed.find(point) == closed.end())
+			open.insert(std::make_pair(point, thor::length(Vector2f(point - start))));
 	};
 
-	open.insert(makePair(start));
+	insertNew(start);
 	while (!open.empty()) {
 		Vector2i current = std::min_element(open.begin(), open.end())->first;
 		open.erase(current);
 		closed.insert(current);
-		if (mTiles.count(current.x) != 0 &&
-				mTiles.at(current.x).count(current.y) != 0 &&
-				mTiles.at(current.x).at(current.y) == Tile::Type::FLOOR) {
+		if (mTiles.at(current.x).at(current.y) == Tile::Type::FLOOR)
 			return current;
-		}
 		else {
-			if (closed.find(Vector2i(current.x + 1, current.y)) == closed.end())
-				open.insert(makePair(Vector2i(current.x + 1, current.y)));
-			if (closed.find(Vector2i(current.x, current.y + 1)) == closed.end())
-				open.insert(makePair(Vector2i(current.x, current.y + 1)));
-			if (closed.find(Vector2i(current.x - 1, current.y)) == closed.end())
-				open.insert(makePair(Vector2i(current.x - 1, current.y)));
-			if (closed.find(Vector2i(current.x, current.y - 1)) == closed.end())
-				open.insert(makePair(Vector2i(current.x, current.y - 1)));
+			insertNew(Vector2i(current.x + 1, current.y));
+			insertNew(Vector2i(current.x,     current.y + 1));
+			insertNew(Vector2i(current.x - 1, current.y));
+			insertNew(Vector2i(current.x,     current.y - 1));
 		}
 	}
 	// No floor tile found in the entire world.
