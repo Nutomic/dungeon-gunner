@@ -16,10 +16,6 @@
 #include "../../World.h"
 #include "../../Pathfinder.h"
 
-const float Character::VISION_DISTANCE = 500.0f;
-const float Character::POINT_REACHED_DISTANCE = 1.0f;
-const float Character::ITEM_PICKUP_MAX_DISTANCE = 50.0f;
-
 /**
  * Saves pointer to this instance in static var for think().
  */

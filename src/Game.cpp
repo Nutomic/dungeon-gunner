@@ -16,17 +16,13 @@
 #include "util/ResourceManager.h"
 #include "util/Yaml.h"
 
-const int Game::FPS_GOAL = 60;
-
 /**
  * Initializes game, including window and objects (sprites).
  */
 Game::Game(tgui::Window& window) :
 		mWindow(window),
 		mWorldView(Vector2f(0, 0), mWindow.getView().getSize()),
-		mGenerator(mWorld, mPathfinder),
-		mQuit(false),
-		mPaused(false) {
+		mGenerator(mWorld, mPathfinder) {
 	mWindow.setFramerateLimit(FPS_GOAL);
 	mWindow.setKeyRepeatEnabled(false);
 	srand(time(nullptr));
@@ -169,7 +165,8 @@ Game::input() {
 		case sf::Event::MouseMoved:
 			mPlayer->setCrosshairPosition(convertCoordinates(event.mouseMove.x,
 					event.mouseMove.y));
-			mCrosshair.setPosition(Vector2f(sf::Mouse::getPosition(mWindow) - Vector2i(mCrosshair.getTextureRect().width, mCrosshair.getTextureRect().height) / 2));
+			mCrosshair.setPosition(Vector2f(sf::Mouse::getPosition(mWindow) -
+					Vector2i(mCrosshair.getTextureRect().width, mCrosshair.getTextureRect().height) / 2));
 			break;
 		case sf::Event::MouseWheelMoved:
 			mPlayer->toggleWeapon();

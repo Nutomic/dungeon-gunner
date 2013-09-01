@@ -41,7 +41,7 @@ private:
 	void initPlayer();
 
 private:
-	static const int FPS_GOAL;
+	static const int FPS_GOAL = 60;
 
 	tgui::Window& mWindow;
 	sf::Clock mClock;
@@ -60,8 +60,8 @@ private:
 	Generator mGenerator;
 	std::shared_ptr<Player> mPlayer;
 
-	bool mQuit;
-	bool mPaused;
+	bool mQuit = false;
+	bool mPaused = false;
 };
 
 #endif /* DG_GAME_H_ */

@@ -21,6 +21,7 @@ public:
 	 * Movement directions that can be set via Player::setDirection().
 	 */
 	enum Direction : unsigned char {
+		NONE = 0,
 		RIGHT = 1 << 0,
 		LEFT = 1 << 1,
 		UP = 1 << 2,
@@ -58,7 +59,7 @@ private:
 
 private:
 	Vector2f mCrosshairPosition; //< Relative position of the point to fire at (mouse cursor).
-	unsigned char mDirection; //< Current movement direction for direct control.
+	unsigned char mDirection = NONE; //< Current movement direction for direct control.
 };
 
 #endif /* DG_PLAYER_H_ */

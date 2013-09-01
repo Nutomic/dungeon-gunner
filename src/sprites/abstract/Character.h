@@ -36,9 +36,9 @@ public:
 	};
 
 	/// Maximum distance where an enemy will be detected.
-	static const float VISION_DISTANCE;
+	static constexpr float VISION_DISTANCE = 500.0f;
 	/// Maximum distance from character where an item can be picked up.
-	static const float ITEM_PICKUP_MAX_DISTANCE;
+	static constexpr float ITEM_PICKUP_MAX_DISTANCE = 50.0f;
 
 public:
 	explicit Character(const Vector2f& position, Category category,
@@ -87,7 +87,7 @@ private:
 
 	/// Distance to a path point where it will be considered as reached (to
 	/// avoid floating point equality check).
-	static const float POINT_REACHED_DISTANCE;
+	static constexpr float POINT_REACHED_DISTANCE = 1.0f;
 	friend class World;
 	World& mWorld;
 	Pathfinder& mPathfinder;

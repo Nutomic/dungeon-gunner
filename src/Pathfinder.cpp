@@ -16,8 +16,6 @@
 #include "util/Interval.h"
 #include "sprites/Tile.h"
 
-const float Pathfinder::WALL_DISTANCE_MULTIPLIER = 1.5f;
-
 /**
  * Runs the A* path finding algorithm with areas as nodes and portals as edges.
  *
@@ -242,4 +240,4 @@ Pathfinder::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 		target.draw(rect);
 	}
 }
-#endif
+#endif /* RELEASE */

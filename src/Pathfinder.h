@@ -36,8 +36,11 @@ private:
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
 private:
-    static const float WALL_DISTANCE_MULTIPLIER;
-	std::vector<Area> mAreas; //< This has to be a vector as objects are compared by address.
+	/// character radius multiplied with this gives movement distance
+	// from the nearest wall.
+    static constexpr float WALL_DISTANCE_MULTIPLIER = 1.5f;
+    //< This has to be a vector as objects are compared by address.
+	std::vector<Area> mAreas;
 };
 
 /**

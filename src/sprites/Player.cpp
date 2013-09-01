@@ -18,8 +18,7 @@
 Player::Player(World& world, Pathfinder& pathfinder,
 		const Vector2f& position, const EquippedItems& items) :
 	Character(position, CATEGORY_ACTOR, MASK_ALL, Yaml("player.yaml"), world,
-			pathfinder, items),
-	mDirection(0) {
+			pathfinder, items) {
 }
 
 Vector2f

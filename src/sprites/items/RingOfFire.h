@@ -26,7 +26,7 @@ protected:
 	GadgetType getType() const override;
 
 private:
-	static const int WAVES_PER_USE = 3;
+	static constexpr int WAVES_PER_USE = 3;
 	int mCurrentWave = WAVES_PER_USE + 1;
 
 	Character* mCharacter;
