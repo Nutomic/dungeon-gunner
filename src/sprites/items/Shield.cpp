@@ -11,8 +11,10 @@
 #include "../RotatingShield.h"
 #include "../../World.h"
 
+const Yaml Shield::CONFIG("res/yaml/rotating_shield.yaml");
+
 Shield::Shield() :
-		Gadget("Shield") {
+		Gadget(CONFIG.get("name", std::string()), CONFIG.get("cooldown", 0)) {
 }
 
 void
@@ -32,11 +34,6 @@ Shield::onThink(int elapsed) {
 		mRotatingShield->setDirection(mCharacter->getPosition() -
 				mRotatingShield->getPosition());
 	}
-}
-
-sf::Time
-Shield::getCooldownTime() const {
-	return sf::seconds(10);
 }
 
 Shield::GadgetType

@@ -12,9 +12,13 @@
 #include "Shield.h"
 #include "RingOfFire.h"
 
-Gadget::Gadget(std::string name) :
+/**
+ * @param cooldown Time in milliseconds after which the gadget can be used again.
+ */
+Gadget::Gadget(std::string name, int cooldown) :
 		Item(sf::Vector2f(32, 32), "item.png"),
-		mName(name) {
+		mName(name),
+		mCooldown(sf::milliseconds(cooldown)) {
 }
 
 /**
@@ -38,7 +42,7 @@ void
 Gadget::use(Character& character) {
 	if (mCooldownTimer.isExpired()) {
 		onUse(character);
-		mCooldownTimer.restart(getCooldownTime());
+		mCooldownTimer.restart(mCooldown);
 	}
 }
 

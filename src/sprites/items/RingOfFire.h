@@ -22,12 +22,16 @@ public:
 protected:
 	void onUse(Character& character) override;
 	void onThink(int elapsed) override;
-	sf::Time getCooldownTime() const override;
 	GadgetType getType() const override;
 
 private:
-	static constexpr int WAVES_PER_USE = 3;
-	int mCurrentWave = WAVES_PER_USE + 1;
+	static const Yaml CONFIG;
+	const int mWavesPerUse;
+	const int mAngleOffset;
+	const int mBulletsPerWave;
+	const sf::Time mDelay;
+
+	int mCurrentWave;
 
 	Character* mCharacter;
 	thor::Timer mTimer;

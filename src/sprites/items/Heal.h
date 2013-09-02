@@ -1,14 +1,16 @@
 /*
- * SlowHeal.h
+ * Heal.h
  *
  *  Created on: 06.07.2013
  *      Author: Felix
  */
 
-#ifndef DG_SLOWHEAL_H_
-#define DG_SLOWHEAL_H_
+#ifndef DG_HEAL_H_
+#define DG_HEAL_H_
 
 #include "Gadget.h"
+
+#include "../../util/Yaml.h"
 
 class Heal : public Gadget {
 public:
@@ -17,13 +19,17 @@ public:
 protected:
 	void onUse(Character& character) override;
 	void onThink(int elapsed) override;
-	sf::Time getCooldownTime() const override;
 	GadgetType getType() const override;
 
 private:
+	static const Yaml CONFIG;
+	const int mHealedTotal;
+	const sf::Time mTimePerPoint;
+
+	int mHealed;
+
 	Character* mCharacter;
 	thor::Timer mTimer;
-	int mHealedTotal = 50;
 };
 
-#endif /* DG_SLOWHEAL_H_ */
+#endif /* DG_HEAL_H_ */

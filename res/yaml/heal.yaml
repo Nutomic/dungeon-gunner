@@ -1,0 +1,10 @@
+name: Heal
+
+# Milliseconds between each use.
+cooldown: 5000
+
+# Hit points restored with each use (total).
+amount_healed: 50
+
+# Time in milliseconds to restore one hitpoint.
+time_per_point: 75

@@ -28,7 +28,7 @@ public:
 	};
 
 public:
-	Gadget(std::string name);
+	Gadget(std::string name, int cooldown);
 	static std::shared_ptr<Gadget> getGadget(World& world, GadgetType type);
 	void use(Character& character);
 	virtual void onThink(int elapsed) = 0;
@@ -37,13 +37,13 @@ public:
 
 protected:
 	virtual void onUse(Character& character) = 0;
-	virtual sf::Time getCooldownTime() const = 0;
 
 protected:
 	thor::Timer mCooldownTimer;
 
 private:
-	std::string mName;
+	const std::string mName;
+	const sf::Time mCooldown;
 };
 
 #endif /* DG_GADGET_H_ */

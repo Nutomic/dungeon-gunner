@@ -1,3 +1,7 @@
 name: Shield
+
 texture: shield.png
+
 size: [75, 5]
+
+cooldown: 5000
