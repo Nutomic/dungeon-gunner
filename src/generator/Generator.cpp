@@ -334,7 +334,8 @@ Generator::findClosestFloor(const Vector2i& start) const {
 		Vector2i current = std::min_element(open.begin(), open.end())->first;
 		open.erase(current);
 		closed.insert(current);
-		if (mTiles.at(current.x).at(current.y) == Tile::Type::FLOOR)
+		if (mTiles.count(current.x) != 0 && mTiles.at(current.x).count(current.y) != 0 &&
+				mTiles.at(current.x).at(current.y) == Tile::Type::FLOOR)
 			return current;
 		else {
 			insertNew(Vector2i(current.x + 1, current.y));
