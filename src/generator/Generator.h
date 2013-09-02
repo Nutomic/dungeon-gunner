@@ -44,7 +44,7 @@ private:
 private:
 	static constexpr int GENERATE_AREA_SIZE = 4;
 	static constexpr float GENERATE_AREA_RANGE = 4.0f;
-	static constexpr float ROOM_SIZE_VALUE = 12.0f;
+	static constexpr float ROOM_SIZE_VALUE = 10.0f;
 	static constexpr float ROOM_CONNECTION_VALUE = 5.0f;
 
 	World& mWorld;

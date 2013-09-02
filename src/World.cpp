@@ -141,12 +141,10 @@ World::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 	sf::FloatRect screen(target.getViewport(target.getView()));
 	screen.left += target.getView().getCenter().x - target.getView().getSize().x / 2;
 	screen.top += target.getView().getCenter().y - target.getView().getSize().y / 2;
-	for (auto v = mDrawables.begin(); v != mDrawables.end(); v++) {
-		for (const auto& item : v->second) {
+	for (auto v = mDrawables.begin(); v != mDrawables.end(); v++)
+		for (const auto& item : v->second)
 			if (item->isInside(screen))
 				target.draw(static_cast<sf::Drawable&>(*item), states);
-		}
-	}
 }
 
 /*

@@ -19,7 +19,6 @@
 #include "../Pathfinder.h"
 #include "../World.h"
 #include "../sprites/Enemy.h"
-#include "../util/Log.h"
 
 /**
  * Generates new random seed.
@@ -159,7 +158,7 @@ Generator::connectRooms(const Vector2i& start) {
 			destinations.insert(current);
 			break;
 		}
-		else if (distance.at(current) < ROOM_CONNECTION_VALUE) {
+		if (distance.at(current) < ROOM_CONNECTION_VALUE) {
 			process(Vector2i(current.x + 1, current.y), current);
 			process(Vector2i(current.x,     current.y + 1), current);
 			process(Vector2i(current.x - 1, current.y), current);
@@ -167,7 +166,6 @@ Generator::connectRooms(const Vector2i& start) {
 		}
 	}
 
-	// take min length paths and set tiles
 	float totalValue = 0.0f;
 	while (totalValue < ROOM_CONNECTION_VALUE && !destinations.empty()) {
 		std::vector<Vector2i> path;
