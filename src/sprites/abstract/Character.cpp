@@ -9,6 +9,7 @@
 
 #include <Thor/Vectors.hpp>
 
+#include "../items/HealthOrb.h"
 #include "../items/Weapon.h"
 #include "../Corpse.h"
 #include "../../util/Log.h"
@@ -103,23 +104,29 @@ void
 Character::onDeath() {
 	mWorld.insert(std::shared_ptr<Sprite>(new Corpse(getPosition())));
 
-	switch (rand() % 3) {
-	case 0:
-		dropItem(mFirstWeapon);
-		break;
-	case 1:
-		dropItem(mSecondWeapon);
-		break;
-	case 2:
-		if (mLeftGadget)
-			dropItem(mLeftGadget);
-		else if (mRightGadget)
-			dropItem(mRightGadget);
-	}
-	// To avoid weapons continuing to fire after drop and pickup.
-	mFirstWeapon->releaseTrigger();
-	mSecondWeapon->releaseTrigger();
-
+	if (rand() % 2)
+		dropItem(std::make_shared<HealthOrb>());
+	else
+		switch (rand() % 3) {
+		case 0:
+			// To avoid weapons continuing to fire after drop and pickup.
+			mFirstWeapon->releaseTrigger();
+			dropItem(mFirstWeapon);
+			break;
+		case 1:
+			// Same here.
+			mSecondWeapon->releaseTrigger();
+			dropItem(mSecondWeapon);
+			break;
+		case 2:
+			if (mLeftGadget)
+				dropItem(mLeftGadget);
+			break;
+		case 3:
+			if (mRightGadget)
+				dropItem(mRightGadget);
+			break;
+		}
 }
 
 /**
