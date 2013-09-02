@@ -11,7 +11,6 @@
 
 #include "../../util/Loader.h"
 #include "../../util/Log.h"
-#include "../../util/ResourceManager.h"
 
 Sprite::Sprite(const Vector2f& position, Category category,
 			unsigned short mask, const Vector2f& size,
@@ -151,8 +150,7 @@ Sprite::setPosition(const Vector2f& position) {
 void
 Sprite::setTexture(const std::string& texture) {
 	try {
-		mTexture = ResourceManager::i().acquire(Loader::i()
-				.fromFile<sf::Texture>(texture));
+		mTexture = Loader::i().fromFile<sf::Texture>(texture);
 		mShape.setTexture(&*mTexture, false);
 	}
 	catch (thor::ResourceLoadingException&) {

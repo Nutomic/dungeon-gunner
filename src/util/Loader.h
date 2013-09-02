@@ -37,6 +37,9 @@
  * @endcode
  */
 class Loader : public Singleton<Loader> {
+private:
+	class ResourceManager;
+
 public:
 	/**
 	 * Sets the general resource folder path.
@@ -52,11 +55,14 @@ public:
 	}
 
 	/**
-	 * Loads a resource from a file, looking in the specific resource folder for this type.
+	 * cquires a resource key by filename, then loads the resource from a
+	 * file, looking in the specific resource folder for this type.
 	 */
-	template <typename T> thor::ResourceKey<T>
+	template <typename T> std::shared_ptr<T>
 	fromFile(const std::string& file) {
-		return static_cast<SpecificLoader<T>* >(getLoader<T>().get())->fromFile(mFolder, file);
+		auto resourceKey = static_cast<SpecificLoader<T>* >(getLoader<T>().get())
+				->fromFile(mFolder, file);
+		return mResourceManager.acquire(resourceKey);
 	}
 
 private:
@@ -118,8 +124,18 @@ private:
 	};
 
 private:
+	class ResourceManager : public thor::MultiResourceCache {
+	public:
+		ResourceManager() {
+			setLoadingFailureStrategy(thor::Resources::ThrowException);
+			setReleaseStrategy(thor::Resources::AutoRelease);
+		};
+	};
+
+private:
 	std::string mFolder;
 	std::map<std::type_index, std::unique_ptr<LoaderBase> > mLoaders;
+	ResourceManager mResourceManager;
 };
 
 #endif /* DG_LOADER_H_ */

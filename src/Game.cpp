@@ -13,7 +13,6 @@
 #include "sprites/Enemy.h"
 #include "sprites/Player.h"
 #include "util/Loader.h"
-#include "util/ResourceManager.h"
 #include "util/Yaml.h"
 
 /**
@@ -29,8 +28,7 @@ Game::Game(tgui::Window& window) :
 
 	initPlayer();
 
-	mCrosshairTexture = ResourceManager::i().acquire(Loader::i()
-			.fromFile<sf::Texture>("crosshair.png"));
+	mCrosshairTexture = Loader::i().fromFile<sf::Texture>("crosshair.png");
 	mCrosshair.setTexture(*mCrosshairTexture, true);
 	mWindow.setMouseCursorVisible(false);
 
