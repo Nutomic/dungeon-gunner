@@ -1,7 +1,7 @@
 name: Enemy
 texture: enemy.png
 
-health: 100
+health: 50
 speed: 100
 radius: 25
 size: [50, 50]
