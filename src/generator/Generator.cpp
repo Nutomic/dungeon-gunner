@@ -19,11 +19,17 @@
 #include "../Pathfinder.h"
 #include "../World.h"
 #include "../sprites/Enemy.h"
+#include "../util/Yaml.h"
 
 /**
  * Generates new random seed.
  */
-Generator::Generator(World& world, Pathfinder& pathfinder) :
+Generator::Generator(World& world, Pathfinder& pathfinder, const Yaml& config) :
+		mAreaSize(config.get("generate_area_size", 1)),
+		mMaxRange((config.get("generate_area_range", 1.0f) / mAreaSize) / Tile::TILE_SIZE.x),
+		mRoomSizeValue(config.get("room_size_value", 1.0f)),
+		mRoomConnectionValue(config.get("room_connection_value", 1.0f)),
+		mEnemyGenerationChance(config.get("enemy_generation_chance", 0.0f) * 2 - 1),
 		mWorld(world),
 		mPathfinder(pathfinder) {
 }
@@ -40,7 +46,7 @@ Generator::generateCurrentAreaIfNeeded(const Vector2f& playerPosition,
 
 	Vector2i start((int) floor(playerPosition.x / Tile::TILE_SIZE.x),
 			(int) floor(playerPosition.y / Tile::TILE_SIZE.y));
-	start /= GENERATE_AREA_SIZE;
+	start /= mAreaSize;
 	auto makePair = [&start](const Vector2i& point) {
 		return std::make_pair(point, thor::length(Vector2f(point - start)));
 	};
@@ -51,11 +57,11 @@ Generator::generateCurrentAreaIfNeeded(const Vector2f& playerPosition,
 		float distance = open[current];
 		open.erase(current);
 		closed.insert(current);
-		if (!mGenerated[current.x][current.y] && distance <= GENERATE_AREA_RANGE) {
+		if (!mGenerated[current.x][current.y] && distance <= mMaxRange) {
 			mGenerated[current.x][current.y] = true;
-			sf::IntRect area(current * GENERATE_AREA_SIZE -
-					Vector2i(GENERATE_AREA_SIZE, GENERATE_AREA_SIZE) / 2,
-					Vector2i(GENERATE_AREA_SIZE, GENERATE_AREA_SIZE));
+			sf::IntRect area(current * mAreaSize -
+					Vector2i(mAreaSize, mAreaSize) / 2,
+					Vector2i(mAreaSize, mAreaSize));
 			generateTiles(area);
 			for (const auto& spawn : getEnemySpawns(area)) {
 				float distance = thor::length(spawn - playerPosition);
@@ -64,7 +70,7 @@ Generator::generateCurrentAreaIfNeeded(const Vector2f& playerPosition,
 							mWorld, mPathfinder, spawn, playerItems)));
 			}
 		}
-		if (mGenerated[current.x][current.y] && distance <= GENERATE_AREA_RANGE) {
+		if (mGenerated[current.x][current.y] && distance <= mMaxRange) {
 			if (closed.find(Vector2i(current.x + 1, current.y)) == closed.end())
 				open.insert(makePair(Vector2i(current.x + 1, current.y)));
 			if (closed.find(Vector2i(current.x, current.y + 1)) == closed.end())
@@ -158,7 +164,7 @@ Generator::connectRooms(const Vector2i& start) {
 			destinations.insert(current);
 			break;
 		}
-		if (distance.at(current) < ROOM_CONNECTION_VALUE) {
+		if (distance.at(current) < mRoomConnectionValue) {
 			process(Vector2i(current.x + 1, current.y), current);
 			process(Vector2i(current.x,     current.y + 1), current);
 			process(Vector2i(current.x - 1, current.y), current);
@@ -167,7 +173,7 @@ Generator::connectRooms(const Vector2i& start) {
 	}
 
 	float totalValue = 0.0f;
-	while (totalValue < ROOM_CONNECTION_VALUE && !destinations.empty()) {
+	while (totalValue < mRoomConnectionValue && !destinations.empty()) {
 		std::vector<Vector2i> path;
 		float pathValue = 0;
 		Vector2i current = *destinations.begin();
@@ -214,7 +220,7 @@ Generator::generateTiles(const sf::IntRect& area) {
 			}
 		}
 
-	std::vector<Vector2i> selected = createMinimalSpanningTree(start, ROOM_SIZE_VALUE);
+	std::vector<Vector2i> selected = createMinimalSpanningTree(start, mRoomSizeValue);
 
     // For rooms, take minimum bounding box of spanning tree.
 
@@ -261,7 +267,7 @@ Generator::getEnemySpawns(const sf::IntRect& area) {
 	for (int x = area.left; x < area.left + area.width; x++) {
 		for (int y = area.top; y < area.top + area.height; y++) {
 			float noise = mCharacterNoise.getNoise(x, y);
-			if (noise <= -0.85f) {
+			if (noise <= mEnemyGenerationChance) {
 				Vector2i tilePosition = findClosestFloor(Vector2i(x, y));
 				spawns.push_back(Vector2f(tilePosition.x * Tile::TILE_SIZE.x,
 						tilePosition.y * Tile::TILE_SIZE.y));

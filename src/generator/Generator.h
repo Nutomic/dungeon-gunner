@@ -17,13 +17,14 @@
 
 class World;
 class Pathfinder;
+class Yaml;
 
 /**
  * Procedurally generates tiles, chooses player and enemy spawn positions.
  */
 class Generator : public sf::Drawable {
 public:
-	explicit Generator(World& world, Pathfinder& pathfinder);
+	explicit Generator(World& world, Pathfinder& pathfinder, const Yaml& config);
 	void generateCurrentAreaIfNeeded(const Vector2f& position,
 			const Character::EquippedItems& playerItems);
 	Vector2f getPlayerSpawn() const;
@@ -42,10 +43,11 @@ private:
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
 private:
-	static constexpr int GENERATE_AREA_SIZE = 4;
-	static constexpr float GENERATE_AREA_RANGE = 4.0f;
-	static constexpr float ROOM_SIZE_VALUE = 10.0f;
-	static constexpr float ROOM_CONNECTION_VALUE = 5.0f;
+	const int mAreaSize;
+	const float mMaxRange;
+	const float mRoomSizeValue;
+	const float mRoomConnectionValue;
+	const float mEnemyGenerationChance;
 
 	World& mWorld;
 	Pathfinder& mPathfinder;

@@ -1,0 +1,15 @@
+# Whenever tiles are generated, rectangles of this side length are created.
+generate_area_size: 4
+
+# Distance in pixels to which areas should be generated.
+generate_area_range: 1200.0
+
+# Deciding factor in how big individual rooms will be. Higher value means bigger rooms.
+room_size_value: 10.0
+
+# Deciding factor in how long connections between rooms may be and how many there may be.
+# Higher value means more and/or longer paths.
+room_connection_value: 5.0
+
+# The chance that an enemy is placed in a certain tile, must be in [0, 1]. Higher value means more enemies.
+enemy_generation_chance: 0.075

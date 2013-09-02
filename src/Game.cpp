@@ -22,7 +22,7 @@
 Game::Game(tgui::Window& window) :
 		mWindow(window),
 		mWorldView(Vector2f(0, 0), mWindow.getView().getSize()),
-		mGenerator(mWorld, mPathfinder) {
+		mGenerator(mWorld, mPathfinder, Yaml("generation.yaml")) {
 	mWindow.setFramerateLimit(FPS_GOAL);
 	mWindow.setKeyRepeatEnabled(false);
 	srand(time(nullptr));
