@@ -7,13 +7,20 @@
 
 #include "HealthOrb.h"
 
-HealthOrb::HealthOrb() :
-		Item(Vector2i(32, 32), "health_orb.png") {
+const Yaml HealthOrb::CONFIG("res/yaml/health_orb.yaml");
 
+HealthOrb::HealthOrb() :
+		Item(CONFIG.get("size", Vector2i()), CONFIG.get("texture", std::string())),
+		mName(CONFIG.get("name", std::string())),
+		mAmountHealed(CONFIG.get("amount_healed", 0)) {
+}
+
+int
+HealthOrb::getAmountHealed() const {
+	return mAmountHealed;
 }
 
 std::string
 HealthOrb::getName() const {
-	return "Health Orb";
+	return mName;
 }
-

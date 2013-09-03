@@ -10,13 +10,18 @@
 
 #include "Item.h"
 
-class HealthOrb : public Item {
-public:
-	static const int AMOUNT_HEALED = 50;
+#include "../../util/Yaml.h"
 
+class HealthOrb : public Item {
 public:
 	HealthOrb();
 	std::string getName() const;
+	int getAmountHealed() const;
+
+private:
+	static const Yaml CONFIG;
+	const std::string mName;
+	const int mAmountHealed;
 };
 
 #endif /* DG_HEALTHORB_H_ */

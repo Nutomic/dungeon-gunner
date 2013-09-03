@@ -1,0 +1,7 @@
+name: Health Orb
+
+texture: health_orb.png
+
+size: [32, 32]
+
+amount_healed: 50

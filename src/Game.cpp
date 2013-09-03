@@ -127,8 +127,9 @@ Game::updateGui() {
 			mWindow.getSize().y - mRightGadget->getSize().y);
 
 	auto item = mWorld.getClosestItem(mPlayer->getPosition());
-	if (std::dynamic_pointer_cast<HealthOrb>(item)) {
-		mPlayer->onDamage(- HealthOrb::AMOUNT_HEALED);
+	auto orb = std::dynamic_pointer_cast<HealthOrb>(item);
+	if (orb) {
+		mPlayer->onDamage(- orb->getAmountHealed());
 		mWorld.remove(item);
 	}
 	else if (item) {
