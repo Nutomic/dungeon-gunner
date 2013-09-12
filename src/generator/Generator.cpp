@@ -381,9 +381,9 @@ Generator::findClosestFloor(const Vector2i& start) const {
  *
  * mPaths is only required for this function.
  */
-#ifndef RELEASE
 void
 Generator::draw(sf::RenderTarget& target, sf::RenderStates states) const {
+#ifndef RELEASE
 	for (auto& p : mPaths) {
 		for (auto&q : p) {
 			sf::RectangleShape rect(Vector2f(Tile::TILE_SIZE));
@@ -392,5 +392,5 @@ Generator::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 			target.draw(rect);
 		}
 	}
-}
 #endif /* RELEASE */
+}

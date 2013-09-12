@@ -230,14 +230,14 @@ Pathfinder::getArea(const Vector2f& point) const {
 /**
  * Draws areas.
  */
-#ifndef RELEASE
 void
 Pathfinder::draw(sf::RenderTarget& target, sf::RenderStates states) const {
+#ifndef RELEASE
 	for (auto& area : mAreas) {
 		sf::RectangleShape rect(Vector2f(area.area.width, area.area.height));
 		rect.setPosition(Vector2f(area.area.left, area.area.top));
 		rect.setFillColor(sf::Color(area.area.width * 30, 127, 0, 96));
 		target.draw(rect);
 	}
-}
 #endif /* RELEASE */
+}
