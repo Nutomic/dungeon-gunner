@@ -48,7 +48,8 @@ public:
 
 	Vector2f getPosition() const;
 	Vector2f getSpeed() const;
-	Vector2f getDirection() const;
+	Vector2f getDirectionVector() const;
+	float getDirection() const;
 	bool getDelete() const;
 	Category getCategory() const;
 	Vector2f getSize() const;

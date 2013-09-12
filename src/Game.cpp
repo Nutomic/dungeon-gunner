@@ -13,6 +13,7 @@
 #include "sprites/Enemy.h"
 #include "sprites/Player.h"
 #include "sprites/items/HealthOrb.h"
+#include "util/Angles.h"
 #include "util/Loader.h"
 #include "util/Yaml.h"
 
@@ -22,12 +23,15 @@
 Game::Game(tgui::Window& window) :
 		mWindow(window),
 		mWorldView(Vector2f(0, 0), mWindow.getView().getSize()),
-		mGenerator(mWorld, mPathfinder, Yaml("generation.yaml")) {
+		mLightSystem(AABB(Vec2f(-100000, -100000), Vec2f(100000, 10000)), &window,
+				"res/textures/light_fin.png", "res/shaders/light_attenuation_shader.frag"),
+		mGenerator(mWorld, mPathfinder, mLightSystem, Yaml("generation.yaml")) {
 	mWindow.setFramerateLimit(FPS_GOAL);
 	mWindow.setKeyRepeatEnabled(false);
 	srand(time(nullptr));
 
 	initPlayer();
+	initLight();
 
 	mCrosshairTexture = Loader::i().fromFile<sf::Texture>("crosshair.png");
 	mCrosshair.setTexture(*mCrosshairTexture, true);
@@ -47,7 +51,15 @@ Game::Game(tgui::Window& window) :
 	mPickupInstruction->setTextSize(14);
 }
 
-void Game::initPlayer() {
+/**
+ * Closes window.
+ */
+Game::~Game() {
+	mWindow.close();
+}
+
+void
+Game::initPlayer() {
 	Character::EquippedItems playerItems = {
 			Weapon::WeaponType::PISTOL,	Weapon::WeaponType::KNIFE,
 			Gadget::GadgetType::NONE, Gadget::GadgetType::NONE
@@ -58,11 +70,37 @@ void Game::initPlayer() {
 	mWorld.insertCharacter(mPlayer);
 }
 
-/**
- * Closes window.
- */
-Game::~Game() {
-	mWindow.close();
+void
+Game::initLight() {
+	Yaml config("light.yaml");
+	Color3f lightColor(config.get("color_red", 0) / 255.0f,
+			config.get("color_green", 0) / 255.0f,
+			config.get("color_blue", 0) / 255.0f);
+	mLightSystem.m_checkForHullIntersect = false;
+	mLightSystem.m_useBloom = false;
+
+	mPlayerAreaLight->m_radius = 250.0f;
+    mPlayerAreaLight->m_size = 1.0f;
+    mPlayerAreaLight->m_softSpreadAngle = 0;
+    mPlayerAreaLight->m_spreadAngle = 2.0f * M_PI;
+    mPlayerAreaLight->m_intensity = 1.1f;
+    mPlayerAreaLight->m_bleed = 0;
+    mPlayerAreaLight->m_color = lightColor;
+	mPlayerDirectionLight->m_linearizeFactor = 0.5;
+	mPlayerAreaLight->CalculateAABB();
+	mLightSystem.AddLight(mPlayerAreaLight);
+
+	mPlayerDirectionLight->m_radius = 500.0f;
+	mPlayerDirectionLight->m_size = 25.0f;
+	mPlayerDirectionLight->m_softSpreadAngle = 0.1f * M_PI;
+	mPlayerDirectionLight->m_spreadAngle =
+			degreeToRadian(config.get("light_cone_angle", 0.0f));
+	mPlayerDirectionLight->m_intensity = 5;
+	mPlayerDirectionLight->m_bleed = 0;
+	mPlayerDirectionLight->m_color = lightColor;
+	mPlayerDirectionLight->m_linearizeFactor = 1;
+	mPlayerDirectionLight->CalculateAABB();
+	mLightSystem.AddLight(mPlayerDirectionLight);
 }
 
 /**
@@ -73,9 +111,9 @@ Game::loop() {
 	while (!mQuit) {
 		input();
 
-		int elapsed = mClock.restart().asMilliseconds();
-		if (mPaused)
-			elapsed = 0;
+		int elapsed = (mPaused)
+				? 0
+				: mClock.restart().asMilliseconds();
 
 		mWorld.think(elapsed);
 		if (mPlayer->getHealth() == 0) {
@@ -300,6 +338,15 @@ Game::render() {
 	// Render world and dynamic stuff.
 	mWindow.setView(mWorldView);
 	mWindow.draw(mWorld);
+
+	// Update light
+	mPlayerAreaLight->SetCenter(mPlayer->getPosition().toVec2f());
+	mPlayerDirectionLight->SetCenter(mPlayer->getPosition().toVec2f());
+	mPlayerDirectionLight->SetDirectionAngle(degreeToRadian(90 - mPlayer->getDirection()));
+
+	mLightSystem.SetView(mWorldView);
+	mLightSystem.RenderLights();
+	mLightSystem.RenderLightTexture();
 
 	// Render GUI and static stuff.
 	mWindow.setView(mWindow.getDefaultView());

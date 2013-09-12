@@ -10,6 +10,9 @@
 
 #include <TGUI/TGUI.hpp>
 
+#include <LTBL/Light/LightSystem.h>
+#include <LTBL/Light/Light_Point.h>
+
 #include "generator/Generator.h"
 #include "Pathfinder.h"
 #include "World.h"
@@ -39,6 +42,7 @@ private:
 	Vector2<float> convertCoordinates(int x, int y);
 	void updateGui();
 	void initPlayer();
+	void initLight();
 
 private:
 	static const int FPS_GOAL = 60;
@@ -57,7 +61,11 @@ private:
 
 	World mWorld;
 	Pathfinder mPathfinder;
+	ltbl::LightSystem mLightSystem;
 	Generator mGenerator;
+	ltbl::Light_Point* mPlayerAreaLight = new ltbl::Light_Point();
+	ltbl::Light_Point* mPlayerDirectionLight = new ltbl::Light_Point();
+
 	std::shared_ptr<Player> mPlayer;
 
 	bool mQuit = false;

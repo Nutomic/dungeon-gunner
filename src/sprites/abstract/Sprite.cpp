@@ -45,8 +45,13 @@ Sprite::getSpeed() const {
  * Returns the angle of the sprite.
  */
 Vector2f
-Sprite::getDirection() const {
+Sprite::getDirectionVector() const {
 	return thor::rotatedVector(Vector2f(0, - 1), mShape.getRotation());
+}
+
+float
+Sprite::getDirection() const {
+	return mShape.getRotation();
 }
 
 /**

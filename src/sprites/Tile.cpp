@@ -22,8 +22,8 @@ const Vector2i Tile::TILE_SIZE = Vector2i(75, 75);
  *
  * @param pType Type of the tile to create.
  */
-Tile::Tile(const Vector2i& position, Type type) :
-		Rectangle(Vector2f(thor::cwiseProduct(position, TILE_SIZE)),
+Tile::Tile(const Vector2i& tilePosition, Type type) :
+		Rectangle(toPosition(tilePosition),
 				CATEGORY_WORLD,	(isSolid(type)) ? 0xffff : 0,
 				Yaml(getConfig(type))),	mType(type) {
 }
@@ -42,8 +42,7 @@ Tile::setTile(const Vector2i& position, Type type, World& world) {
 		std::shared_ptr<Tile> converted = std::dynamic_pointer_cast<Tile>(c);
 		// Direct comparison of floats as both are from the same generation
 		// on the same CPU.
-		if (converted.get() != nullptr &&
-				converted->getPosition() == worldPosition &&
+		if (converted && converted->getPosition() == worldPosition &&
 				converted->getType() != type) {
 			world.remove(converted);
 			break;
@@ -76,6 +75,14 @@ Tile::isSolid(Type type) {
 	default:
 		return true;
 	}
+}
+
+/**
+ * Converts a tile position to world/pixel position.
+ */
+Vector2f
+Tile::toPosition(const Vector2i& tilePosition) {
+	return Vector2f(thor::cwiseProduct(tilePosition, TILE_SIZE));
 }
 
 /**

@@ -35,7 +35,7 @@ void
 RingOfFire::onThink(int elapsed) {
 	if (mCurrentWave < mWavesPerUse && mTimer.isExpired()) {
 		for (int angle = mCurrentWave * 10; angle <= 360; angle += 360 / mBulletsPerWave) {
-			Vector2f direction(thor::rotatedVector(mCharacter->getDirection(), (float) angle) *
+			Vector2f direction(thor::rotatedVector(mCharacter->getDirectionVector(), (float) angle) *
 					mCharacter->getRadius());
 
 			std::shared_ptr<Sprite> projectile(new Bullet(mCharacter->getPosition() + direction,

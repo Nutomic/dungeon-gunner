@@ -10,6 +10,8 @@
 #include "util/Yaml.h"
 #include "util/Log.h"
 
+#include "util/Vector.h"
+
 /**
  * Creates Game object.
  */
@@ -21,6 +23,7 @@ int main(int argc, char* argv[]) {
 
     tgui::Window window(sf::VideoMode(1024, 768, 32), "Dungeon Gunner",
 				sf::Style::Close | sf::Style::Titlebar);
+    Vector2f::SCREEN_HEIGHT = window.getSize().y;
 
 	if (!window.globalFont.loadFromFile("res/DejaVuSans.ttf"))
 		LOG_W("Failed to load font at 'res/DejaVuSans.ttf'");

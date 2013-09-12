@@ -24,14 +24,16 @@
 /**
  * Generates new random seed.
  */
-Generator::Generator(World& world, Pathfinder& pathfinder, const Yaml& config) :
+Generator::Generator(World& world, Pathfinder& pathfinder,
+		ltbl::LightSystem& lightSystem, const Yaml& config) :
 		mAreaSize(config.get("generate_area_size", 1)),
 		mMaxRange((config.get("generate_area_range", 1.0f) / mAreaSize) / Tile::TILE_SIZE.x),
 		mRoomSizeValue(config.get("room_size_value", 1.0f)),
 		mRoomConnectionValue(config.get("room_connection_value", 1.0f)),
 		mEnemyGenerationChance(config.get("enemy_generation_chance", 0.0f) * 2 - 1),
 		mWorld(world),
-		mPathfinder(pathfinder) {
+		mPathfinder(pathfinder),
+		mLightSystem(lightSystem) {
 }
 
 /**
@@ -188,6 +190,12 @@ Generator::connectRooms(const Vector2i& start) {
 		for (const auto& p : path) {
 			mTiles[p.x][p.y] = Tile::Type::FLOOR;
 			Tile::setTile(p, Tile::Type::FLOOR, mWorld);
+			for (auto it = mHulls.begin(); it != mHulls.end(); it++)
+				if ((*it)->GetWorldCenter() == Tile::toPosition(Vector2i(p.x, p.y)).toVec2f()) {
+					mLightSystem.RemoveConvexHull(*it);
+					mHulls.erase(it);
+					break;
+				}
 		}
 	}
 }
@@ -245,11 +253,24 @@ Generator::generateTiles(const sf::IntRect& area) {
 				mTiles[x][y] = Tile::Type::FLOOR;
 
 	connectRooms(start);
-
 	for (int x = area.left; x < area.left + area.width; x++)
-		for (int y = area.top; y < area.top + area.height; y++)
+		for (int y = area.top; y < area.top + area.height; y++) {
 			mWorld.insert(std::shared_ptr<Sprite>(
 					new Tile(Vector2i(x, y), mTiles[x][y])));
+			if (mTiles[x][y] == Tile::Type::WALL) {
+				ltbl::ConvexHull* tileHull = new ltbl::ConvexHull();
+				tileHull->m_vertices.push_back(Vec2f(-37.5f,  37.5f));
+				tileHull->m_vertices.push_back(Vec2f(-37.5f, -37.5f));
+				tileHull->m_vertices.push_back(Vec2f( 37.5f, -37.5f));
+				tileHull->m_vertices.push_back(Vec2f( 37.5f,  37.5f));
+				tileHull->m_renderLightOverHull = false;
+				tileHull->CalculateNormals();
+				tileHull->CalculateAABB();
+				tileHull->SetWorldCenter(Tile::toPosition(Vector2i(x, y)).toVec2f());
+				mLightSystem.AddConvexHull(tileHull);
+				mHulls.push_back(tileHull);
+			}
+		}
 
 	generateAreas(area);
 	mPathfinder.generatePortals();

@@ -1,0 +1,7 @@
+# Color values for player lights, each between 0 and 255
+color_red: 255
+color_green: 255
+color_blue: 127
+
+# Total angle of the player light cone
+light_cone_angle: 90.0

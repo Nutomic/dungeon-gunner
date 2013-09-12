@@ -22,7 +22,7 @@ Shield::onUse(Character& character) {
 	mCharacter = &character;
 	if (mRotatingShield)
 		mRotatingShield->setDelete(true);
-	Vector2f offset = mCharacter->getDirection() * mCharacter->getRadius();
+	Vector2f offset = mCharacter->getDirectionVector() * mCharacter->getRadius();
 	mRotatingShield = std::shared_ptr<RotatingShield>(
 			new RotatingShield(mCharacter->getPosition() + offset));
 	mCharacter->mWorld.insert(mRotatingShield);

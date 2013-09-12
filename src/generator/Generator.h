@@ -10,6 +10,8 @@
 
 #include <SFML/Graphics.hpp>
 
+#include <LTBL/Light/LightSystem.h>
+
 #include "../sprites/abstract/Character.h"
 #include "../sprites/Tile.h"
 #include "SimplexNoise.h"
@@ -24,7 +26,8 @@ class Yaml;
  */
 class Generator : public sf::Drawable {
 public:
-	explicit Generator(World& world, Pathfinder& pathfinder, const Yaml& config);
+	explicit Generator(World& world, Pathfinder& pathfinder,
+			ltbl::LightSystem& lightSystem, const Yaml& config);
 	void generateCurrentAreaIfNeeded(const Vector2f& position,
 			const Character::EquippedItems& playerItems);
 	Vector2f getPlayerSpawn() const;
@@ -51,6 +54,7 @@ private:
 
 	World& mWorld;
 	Pathfinder& mPathfinder;
+	ltbl::LightSystem& mLightSystem;
 	/// Contains values of all tiles that have yet been generated.
 	array mTiles;
 	/// Stores where tiles have already been generated.
@@ -59,6 +63,7 @@ private:
 	SimplexNoise mTileNoise;
 	/// Perlin noise used for character placement.
 	SimplexNoise mCharacterNoise;
+	std::vector<ltbl::ConvexHull*> mHulls;
 	/// Used only for debug drawing.
 	std::vector<std::vector<Vector2i> > mPaths;
 };

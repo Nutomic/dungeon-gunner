@@ -181,7 +181,7 @@ Weapon::setHolder(Character& holder) {
  */
 void
 Weapon::insertProjectile(float angle) {
-	Vector2f offset(mHolder->getDirection() * mHolder->getRadius());
+	Vector2f offset(mHolder->getDirectionVector() * mHolder->getRadius());
 
 	float spread = (mHolder->getSpeed() == Vector2f())
 			? mSpread
@@ -189,7 +189,7 @@ Weapon::insertProjectile(float angle) {
 	std::uniform_real_distribution<float> distribution(- spread, spread);
 	angle += distribution(mGenerator) + 90.0f;
 
-	Vector2f direction(thor::rotatedVector(mHolder->getDirection(), angle));
+	Vector2f direction(thor::rotatedVector(mHolder->getDirectionVector(), angle));
 
 	std::shared_ptr<Sprite> projectile(new Bullet(mHolder->getPosition() + offset,
 			*mHolder, direction, mProjectile, mProjectileSpeed,
