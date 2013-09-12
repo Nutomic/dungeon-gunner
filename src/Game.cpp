@@ -228,9 +228,6 @@ Game::keyUp(const sf::Event& event) {
 	case sf::Keyboard::Escape:
 		mQuit = true;
 		break;
-	case sf::Keyboard::Space:
-		mPaused = !mPaused;
-		break;
 	case sf::Keyboard::W:
 		mPlayer->setDirection(Player::Direction::UP, true);
 		break;
