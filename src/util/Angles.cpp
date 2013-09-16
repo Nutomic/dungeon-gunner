@@ -7,12 +7,12 @@
 
 #include "Angles.h"
 
-#include <math.h>
+#include <LTBL/Utils.h>
 
 float radianToDegree(float radian) {
-	return radian * 180 / M_PI;
+	return radian * 180 / ltbl::pi;
 }
 
 float degreeToRadian(float degree) {
-	return degree * M_PI / 180;
+	return degree * ltbl::pi / 180;
 }
