@@ -49,18 +49,17 @@ Character::~Character() {
  */
 void
 Character::onDamage(int damage) {
-	mCurrentHealth -= damage;
+	// Otherwise player might not respawn after death
+	if (mCurrentHealth <= 0)
+		return;
 
+	mCurrentHealth -= damage;
 
 	if (mCurrentHealth > mMaxHealth)
 		mCurrentHealth = mMaxHealth;
 
 	if (mCurrentHealth <= 0) {
-		// Seperated to avoid firing multiple times (when damaged multiple times).
-		if (!mIsDead)
-			onDeath();
-		mIsDead = true;
-		mCurrentHealth = 0;
+		onDeath();
 		setDelete(true);
 	}
 }
@@ -73,7 +72,7 @@ Character::onDamage(int damage) {
  */
 void
 Character::onThink(int elapsed) {
-	if (mCurrentHealth == 0)
+	if (mCurrentHealth <= 0)
 		return;
 
 	mActiveWeapon->onThink(elapsed);
@@ -253,7 +252,7 @@ Character::selectSecondWeapon() {
 }
 
 /**
- * Returns current player health.
+ * Returns current player health. A value <= 0 means this character is dead.
  */
 int
 Character::getHealth() const {

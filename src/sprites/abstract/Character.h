@@ -49,6 +49,11 @@ public:
 	void onDamage(int damage);
 	Faction getFaction() const;
 	EquippedItems getEquippedItems() const;
+	int getHealth() const;
+	int getMagazineAmmo() const;
+	int getTotalAmmo() const;
+	std::string getLeftGadgetName() const;
+	std::string getRightGadgetName() const;
 
 protected:
 	virtual void onThink(int elapsed);
@@ -60,22 +65,17 @@ protected:
 	bool isPathEmpty() const;
 	bool isVisible(const Vector2f& target) const;
 	std::vector<std::shared_ptr<Character> > getCharacters() const;
-	int getMagazineAmmo() const;
-	int getTotalAmmo() const;
 	std::string getWeaponName() const;
 	void reload();
 	void toggleWeapon();
 	void selectFirstWeapon();
 	void selectSecondWeapon();
-	int getHealth() const;
 	void setFirstWeapon(std::shared_ptr<Weapon> weapon);
 	void setSecondWeapon(std::shared_ptr<Weapon> weapon);
 	void setLeftGadget(std::shared_ptr<Gadget> gadget);
 	void setRightGadget(std::shared_ptr<Gadget> gadget);
 	void useLeftGadget();
 	void useRightGadget();
-	std::string getLeftGadgetName() const;
-	std::string getRightGadgetName() const;
 	void pickUpItem();
 
 private:
@@ -103,7 +103,6 @@ private:
 	std::vector<Vector2f> mPath; //< Contains nodes to reach a set destination.
 	Vector2f mLastPosition;
 	Faction mFaction;
-	bool mIsDead = false;
 };
 
 #endif /* DG_ACTOR_H_ */

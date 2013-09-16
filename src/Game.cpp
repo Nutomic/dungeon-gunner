@@ -116,7 +116,8 @@ Game::loop() {
 				: mClock.restart().asMilliseconds();
 
 		mWorld.think(elapsed);
-		if (mPlayer->getHealth() == 0) {
+		// Respawn player at start position on death.
+		if (mPlayer->getHealth() <= 0) {
 			Vector2f pos = mPlayer->getCrosshairPosition();
 			mWorld.remove(mPlayer);
 			initPlayer();

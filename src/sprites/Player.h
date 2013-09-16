@@ -38,8 +38,6 @@ public:
 	using Character::releaseTrigger;
 	void setDirection(Direction direction, bool unset);
 	void setDestination(const Vector2f& destination);
-	using Character::getMagazineAmmo;
-	using Character::getTotalAmmo;
 	using Character::getWeaponName;
 	using Character::reload;
 	using Character::toggleWeapon;
@@ -49,9 +47,6 @@ public:
 	using Character::setRightGadget;
 	using Character::useLeftGadget;
 	using Character::useRightGadget;
-	using Character::getHealth;
-	using Character::getLeftGadgetName;
-	using Character::getRightGadgetName;
 	using Character::pickUpItem;
 
 private:
