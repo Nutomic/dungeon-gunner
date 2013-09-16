@@ -9,6 +9,8 @@
 
 #include <Thor/Vectors.hpp>
 
+#include <LTBL/Utils.h>
+
 #include "generator/Generator.h"
 #include "sprites/Enemy.h"
 #include "sprites/Player.h"
@@ -82,7 +84,7 @@ Game::initLight() {
 	mPlayerAreaLight->m_radius = 250.0f;
     mPlayerAreaLight->m_size = 1.0f;
     mPlayerAreaLight->m_softSpreadAngle = 0;
-    mPlayerAreaLight->m_spreadAngle = 2.0f * M_PI;
+    mPlayerAreaLight->m_spreadAngle = 2.0f * ltbl::pi;
     mPlayerAreaLight->m_intensity = 1.1f;
     mPlayerAreaLight->m_bleed = 0;
     mPlayerAreaLight->m_color = lightColor;
@@ -92,7 +94,7 @@ Game::initLight() {
 
 	mPlayerDirectionLight->m_radius = 500.0f;
 	mPlayerDirectionLight->m_size = 25.0f;
-	mPlayerDirectionLight->m_softSpreadAngle = 0.1f * M_PI;
+	mPlayerDirectionLight->m_softSpreadAngle = 0.1f * ltbl::pi;
 	mPlayerDirectionLight->m_spreadAngle =
 			degreeToRadian(config.get("light_cone_angle", 0.0f));
 	mPlayerDirectionLight->m_intensity = 5;
