@@ -360,7 +360,10 @@ Game::render() {
 
 	// Update light
 	mPlayerAreaLight->SetCenter(mPlayer->getPosition().toVec2f());
-	mPlayerDirectionLight->SetCenter(mPlayer->getPosition().toVec2f());
+	// Avoid light light drawing partially onto player sprite.
+	Vector2f playerLightPosition = mPlayer->getPosition() +
+			thor::rotatedVector(Vector2f(0, - 13), mPlayer->getDirection());
+	mPlayerDirectionLight->SetCenter(playerLightPosition.toVec2f());
 	mPlayerDirectionLight->SetDirectionAngle(degreeToRadian(90 - mPlayer->getDirection()));
 
 	mLightSystem.SetView(mWorldView);
