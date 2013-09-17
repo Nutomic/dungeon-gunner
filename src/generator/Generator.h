@@ -28,10 +28,8 @@ class Generator : public sf::Drawable {
 public:
 	explicit Generator(World& world, Pathfinder& pathfinder,
 			ltbl::LightSystem& lightSystem, const Yaml& config);
-	void generateCurrentAreaIfNeeded(const Vector2f& position,
-			const Character::EquippedItems& playerItems);
+	std::vector<Vector2f> generateCurrentAreaIfNeeded(const Vector2f& position);
 	Vector2f getPlayerSpawn() const;
-	std::vector<Vector2f> getEnemySpawns(const sf::IntRect& area);
 
 private:
 	typedef std::map<int, std::map<int, Tile::Type> > array;
@@ -43,6 +41,7 @@ private:
 	std::vector<Vector2i> createMinimalSpanningTree(
 			const Vector2i& start, const float limit);
 	void connectRooms(const Vector2i& start);
+	std::vector<Vector2f> getEnemySpawns(const sf::IntRect& area);
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
 private:

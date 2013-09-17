@@ -43,6 +43,7 @@ private:
 	void updateGui();
 	void initPlayer();
 	void initLight();
+	void insertEnemies(const std::vector<Vector2f>& positions);
 
 private:
 	static const int FPS_GOAL = 60;

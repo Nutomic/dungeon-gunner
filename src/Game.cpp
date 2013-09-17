@@ -66,12 +66,30 @@ Game::initPlayer() {
 			Weapon::WeaponType::PISTOL,	Weapon::WeaponType::KNIFE,
 			Gadget::GadgetType::NONE, Gadget::GadgetType::NONE
 	};
-	mGenerator.generateCurrentAreaIfNeeded(Vector2f(), playerItems);
+	auto enemySpawns = mGenerator.generateCurrentAreaIfNeeded(Vector2f());
 	mPlayer = std::shared_ptr<Player>(new Player(mWorld, mPathfinder,
 			mGenerator.getPlayerSpawn(), playerItems));
 	mWorld.insertCharacter(mPlayer);
+	insertEnemies(enemySpawns);
 }
 
+/**
+ * Inserts enemies at the given positions, if they are more than
+ * Character::VISION_DISTANCE away from the player's postion.
+ */
+void
+Game::insertEnemies(const std::vector<Vector2f>& positions) {
+	for (const auto& spawn : positions) {
+		if (thor::length(spawn - mPlayer->getPosition()) >
+				Character::VISION_DISTANCE)
+			mWorld.insertCharacter(std::make_shared<Enemy>(mWorld,
+					mPathfinder, spawn, mPlayer->getEquippedItems()));
+	}
+}
+
+/**
+ * Initializes the lights held by the player and sets light system parameters.
+ */
 void
 Game::initLight() {
 	Yaml config("light.yaml");
@@ -132,7 +150,8 @@ Game::loop() {
 
 		render();
 
-		mGenerator.generateCurrentAreaIfNeeded(mPlayer->getPosition(), mPlayer->getEquippedItems());
+		auto enemySpawns = mGenerator.generateCurrentAreaIfNeeded(mPlayer->getPosition());
+		insertEnemies(enemySpawns);
 	}
 }
 
@@ -341,7 +360,10 @@ Game::render() {
 
 	// Update light
 	mPlayerAreaLight->SetCenter(mPlayer->getPosition().toVec2f());
-	mPlayerDirectionLight->SetCenter(mPlayer->getPosition().toVec2f());
+	// Avoid light light drawing partially onto player sprite.
+	Vector2f playerLightPosition = mPlayer->getPosition() +
+			thor::rotatedVector(Vector2f(0, - 13), mPlayer->getDirection());
+	mPlayerDirectionLight->SetCenter(playerLightPosition.toVec2f());
 	mPlayerDirectionLight->SetDirectionAngle(degreeToRadian(90 - mPlayer->getDirection()));
 
 	mLightSystem.SetView(mWorldView);

@@ -10,6 +10,7 @@ R: reload
 Q: use left Gadget
 E: use right Gadget
 F: pick up item or swap Gadgets
+Esc: exit
 
 ## Dependencies
 - SFML
