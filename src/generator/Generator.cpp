@@ -39,15 +39,17 @@ Generator::Generator(World& world, Pathfinder& pathfinder,
 /**
  * Generates tiles near player position (maximum distance is determined by
  * GENERATE_AREA_SIZE and GENERATE_AREA_RANGE).
+ *
+ * @return Potential spawn points for enemies. Guaranteed to be on floor tiles.
  */
-void
-Generator::generateCurrentAreaIfNeeded(const Vector2f& playerPosition,
-		const Character::EquippedItems& playerItems) {
+std::vector<Vector2f>
+Generator::generateCurrentAreaIfNeeded(const Vector2f& position) {
+	std::vector<Vector2f> enemySpawns;
 	std::map<Vector2i, float> open;
 	std::set<Vector2i> closed;
 
-	Vector2i start((int) floor(playerPosition.x / Tile::TILE_SIZE.x),
-			(int) floor(playerPosition.y / Tile::TILE_SIZE.y));
+	Vector2i start((int) floor(position.x / Tile::TILE_SIZE.x),
+			(int) floor(position.y / Tile::TILE_SIZE.y));
 	start /= mAreaSize;
 	auto makePair = [&start](const Vector2i& point) {
 		return std::make_pair(point, thor::length(Vector2f(point - start)));
@@ -65,12 +67,8 @@ Generator::generateCurrentAreaIfNeeded(const Vector2f& playerPosition,
 					Vector2i(mAreaSize, mAreaSize) / 2,
 					Vector2i(mAreaSize, mAreaSize));
 			generateTiles(area);
-			for (const auto& spawn : getEnemySpawns(area)) {
-				float distance = thor::length(spawn - playerPosition);
-				if (distance > Character::VISION_DISTANCE)
-					mWorld.insertCharacter(std::shared_ptr<Enemy>(new Enemy(
-							mWorld, mPathfinder, spawn, playerItems)));
-			}
+			auto spawnTemp = getEnemySpawns(area);
+			enemySpawns.insert(enemySpawns.end(), spawnTemp.begin(), spawnTemp.end());
 		}
 		if (mGenerated[current.x][current.y] && distance <= mMaxRange) {
 			if (closed.find(Vector2i(current.x + 1, current.y)) == closed.end())
@@ -83,6 +81,7 @@ Generator::generateCurrentAreaIfNeeded(const Vector2f& playerPosition,
 				open.insert(makePair(Vector2i(current.x, current.y - 1)));
 		}
 	}
+	return enemySpawns;
 }
 
 /**
