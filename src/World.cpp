@@ -121,9 +121,9 @@ World::applyMovement(std::shared_ptr<Sprite> sprite, int elapsed) {
 void
 World::think(int elapsed) {
 	for (auto it = mCharacters.begin(); it != mCharacters.end(); ) {
-		if ((*it)->getDelete()) {
+		if ((*it)->getDelete() && (*it)->getCategory() != Sprite::CATEGORY_ACTOR) {
 			mCharacters.erase(it);
-			auto& d = mDrawables[Sprite::CATEGORY_ACTOR];
+			auto& d = mDrawables[(*it)->getCategory()];
 			d.erase(std::find(d.begin(), d.end(), *it));
 		}
 		else {
