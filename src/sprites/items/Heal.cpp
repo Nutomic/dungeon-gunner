@@ -9,12 +9,16 @@
 
 #include "../abstract/Character.h"
 
-const Yaml Heal::CONFIG("res/yaml/heal.yaml");
+const std::string Heal::CONFIG_NAME = "heal.yaml";
 
 Heal::Heal() :
-		Gadget(CONFIG.get("name", std::string()), CONFIG.get("cooldown", 0)),
-		mHealedTotal(CONFIG.get("amount_healed", 0)),
-		mTimePerPoint(sf::milliseconds(CONFIG.get("time_healing", 0))),
+		Heal(Yaml(CONFIG_NAME)) {
+}
+
+Heal::Heal(const Yaml& config) :
+		Gadget(config.get("name", std::string()), config.get("cooldown", 0)),
+		mHealedTotal(config.get("amount_healed", 0)),
+		mTimePerPoint(sf::milliseconds(config.get("time_healing", 0))),
 		mHealed(mHealedTotal + 1) {
 }
 

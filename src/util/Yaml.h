@@ -22,9 +22,6 @@
 class Yaml {
 public:
 	explicit Yaml(const std::string& filename);
-	~Yaml();
-
-	std::string getFilename() const;
 
 	static void setFolder(const std::string& folder);
 
@@ -33,27 +30,38 @@ public:
 
 private:
 	static std::string mFolder;
-
 	std::string mFilename;
-	std::ifstream mFile;
 	YAML::Node mNode;
 };
 
 /**
- * Stream output operators to specialize Yaml::get for other types.
- * Error handling is done in Yaml::get.
+ * Template specializations to convert yaml parameters into custom types.
  */
-namespace {
-	void operator>>(const YAML::Node& node, Vector2i& vector) {
-		node[0] >> vector.x;
-		node[1] >> vector.y;
-	}
+namespace YAML {
+template<>
+struct convert<Vector2f> {
+	static bool decode(const Node& node, Vector2f& rhs) {
+		if(!node.IsSequence() || node.size() != 2)
+			return false;
 
-	void operator>>(const YAML::Node& node, Vector2f& vector) {
-		node[0] >> vector.x;
-		node[1] >> vector.y;
+		rhs.x = node[0].as<float>();
+		rhs.y = node[1].as<float>();
+		return true;
 	}
 };
+
+template<>
+struct convert<Vector2i> {
+	static bool decode(const Node& node, Vector2i& rhs) {
+		if(!node.IsSequence() || node.size() != 2)
+			return false;
+
+		rhs.x = node[0].as<int>();
+		rhs.y = node[1].as<int>();
+		return true;
+	}
+};
+}
 
 /**
  * Gets a value of a specified type by key. Returns default value on error.
@@ -64,18 +72,10 @@ namespace {
  */
 template <typename T>
 T Yaml::get(const std::string& key, const T& defaultValue) const {
-	try {
-		if (const YAML::Node* node = mNode.FindValue(key)) {
-			T value;
-			*node >> value;
-			return value;
-		}
-		else
-			return defaultValue;
-	}
-	catch(YAML::Exception&) {
-		return defaultValue;
-	}
+    if(mNode[key])
+    	return mNode[key].as<T>();
+    else
+    	return defaultValue;
 };
 
 #endif /* DG_YAML_H_ */

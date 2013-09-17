@@ -25,7 +25,10 @@ protected:
 	GadgetType getType() const override;
 
 private:
-	static const Yaml CONFIG;
+	Shield(const Yaml& config);
+
+private:
+	static const std::string CONFIG_NAME;
 	Character* mCharacter;
 	std::shared_ptr<RotatingShield> mRotatingShield;
 };

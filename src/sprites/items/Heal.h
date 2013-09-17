@@ -22,7 +22,10 @@ protected:
 	GadgetType getType() const override;
 
 private:
-	static const Yaml CONFIG;
+	Heal(const Yaml& config);
+
+private:
+	static const std::string CONFIG_NAME;
 	const int mHealedTotal;
 	const sf::Time mTimePerPoint;
 

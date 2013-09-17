@@ -12,17 +12,22 @@
 #include "../effects/Bullet.h"
 #include "../../World.h"
 
-const Yaml RingOfFire::CONFIG("res/yaml/ring_of_fire.yaml");
+const std::string RingOfFire::CONFIG_NAME = "ring_of_fire.yaml";
 
 RingOfFire::RingOfFire(World& world) :
-		Gadget(CONFIG.get("name", std::string()), CONFIG.get("cooldown", 0)),
-		mWavesPerUse(CONFIG.get("waves_per_use", 0)),
-		mAngleOffset(CONFIG.get("angle_offset", 0.0f)),
-		mBulletsPerWave(CONFIG.get("bullets_per_wave", 0)),
-		mDelay(sf::milliseconds(CONFIG.get("delay", 0))),
-		mCurrentWave(mWavesPerUse + 1),
-		mWorld(world),
-		mBullet(CONFIG.get("bullet", std::string())) {
+		RingOfFire(world, Yaml(CONFIG_NAME)) {
+}
+
+RingOfFire::RingOfFire(World& world, const Yaml& config) :
+	Gadget(config.get("name", std::string()), config.get("cooldown", 0)),
+	mWavesPerUse(config.get("waves_per_use", 0)),
+	mAngleOffset(config.get("angle_offset", 0.0f)),
+	mBulletsPerWave(config.get("bullets_per_wave", 0)),
+	mDelay(sf::milliseconds(config.get("delay", 0))),
+	mCurrentWave(mWavesPerUse + 1),
+	mWorld(world),
+	mBullet(config.get("bullet", std::string())) {
+
 }
 
 void

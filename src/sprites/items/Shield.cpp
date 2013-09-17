@@ -11,10 +11,14 @@
 #include "../RotatingShield.h"
 #include "../../World.h"
 
-const Yaml Shield::CONFIG("res/yaml/rotating_shield.yaml");
+const std::string Shield::CONFIG_NAME = "rotating_shield.yaml";
 
 Shield::Shield() :
-		Gadget(CONFIG.get("name", std::string()), CONFIG.get("cooldown", 0)) {
+		Shield(Yaml(CONFIG_NAME)) {
+}
+
+Shield::Shield(const Yaml& config) :
+		Gadget(config.get("name", std::string()), config.get("cooldown", 0)) {
 }
 
 void

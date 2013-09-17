@@ -19,7 +19,10 @@ public:
 	int getAmountHealed() const;
 
 private:
-	static const Yaml CONFIG;
+	HealthOrb(const Yaml& config);
+
+private:
+	static const std::string CONFIG_NAME;
 	const std::string mName;
 	const int mAmountHealed;
 };

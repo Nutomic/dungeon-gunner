@@ -25,7 +25,10 @@ protected:
 	GadgetType getType() const override;
 
 private:
-	static const Yaml CONFIG;
+	RingOfFire(World& world, const Yaml& config);
+
+private:
+	static const std::string CONFIG_NAME;
 	const int mWavesPerUse;
 	const int mAngleOffset;
 	const int mBulletsPerWave;

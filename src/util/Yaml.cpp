@@ -16,24 +16,10 @@ std::string Yaml::mFolder = "";
  * set in setFolder().
  */
 Yaml::Yaml(const std::string& filename) :
-		mFilename(mFolder+filename),
-		mFile(mFilename) {
-	if (mFile.fail())
-		LOG_W("Failed to open YAML file: " << mFolder << filename);
-	YAML::Parser parser(mFile);
-	parser.GetNextDocument(mNode);
-}
-
-Yaml::~Yaml() {
-	mFile.close();
-}
-
-/**
- * Return path and name of the file opened in this object.
- */
-std::string
-Yaml::getFilename() const {
-	return mFilename;
+		mFilename(filename) {
+	mNode = YAML::LoadFile(mFolder + filename);
+	if (mNode.IsNull())
+		LOG_D("Failed to load config file " << mFolder << filename);
 }
 
 /**
