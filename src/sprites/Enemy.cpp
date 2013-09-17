@@ -34,7 +34,7 @@ Enemy::Enemy(World& world, Pathfinder& pathfinder,
 Character::EquippedItems
 Enemy::generateItems(EquippedItems playerItems) {
 	// Uses cast from enum to int to enum in order to increment enum values.
-	switch (rand() % 4) {
+	switch (rand() % 2) {
 	case 0:
 		if (playerItems.primary + 1 != Weapon::WeaponType::_LAST)
 			playerItems.primary =
@@ -47,19 +47,11 @@ Enemy::generateItems(EquippedItems playerItems) {
 					(Weapon::WeaponType) (((int) (playerItems.secondary) + 1));
 
 		break;
-	case 2:
-		if (playerItems.left + 1 != Gadget::GadgetType::_LAST)
-			playerItems.left = (Gadget::GadgetType) (((int) (playerItems.left)
-					+ 1));
-
-		break;
-	case 3:
-		if (playerItems.right + 1 != Gadget::GadgetType::_LAST)
-			playerItems.left = (Gadget::GadgetType) (((int) (playerItems.left)
-					+ 1));
-
-		break;
 	}
+
+	playerItems.left = (Gadget::GadgetType) (rand() % 4);
+	playerItems.right = (Gadget::GadgetType) (rand() % 4);
+
 	return playerItems;
 }
 

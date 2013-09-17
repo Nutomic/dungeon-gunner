@@ -23,8 +23,7 @@ public:
 		NONE,
 		SHIELD,
 		HEAL,
-		RINGOFFIRE,
-		_LAST
+		RINGOFFIRE
 	};
 
 public:
