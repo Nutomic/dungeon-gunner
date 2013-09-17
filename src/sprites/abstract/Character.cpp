@@ -27,7 +27,7 @@ Character::Character(const Vector2f& position, Category category,
 		mWorld(world),
 		mPathfinder(pathfinder),
 		mMaxHealth(config.get("health", 100)),
-		mCurrentHealth(mMaxHealth),
+		mHealth(mMaxHealth),
 		mMovementSpeed(config.get("speed", 0.0f)),
 		mActiveWeapon(mFirstWeapon),
 		mLastPosition(getPosition()),
@@ -50,15 +50,15 @@ Character::~Character() {
 void
 Character::onDamage(int damage) {
 	// Otherwise player might not respawn after death
-	if (mCurrentHealth <= 0)
+	if (mHealth <= 0)
 		return;
 
-	mCurrentHealth -= damage;
+	mHealth -= damage;
 
-	if (mCurrentHealth > mMaxHealth)
-		mCurrentHealth = mMaxHealth;
+	if (mHealth > mMaxHealth)
+		mHealth = mMaxHealth;
 
-	if (mCurrentHealth <= 0) {
+	if (mHealth <= 0) {
 		onDeath();
 		setDelete(true);
 	}
@@ -72,7 +72,7 @@ Character::onDamage(int damage) {
  */
 void
 Character::onThink(int elapsed) {
-	if (mCurrentHealth <= 0)
+	if (mHealth <= 0)
 		return;
 
 	mActiveWeapon->onThink(elapsed);
@@ -256,7 +256,12 @@ Character::selectSecondWeapon() {
  */
 int
 Character::getHealth() const {
-	return mCurrentHealth;
+	return mHealth;
+}
+
+int
+Character::getMaxHealth() const {
+	return mMaxHealth;
 }
 
 /**

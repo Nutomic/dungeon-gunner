@@ -50,6 +50,7 @@ public:
 	Faction getFaction() const;
 	EquippedItems getEquippedItems() const;
 	int getHealth() const;
+	int getMaxHealth() const;
 	int getMagazineAmmo() const;
 	int getTotalAmmo() const;
 	std::string getLeftGadgetName() const;
@@ -93,7 +94,7 @@ private:
 	Pathfinder& mPathfinder;
 
 	const int mMaxHealth;
-	int mCurrentHealth; //< Current health. Between 0 and mMaxHealth.
+	int mHealth; //< Current health. Between 0 and mMaxHealth.
 	const float mMovementSpeed;
 	std::shared_ptr<Weapon> mFirstWeapon;
 	std::shared_ptr<Weapon> mSecondWeapon;

@@ -169,7 +169,7 @@ Game::updateGui() {
 
 	auto item = mWorld.getClosestItem(mPlayer->getPosition());
 	auto orb = std::dynamic_pointer_cast<HealthOrb>(item);
-	if (orb) {
+	if (orb && mPlayer->getHealth() < mPlayer->getMaxHealth()) {
 		mPlayer->onDamage(- orb->getAmountHealed());
 		mWorld.remove(item);
 	}
