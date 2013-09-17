@@ -91,7 +91,18 @@ Character::getFaction() const {
 	return mFaction;
 }
 
+/**
+ * Inserts the item into the world. Does not remove it from the Character.
+ */
 void Character::dropItem(std::shared_ptr<Item> item) {
+	if (!item)
+		return;
+
+	// To avoid weapons continuing to fire after drop and pickup.
+	auto weapon = std::dynamic_pointer_cast<Weapon>(item);
+	if (weapon)
+		weapon->releaseTrigger();
+
 	mWorld.insert(item);
 	item->drop(getPosition());
 }
@@ -108,22 +119,16 @@ Character::onDeath() {
 	else
 		switch (rand() % 3) {
 		case 0:
-			// To avoid weapons continuing to fire after drop and pickup.
-			mFirstWeapon->releaseTrigger();
 			dropItem(mFirstWeapon);
 			break;
 		case 1:
-			// Same here.
-			mSecondWeapon->releaseTrigger();
 			dropItem(mSecondWeapon);
 			break;
 		case 2:
-			if (mLeftGadget)
-				dropItem(mLeftGadget);
+			dropItem(mLeftGadget);
 			break;
 		case 3:
-			if (mRightGadget)
-				dropItem(mRightGadget);
+			dropItem(mRightGadget);
 			break;
 		}
 }

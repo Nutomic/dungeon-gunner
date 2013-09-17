@@ -65,13 +65,17 @@ Tile::getConfig(Type type) {
 		return "";
 	}
 }
+
+/**
+ * Returns true if collisions with this tile type are enabled.
+ */
 bool
 Tile::isSolid(Type type) {
 	switch (type) {
 	case Type::FLOOR:
 		return false;
 	case Type::WALL:
-		// falltrough
+		return true;
 	default:
 		return true;
 	}
