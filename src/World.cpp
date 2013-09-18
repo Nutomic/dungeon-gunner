@@ -19,7 +19,7 @@
  */
 void
 World::insert(std::shared_ptr<Sprite> drawable) {
-#ifndef NDEBUG
+#ifndef RELEASE
 	Sprite::Category cat = drawable->getCategory();
 	auto item = std::find(mDrawables[cat].begin(), mDrawables[cat].end(), drawable);
 	assert(item == mDrawables[cat].end());
@@ -33,7 +33,7 @@ World::insert(std::shared_ptr<Sprite> drawable) {
  */
 void
 World::insertCharacter(std::shared_ptr<Character> character) {
-#ifndef NDEBUG
+#ifndef RELEASE
 	auto item = std::find(mCharacters.begin(), mCharacters.end(), character);
 	assert(item == mCharacters.end());
 #endif
@@ -52,7 +52,7 @@ World::remove(std::shared_ptr<Sprite> drawable) {
  * Returns all characters that are within maxDistance from position.
  */
 std::vector<std::shared_ptr<Character> >
-		World::getCharacters(const Vector2f& position, float maxDistance) const {
+World::getCharacters(const Vector2f& position, float maxDistance) const {
 	std::vector<std::shared_ptr<Character> > visible;
 	for (const auto& it : mCharacters) {
 		if (position == it->getPosition())
@@ -123,8 +123,7 @@ World::think(int elapsed) {
 	for (auto it = mCharacters.begin(); it != mCharacters.end(); ) {
 		if ((*it)->getDelete()) {
 			mCharacters.erase(it);
-			auto& d = mDrawables[Sprite::CATEGORY_ACTOR];
-			d.erase(std::find(d.begin(), d.end(), *it));
+			remove(*it);
 		}
 		else {
 			(*it)->onThink(elapsed);
