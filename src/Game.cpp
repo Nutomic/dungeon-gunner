@@ -187,12 +187,7 @@ Game::updateGui() {
 			mWindow.getSize().y - mRightGadget->getSize().y);
 
 	auto item = mWorld.getClosestItem(mPlayer->getPosition());
-	auto orb = std::dynamic_pointer_cast<HealthOrb>(item);
-	if (orb && mPlayer->getHealth() < mPlayer->getMaxHealth()) {
-		mPlayer->onDamage(- orb->getAmountHealed());
-		mWorld.remove(item);
-	}
-	else if (item) {
+	if (item) {
 		mPickupInstruction->setText("F - pick up " + item->getName());
 		mPickupInstruction->setPosition(
 				mWindow.getSize().x / 2 - mPickupInstruction->getSize().x / 2,

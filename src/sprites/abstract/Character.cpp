@@ -343,7 +343,10 @@ Character::pickUpItem() {
 		return;
 	}
 
-	std::shared_ptr<Weapon> weapon = std::dynamic_pointer_cast<Weapon>(closest);
+	auto weapon = std::dynamic_pointer_cast<Weapon>(closest);
+	auto gadget = std::dynamic_pointer_cast<Gadget>(closest);
+	auto orb = std::dynamic_pointer_cast<HealthOrb>(closest);
+
 	if (weapon) {
 		mWorld.insert(mActiveWeapon);
 		mActiveWeapon->drop(getPosition());
@@ -351,14 +354,16 @@ Character::pickUpItem() {
 				? setFirstWeapon(weapon)
 				: setSecondWeapon(weapon);
 	}
-	std::shared_ptr<Gadget> gadget = std::dynamic_pointer_cast<Gadget>(closest);
-	if (gadget) {
+	else if (gadget) {
 		if (mRightGadget) {
 			mWorld.insert(mRightGadget);
 			mRightGadget->drop(getPosition());
 		}
 		mRightGadget = mLeftGadget;
 		mLeftGadget = gadget;
+	}
+	else if (orb) {
+		onDamage(- orb->getAmountHealed());
 	}
 	mWorld.remove(closest);
 }
