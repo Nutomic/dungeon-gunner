@@ -2,15 +2,14 @@
 2d top down shooter with tactical gameplay set in a procedurally generated world.
 
 ## Controls
-WASD: move
-Mouse: look
-Lmb: shoot
-Rmb: walk to position
+WASD: walk
+Mouse: aim
+Left Mouse Button: shoot
 R: reload
-Q: use left Gadget
-E: use right Gadget
-F: pick up item or swap Gadgets
-Esc: exit
+Q: use left gadget
+E: use right gadget
+F: pick up item or swap gadgets
+Esc: exit game
 
 ## Dependencies
 - SFML

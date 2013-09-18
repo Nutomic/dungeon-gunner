@@ -322,10 +322,6 @@ Game::mouseDown(const sf::Event& event) {
 	case sf::Mouse::Left:
 		mPlayer->pullTrigger();
 		break;
-	case sf::Mouse::Right:
-		mPlayer->setDestination(convertCoordinates(event.mouseButton.x,
-				event.mouseButton.y));
-		break;
 	default:
 		break;
 	}

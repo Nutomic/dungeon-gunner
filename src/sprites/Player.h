@@ -37,7 +37,6 @@ public:
 	using Character::pullTrigger;
 	using Character::releaseTrigger;
 	void setDirection(Direction direction, bool unset);
-	void setDestination(const Vector2f& destination);
 	using Character::getWeaponName;
 	using Character::reload;
 	using Character::toggleWeapon;

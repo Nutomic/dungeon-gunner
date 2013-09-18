@@ -63,12 +63,6 @@ Player::setDirection(Direction direction, bool unset) {
 	setSpeed(dirVec, getMovementSpeed());
 }
 
-void
-Player::setDestination(const Vector2f& destination) {
-	mDirection = 0;
-	Character::setDestination(destination);
-}
-
 /**
  * Check if we arrived at destination, turn towards cursor.
  */

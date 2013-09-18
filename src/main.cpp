@@ -12,6 +12,8 @@
 
 #include "util/Vector.h"
 
+// TODO: remove right click move (also in readme)
+
 /**
  * Creates Game object.
  */
