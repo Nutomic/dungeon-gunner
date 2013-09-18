@@ -75,14 +75,15 @@ World::getCharacters(const Vector2f& position, float maxDistance) const {
 void
 World::step(int elapsed) {
 	for (auto v = mDrawables.begin(); v != mDrawables.end(); v++) {
-		for (auto it = v->second.begin(); it != v->second.end(); it++) {
-			if ((*it)->getDelete()) {
-				v->second.erase(it);
-				it--;
+		for (auto it = v->second.begin(); it != v->second.end(); ) {
+			if ((*it)->getDelete() && (*it)->getCategory() != Character::CATEGORY_ACTOR)
+				it = v->second.erase(it);
+			else {
+				// Don't run collision tests if sprite is not moving.
+				if ((*it)->getSpeed() != Vector2f())
+					applyMovement(*it, elapsed);
+				it++;
 			}
-			// Don't run collision tests if sprite is not moving.
-			else if ((*it)->getSpeed() != Vector2f())
-				applyMovement(*it, elapsed);
 		}
 	}
 }
@@ -121,12 +122,13 @@ World::applyMovement(std::shared_ptr<Sprite> sprite, int elapsed) {
 void
 World::think(int elapsed) {
 	for (auto it = mCharacters.begin(); it != mCharacters.end(); ) {
-		if ((*it)->getDelete()) {
-			mCharacters.erase(it);
-			remove(*it);
+		auto value = *it;
+		if (value->getDelete()) {
+			remove(value);
+			it = mCharacters.erase(it);
 		}
 		else {
-			(*it)->onThink(elapsed);
+			value->onThink(elapsed);
 			it++;
 		}
 	}

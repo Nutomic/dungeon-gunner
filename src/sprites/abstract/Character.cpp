@@ -49,7 +49,7 @@ Character::~Character() {
  */
 void
 Character::onDamage(int damage) {
-	// Otherwise player might not respawn after death
+	// Avoid calling onDeath twice, or reviving Character.
 	if (mHealth <= 0)
 		return;
 
@@ -72,8 +72,7 @@ Character::onDamage(int damage) {
  */
 void
 Character::onThink(int elapsed) {
-	if (mHealth <= 0)
-		return;
+	assert(mHealth >= 0);
 
 	mActiveWeapon->onThink(elapsed);
 	if (mLeftGadget)
