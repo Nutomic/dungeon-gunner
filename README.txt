@@ -1,4 +1,4 @@
-This project was moved to https://gitea.nutomic.com/nutomic/dungeon-gunner
+This project was moved to https://yerbamate.dev/nutomic/dungeon-gunner
 
 ## About
 2d top down shooter with tactical gameplay set in a procedurally generated world.
